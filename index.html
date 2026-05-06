@@ -6,285 +6,78 @@
   <title>Otk1 MC | Ultimate Enhanced Network</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/skinview3d/3.0.8/bundled/skinview3d.bundle.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #0a0418;
-      color: #fff;
-      overflow-x: hidden;
-    }
-    .orb-bg {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-      background: radial-gradient(circle at 10% 20%, #1f0c3c, #0a0418);
-    }
-    .orb-glow {
-      position: fixed;
-      width: 60vw;
-      height: 60vw;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(155,90,255,0.25) 0%, rgba(155,90,255,0) 70%);
-      filter: blur(100px);
-      z-index: -1;
-      animation: floatGlow 25s infinite alternate;
-    }
-    @keyframes floatGlow {
-      0% { transform: translate(10%, 20%) scale(1); opacity: 0.3; }
-      100% { transform: translate(-10%, -15%) scale(1.4); opacity: 0.6; }
-    }
-    .wrapper {
-      display: flex;
-      min-height: 100vh;
-      position: relative;
-      z-index: 5;
-    }
-    .side-nav {
-      width: 280px;
-      background: rgba(15, 12, 30, 0.65);
-      backdrop-filter: blur(16px);
-      border-right: 1px solid rgba(155, 90, 255, 0.4);
-      padding: 2rem 1rem;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      z-index: 10;
-    }
-    .logo-area {
-      text-align: center;
-      padding-bottom: 1rem;
-      border-bottom: 1px dashed rgba(155,90,255,0.4);
-    }
-    .logo-area h1 {
-      font-size: 1.8rem;
-      background: linear-gradient(135deg, #fff, #c084fc);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .nav-items {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.7rem 1rem;
-      border-radius: 1rem;
-      color: #ddd;
-      transition: all 0.25s ease;
-      cursor: pointer;
-      font-weight: 500;
-    }
+    body { font-family: 'Inter', sans-serif; background: #0a0418; color: #fff; overflow-x: hidden; }
+    .orb-bg { position: fixed; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle at 10% 20%, #1f0c3c, #0a0418); }
+    .orb-glow { position: fixed; width: 60vw; height: 60vw; border-radius: 50%; background: radial-gradient(circle, rgba(155,90,255,0.25) 0%, rgba(155,90,255,0) 70%); filter: blur(100px); z-index: -1; animation: floatGlow 25s infinite alternate; }
+    @keyframes floatGlow { 0% { transform: translate(10%, 20%) scale(1); opacity: 0.3; } 100% { transform: translate(-10%, -15%) scale(1.4); opacity: 0.6; } }
+    .wrapper { display: flex; min-height: 100vh; position: relative; z-index: 5; }
+    .side-nav { width: 280px; background: rgba(15, 12, 30, 0.65); backdrop-filter: blur(16px); border-right: 1px solid rgba(155, 90, 255, 0.4); padding: 2rem 1rem; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 2rem; z-index: 10; }
+    .logo-area { text-align: center; padding-bottom: 1rem; border-bottom: 1px dashed rgba(155,90,255,0.4); }
+    .logo-area h1 { font-size: 1.8rem; background: linear-gradient(135deg, #fff, #c084fc); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .nav-items { display: flex; flex-direction: column; gap: 1rem; }
+    .nav-item { display: flex; align-items: center; gap: 1rem; padding: 0.7rem 1rem; border-radius: 1rem; color: #ddd; transition: all 0.25s ease; cursor: pointer; font-weight: 500; }
     .nav-item i { width: 24px; }
-    .nav-item.active, .nav-item:hover {
-      background: #9a4eff;
-      color: white;
-      box-shadow: 0 0 12px #9a4eff;
-      transform: translateX(5px);
-    }
-    .lang-toggle {
-      margin-top: auto;
-      background: linear-gradient(135deg, #4e2d89, #2a1a4a);
-      border: none;
-      padding: 0.6rem;
-      border-radius: 2rem;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: 0.2s;
-    }
+    .nav-item.active, .nav-item:hover { background: #9a4eff; color: white; box-shadow: 0 0 12px #9a4eff; transform: translateX(5px); }
+    .lang-toggle { margin-top: auto; background: linear-gradient(135deg, #4e2d89, #2a1a4a); border: none; padding: 0.6rem; border-radius: 2rem; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: 0.2s; }
     .lang-toggle:hover { transform: scale(1.02); background: linear-gradient(135deg, #6b3dc9, #3a1f6e); }
-    .main-content {
-      flex: 1;
-      padding: 2rem;
-      overflow-y: auto;
-    }
-    .hero-stats {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      background: rgba(0,0,0,0.35);
-      backdrop-filter: blur(8px);
-      border-radius: 2rem;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      border: 1px solid rgba(155,90,255,0.3);
-    }
-    .hero-title h2 {
-      font-size: 2.5rem;
-      background: linear-gradient(135deg, #fff, #c084fc);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .hero-stats-box {
-      display: flex;
-      gap: 2rem;
-    }
-    .hero-stat {
-      text-align: center;
-    }
-    .hero-stat .number {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #cb9eff;
-    }
-    .copy-ip-btn {
-      background: #9a4eff;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 2rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.1s;
-    }
+    .main-content { flex: 1; padding: 2rem; overflow-y: auto; }
+    .hero-stats { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; background: rgba(0,0,0,0.35); backdrop-filter: blur(8px); border-radius: 2rem; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid rgba(155,90,255,0.3); }
+    .hero-title h2 { font-size: 2.5rem; background: linear-gradient(135deg, #fff, #c084fc); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero-stats-box { display: flex; gap: 2rem; }
+    .hero-stat { text-align: center; }
+    .hero-stat .number { font-size: 1.8rem; font-weight: 800; color: #cb9eff; }
+    .copy-ip-btn { background: #9a4eff; border: none; padding: 0.6rem 1.2rem; border-radius: 2rem; font-weight: bold; cursor: pointer; transition: 0.1s; }
     .copy-ip-btn:active { transform: scale(0.96); }
-    .grid-title {
-      font-size: 1.6rem;
-      margin: 2rem 0 1rem;
-      border-left: 4px solid #b87eff;
-      padding-left: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .top-players-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
-    }
-    .top-card {
-      background: rgba(20,12,38,0.7);
-      backdrop-filter: blur(4px);
-      border-radius: 1.2rem;
-      padding: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      transition: all 0.25s;
-      border: 1px solid rgba(155,90,255,0.3);
-    }
-    .top-card:hover {
-      transform: translateY(-5px);
-      border-color: #c084fc;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
+    .grid-title { font-size: 1.6rem; margin: 2rem 0 1rem; border-left: 4px solid #b87eff; padding-left: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .top-players-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+    .top-card { background: rgba(20,12,38,0.7); backdrop-filter: blur(4px); border-radius: 1.2rem; padding: 1rem; display: flex; align-items: center; gap: 1rem; transition: all 0.25s; border: 1px solid rgba(155,90,255,0.3); }
+    .top-card:hover { transform: translateY(-5px); border-color: #c084fc; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
     .top-icon { font-size: 2rem; }
     .top-info h4 { font-size: 1rem; }
     .top-info p { font-size: 0.8rem; opacity: 0.8; }
-    .modes-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
-    .game-card {
-      background: rgba(20,12,38,0.7);
-      backdrop-filter: blur(8px);
-      border-radius: 1.5rem;
-      padding: 1.5rem;
-      border: 1px solid rgba(155,90,255,0.4);
-      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-    .game-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-      transition: 0.5s;
-    }
+    .modes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+    .game-card { background: rgba(20,12,38,0.7); backdrop-filter: blur(8px); border-radius: 1.5rem; padding: 1.5rem; border: 1px solid rgba(155,90,255,0.4); transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); cursor: pointer; position: relative; overflow: hidden; }
+    .game-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); transition: 0.5s; }
     .game-card:hover::before { left: 100%; }
-    .game-card:hover {
-      transform: translateY(-10px);
-      border-color: #c084fc;
-      box-shadow: 0 20px 30px rgba(0,0,0,0.5);
-    }
+    .game-card:hover { transform: translateY(-10px); border-color: #c084fc; box-shadow: 0 20px 30px rgba(0,0,0,0.5); }
     .game-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
     .game-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.3rem; }
     .game-desc { font-size: 0.8rem; opacity: 0.7; margin-bottom: 1rem; }
-    .game-stats {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.7rem;
-      margin-bottom: 1rem;
-    }
-    .join-game {
-      background: #4e2d89;
-      border: none;
-      padding: 0.5rem;
-      border-radius: 2rem;
-      color: white;
-      cursor: pointer;
-      width: 100%;
-      font-weight: 600;
-      transition: 0.1s;
-    }
+    .game-stats { display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 1rem; }
+    .join-game { background: #4e2d89; border: none; padding: 0.5rem; border-radius: 2rem; color: white; cursor: pointer; width: 100%; font-weight: 600; transition: 0.1s; }
     .join-game:active { transform: scale(0.97); }
-    .leaderboard-podium {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-    .podium-item {
-      text-align: center;
-      background: rgba(0,0,0,0.5);
-      border-radius: 1rem;
-      padding: 1rem;
-      width: 150px;
-      transition: 0.2s;
-    }
-    .podium-item.first {
-      background: linear-gradient(135deg, #ffd700, #ffb347);
-      transform: scale(1.05);
-      box-shadow: 0 0 15px gold;
-    }
+    .leaderboard-podium { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .podium-item { text-align: center; background: rgba(0,0,0,0.5); border-radius: 1rem; padding: 1rem; width: 150px; transition: 0.2s; }
+    .podium-item.first { background: linear-gradient(135deg, #ffd700, #ffb347); transform: scale(1.05); box-shadow: 0 0 15px gold; }
     .podium-avatar { width: 64px; height: 64px; border-radius: 50%; margin-bottom: 0.5rem; border: 2px solid #fff; }
-    .leaderboard-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: rgba(0,0,0,0.4);
-      border-radius: 1rem;
-      overflow: hidden;
-    }
-    .leaderboard-table th, .leaderboard-table td {
-      padding: 0.8rem;
-      text-align: left;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    .leaderboard-table th {
-      cursor: pointer;
-      transition: 0.1s;
-    }
+    .leaderboard-table { width: 100%; border-collapse: collapse; background: rgba(0,0,0,0.4); border-radius: 1rem; overflow: hidden; }
+    .leaderboard-table th, .leaderboard-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .leaderboard-table th { cursor: pointer; transition: 0.1s; }
     .leaderboard-table th:hover { color: #c084fc; }
+    .extra-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+    .info-card { background: rgba(0,0,0,0.4); border-radius: 1.5rem; padding: 1.2rem; border: 1px solid rgba(155,90,255,0.3); transition: 0.2s; }
+    .info-card:hover { transform: translateY(-3px); border-color: #c084fc; }
+    .staff-member { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+    .staff-avatar { width: 48px; height: 48px; border-radius: 50%; }
+    .faq-question { font-weight: 700; margin-bottom: 0.3rem; cursor: pointer; }
+    .faq-answer { font-size: 0.85rem; opacity: 0.8; display: none; margin-bottom: 0.5rem; }
+    .vote-site-btn { background: #4e2d89; border: none; padding: 0.3rem 0.8rem; border-radius: 2rem; margin: 0.2rem; cursor: pointer; }
     .footer { text-align: center; margin-top: 2rem; color: #aaa; border-top: 1px solid rgba(155,90,255,0.2); padding-top: 1.5rem; }
-    .placeholder {
-      text-align: center;
-      padding: 3rem;
-      background: rgba(0,0,0,0.3);
-      border-radius: 1.5rem;
-      font-size: 1.2rem;
-    }
+    .placeholder { text-align: center; padding: 3rem; background: rgba(0,0,0,0.3); border-radius: 1.5rem; font-size: 1.2rem; }
+    .status-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+    .status-card { background: rgba(0,0,0,0.4); border-radius: 1.5rem; padding: 1.5rem; text-align: center; border: 1px solid rgba(155,90,255,0.3); transition: 0.2s; }
+    .status-card:hover { transform: translateY(-3px); border-color: #c084fc; }
+    .status-card i { font-size: 2.5rem; color: #9a4eff; display: block; margin-bottom: 0.8rem; }
+    .status-card .value { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.3rem; }
+    .status-card .label { font-size: 0.9rem; opacity: 0.7; }
+
+    /* Leaderboard 3D viewer */
+    .skin-3d { width: 200px; height: 280px; background: #222; border-radius: 1rem; overflow: hidden; border: 2px solid #9a4eff; position: relative; }
+    .skin-3d canvas { width: 100% !important; height: 100% !important; }
+
     @media (max-width: 900px) {
       .wrapper { flex-direction: column; }
       .side-nav { width: 100%; height: auto; position: relative; flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; }
@@ -301,15 +94,20 @@
 <div class="orb-glow" style="bottom:-30%; right:-20%; animation-duration: 25s;"></div>
 <div class="wrapper">
   <div class="side-nav">
-    <div class="logo-area">
-      <h1><i class="fas fa-cube"></i> Otk1 MC</h1>
-    </div>
+    <div class="logo-area"><h1><i class="fas fa-cube"></i> Otk1 MC</h1></div>
     <div class="nav-items">
-      <div class="nav-item" data-page="home"><i class="fas fa-home"></i> Home</div>
-      <div class="nav-item" data-page="leaderboard"><i class="fas fa-trophy"></i> Leaderboard</div>
-      <div class="nav-item" data-page="voting"><i class="fas fa-vote-yea"></i> Voting</div>
-      <div class="nav-item" data-page="market"><i class="fas fa-store"></i> Market</div>
-      <div class="nav-item" data-page="social"><i class="fas fa-comments"></i> Social</div>
+      <div class="nav-item" data-page="home"><i class="fas fa-home"></i> <span data-i18n="home">Home</span></div>
+      <div class="nav-item" data-page="leaderboard"><i class="fas fa-trophy"></i> <span data-i18n="leaderboard">Leaderboard</span></div>
+      <div class="nav-item" data-page="status"><i class="fas fa-server"></i> <span data-i18n="status">Status</span></div>
+      <div class="nav-item" data-page="voting"><i class="fas fa-vote-yea"></i> <span data-i18n="voting">Voting</span></div>
+      <div class="nav-item" data-page="market"><i class="fas fa-store"></i> <span data-i18n="market">Market</span></div>
+      <div class="nav-item" data-page="social"><i class="fas fa-comments"></i> <span data-i18n="social">Social</span></div>
+      <div class="nav-item" data-page="staff"><i class="fas fa-users"></i> <span data-i18n="staff">Staff</span></div>
+      <div class="nav-item" data-page="rules"><i class="fas fa-gavel"></i> <span data-i18n="rules">Rules</span></div>
+      <div class="nav-item" data-page="faq"><i class="fas fa-question-circle"></i> <span data-i18n="faq">FAQ</span></div>
+      <div class="nav-item" data-page="store"><i class="fas fa-shopping-cart"></i> <span data-i18n="store">Store</span></div>
+      <div class="nav-item" data-page="discord"><i class="fab fa-discord"></i> <span data-i18n="discord">Discord</span></div>
+      <div class="nav-item" data-page="support"><i class="fas fa-ticket-alt"></i> <span data-i18n="support">Support</span></div>
     </div>
     <button class="lang-toggle" id="langToggleBtn"><i class="fas fa-globe"></i> <span id="langText">العربية</span></button>
   </div>
@@ -317,271 +115,387 @@
 </div>
 
 <script>
-  // ---------- TRANSLATIONS ----------
-  const translations = {
-    en: {
-      hero: "Welcome To Otk1 MC", online: "online", coins: "coins",
-      topTitle: "🏆 Top Player from Each Game", gamesTitle: "🎮 Game Modes",
-      lobbyBtn: "Enter Lobby", copyIp: "Copy IP",
-      leaderboardTitle: "Global Ranking",
-      voteMsg: "🗳️ The vote will start after the server starts",
-      marketMsg: "🛒 The market will open after the server starts",
-      socialMsg: "💬 The social feed will be available after the server starts",
-      copied: "IP copied!"
-    },
-    ar: {
-      hero: "مرحبًا بكم في Otk1 MC", online: "متصل", coins: "عملات",
-      topTitle: "🏆 أفضل لاعب من كل لعبة", gamesTitle: "🎮 الألعاب",
-      lobbyBtn: "انضم للمنطقة", copyIp: "نسخ الآي بي",
-      leaderboardTitle: "الترتيب العالمي",
-      voteMsg: "🗳️ سيبدأ التصويت بعد بدء السيرفر",
-      marketMsg: "🛒 سيفتح السوق بعد بدء السيرفر",
-      socialMsg: "💬 سيكون المنشورات متاحة بعد بدء السيرفر",
-      copied: "تم نسخ الآي بي!"
-    }
-  };
-  let currentLang = localStorage.getItem('otk1_lang') || 'en';
-  function t(key) { return translations[currentLang][key]; }
-  document.getElementById("langText").innerText = currentLang === "en" ? "العربية" : "EN";
-  document.getElementById("langToggleBtn").addEventListener("click", () => {
-    currentLang = currentLang === "en" ? "ar" : "en";
-    localStorage.setItem('otk1_lang', currentLang);
+  (function() {
+    // ---------- TRANSLATIONS ----------
+    const translations = {
+      en: {
+        home:"Home", leaderboard:"Leaderboard", status:"Status", voting:"Voting", market:"Market", social:"Social", staff:"Staff", rules:"Rules", faq:"FAQ", store:"Store", discord:"Discord", support:"Support",
+        hero:"Welcome To Otk1 MC", online:"online", coins:"coins",
+        topTitle:"🏆 Top Player from Each Game", gamesTitle:"🎮 Game Modes",
+        lobbyBtn:"Enter Lobby", copyIp:"Copy IP", leaderboardTitle:"Global Ranking",
+        voteMsg:"🗳️ The vote will start after the server starts",
+        marketMsg:"🛒 The market will open after the server starts",
+        socialMsg:"💬 The social feed will be available after the server starts",
+        copied:"IP copied!",
+        staffTitle:"👥 Our Staff Team", roleOwner:"Owner",
+        ruleTitle:"Server Rules",
+        faqTitle:"Frequently Asked Questions",
+        voteNow:"Vote Now",
+        statusTitle:"Server Status",
+        playersOnline:"Players Online", tps:"TPS", uptime:"Uptime",
+        serverIpJava:"Java IP", serverIpBedrock:"Bedrock IP", discordInvite:"Join Discord",
+        storeComingSoon:"Store coming soon!",
+        discordInfo:"Join our Discord server for updates, events, and support.",
+        supportInfo:"Need help? Join our Discord server and open a ticket.",
+        faq1q:"How do I join the server?", faq1a:"Open Minecraft Java Edition, click Multiplayer, add server address play.otk1mc.com. No mods required, but 1.20+ recommended.",
+        faq2q:"What game modes are available?", faq2a:"We offer 25+ modes including Survival, BedWars, SkyWars, BoxPvP, LifeSteal, Parkour, UHC, and many more.",
+        faq3q:"How do I earn coins?", faq3a:"Coins are earned by playing games, winning matches, voting for the server, and trading on the player market.",
+        faq4q:"What are the ranks and perks?", faq4a:"We have a tiered rank system (VIP, PRO, ELITE, etc.) purchasable in the store. Each rank grants cosmetic perks, chat prefixes, and exclusive kit access.",
+        faq5q:"How do I report a player?", faq5a:"Use /report in-game. For urgent issues or evidence, open a ticket on our Discord server. False reporting is punishable.",
+        faq6q:"What are the punishment stages?", faq6a:"Usually: Warning → Mute / Tempban → Permanent Ban. Severe offenses (cheating, doxing) result in immediate permanent ban. Ban appeals can be made via Discord.",
+      },
+      ar: {
+        home:"الرئيسية", leaderboard:"لوحة المتصدرين", status:"الحالة", voting:"التصويت", market:"السوق", social:"المجتمع", staff:"الموظفون", rules:"القوانين", faq:"الأسئلة الشائعة", store:"متجر", discord:"ديسكورد", support:"الدعم",
+        hero:"مرحبًا بكم في Otk1 MC", online:"متصل", coins:"عملات",
+        topTitle:"🏆 أفضل لاعب من كل لعبة", gamesTitle:"🎮 الألعاب",
+        lobbyBtn:"انضم للمنطقة", copyIp:"نسخ الآي بي", leaderboardTitle:"الترتيب العالمي",
+        voteMsg:"🗳️ سيبدأ التصويت بعد بدء السيرفر",
+        marketMsg:"🛒 سيفتح السوق بعد بدء السيرفر",
+        socialMsg:"💬 سيكون المنشورات متاحة بعد بدء السيرفر",
+        copied:"تم نسخ الآي بي!",
+        staffTitle:"👥 فريق العمل", roleOwner:"المالك",
+        ruleTitle:"قوانين السيرفر",
+        faqTitle:"الأسئلة الشائعة",
+        voteNow:"صوّت الآن",
+        statusTitle:"حالة السيرفر",
+        playersOnline:"اللاعبين المتصلين", tps:"TPS", uptime:"مدة التشغيل",
+        serverIpJava:"IP جافا", serverIpBedrock:"IP بيدروك", discordInvite:"انضم إلى ديسكورد",
+        storeComingSoon:"المتجر قريباً!",
+        discordInfo:"انضم إلى سيرفر الديسكورد للحصول على التحديثات والفعاليات والدعم.",
+        supportInfo:"تحتاج مساعدة؟ انضم إلى سيرفر الديسكورد لدينا وافتح تذكرة.",
+        faq1q:"كيف أنضم إلى السيرفر؟", faq1a:"افتح ماين كرافت جافا، اضغط Multiplayer، أضف عنوان السيرفر play.otk1mc.com. لا تحتاج مودات، لكن يفضل إصدار 1.20+.",
+        faq2q:"ما الألعاب المتاحة؟", faq2a:"نقدم أكثر من 25 لعبة تشمل سيرفايفر، بيد وورز، سكاي وورز، بوكس بي في بي، سرقة القلوب، باركور، يو إتش سي وغيرها. القائمة الكاملة في الصفحة الرئيسية.",
+        faq3q:"كيف أحصل على العملات؟", faq3a:"تكسب العملات عن طريق اللعب، الفوز بالمباريات، التصويت للسيرفر، والتداول في سوق اللاعبين.",
+        faq4q:"ما هي الرتب والمزايا؟", faq4a:"لدينا نظام رتب (VIP، PRO، ELITE إلخ) يمكن شراؤها من المتجر. تمنح مزايا تجميلية، بادئات شات، وحقائب حصرية دون أي أفضليه في اللعب.",
+        faq5q:"كيف أبلغ عن لاعب؟", faq5a:"استخدم الأمر /report داخل اللعبة. للحالات العاجلة أو الأدلة، افتح تذكرة على ديسكورد. التبليغ الكاذب يعاقب عليه.",
+        faq6q:"ما هي مراحل العقوبات؟", faq6a:"عادةً: تحذير ← كتم / حظر مؤقت ← حظر دائم. المخالفات الجسيمة (غش، كشف معلومات) تؤدي إلى حظر دائم فوري. طلبات الاستئناف عبر ديسكورد.",
+      }
+    };
+
+    let currentLang = localStorage.getItem('otk1_lang') || 'en';
+    function t(key) { return translations[currentLang][key] || key; }
     document.getElementById("langText").innerText = currentLang === "en" ? "العربية" : "EN";
-    renderPage(activePage);
-  });
-
-  // ---------- DATA (20 MODES) ----------
-  const modes = [
-    { id:"survival", name:{en:"Survival",ar:"سيرفايفر"}, icon:"🌿", color:"#2ecc71", players:412, desc:{en:"Classic survival, claims",ar:"سيرفايفر كلاسيكي"} },
-    { id:"lifesteal", name:{en:"LifeSteal",ar:"سرقة القلوب"}, icon:"❤️", color:"#e74c3c", players:345, desc:{en:"Steal hearts, bounty",ar:"اسرق القلوب"} },
-    { id:"boxpvp", name:{en:"BoxPvP",ar:"بوكس بي في بي"}, icon:"⚔️", color:"#cb9eff", players:378, desc:{en:"ELO ranked, kits",ar:"تصنيف ELO"} },
-    { id:"bedwars", name:{en:"BedWars",ar:"بيد وورز"}, icon:"🛏️", color:"#f39c12", players:512, desc:{en:"Protect bed, team PvP",ar:"احمِ سريرك"} },
-    { id:"eggwars", name:{en:"EggWars",ar:"إيغ وورز"}, icon:"🥚", color:"#1abc9c", players:467, desc:{en:"Egg protection",ar:"حماية البيضة"} },
-    { id:"skywars", name:{en:"SkyWars",ar:"سكاي وورز"}, icon:"☁️", color:"#3498db", players:489, desc:{en:"Island PvP",ar:"قتال في الجزر"} },
-    { id:"thebridge", name:{en:"The Bridge",ar:"الجسر"}, icon:"🌉", color:"#ff6b6b", players:234, desc:{en:"Bridge dueling",ar:"مبارزات الجسر"} },
-    { id:"ctf", name:{en:"Capture The Flag",ar:"أسرع العلم"}, icon:"🏁", color:"#4ecdc4", players:356, desc:{en:"Capture the flag",ar:"أسرع العلم"} },
-    { id:"hideandseek", name:{en:"Hide and Seek",ar:"غميعة"}, icon:"🔍", color:"#ffe66d", players:189, desc:{en:"Classic hide & seek",ar:"غميعة"} },
-    { id:"murder", name:{en:"Murder Mystery",ar:"لغز القتل"}, icon:"🔪", color:"#292f36", players:278, desc:{en:"Social deduction",ar:"استنتاج اجتماعي"} },
-    { id:"skyblock", name:{en:"SkyBlock",ar:"سكاي بلوك"}, icon:"☁️", color:"#4c9aff", players:512, desc:{en:"Island survival",ar:"نجاة في جزيرة"} },
-    { id:"oneblock", name:{en:"OneBlock",ar:"ون بلوك"}, icon:"🧱", color:"#ff9f4a", players:345, desc:{en:"Regenerating block",ar:"كتلة متجددة"} },
-    { id:"survivalgames", name:{en:"Survival Games",ar:"ألعاب البقاء"}, icon:"🏆", color:"#ff4757", players:478, desc:{en:"Hunger Games",ar:"باتل رويال"} },
-    { id:"buildbattle", name:{en:"Build Battle",ar:"معركة البناء"}, icon:"🎨", color:"#70a1ff", players:289, desc:{en:"Creative building",ar:"بناء إبداعي"} },
-    { id:"parkour", name:{en:"Parkour",ar:"باركور"}, icon:"🏃", color:"#ffa502", players:312, desc:{en:"Time trials",ar:"مسارات زمنية"} },
-    { id:"uhc", name:{en:"UHC",ar:"يو إتش سي"}, icon:"⛏️", color:"#cd6133", players:234, desc:{en:"Ultra Hardcore",ar:"هاكور"} },
-    { id:"kitpvp", name:{en:"KitPvP",ar:"كيت بي في بي"}, icon:"⚔️", color:"#eccc68", players:423, desc:{en:"Kit-based PvP",ar:"بي في بي بمجموعات"} },
-    { id:"blockparty", name:{en:"Block Party",ar:"حفلة الكتل"}, icon:"🎵", color:"#ff69b4", players:345, desc:{en:"Music & reaction",ar:"موسيقى ورد فعل"} },
-    { id:"tnttag", name:{en:"TNT Tag",ar:"تاغ التي إن تي"}, icon:"💣", color:"#ff4444", players:389, desc:{en:"Pass the TNT",ar:"مرر التي إن تي"} },
-    { id:"kartracers", name:{en:"Turbo Kart Racers",ar:"سباقات الكارت"}, icon:"🏎️", color:"#00d2d3", players:389, desc:{en:"Kart racing",ar:"سباقات كارت"} }
-  ];
-
-  const topPlayers = {
-    survival: { name:"CraftyKing", stat:"15840 Kills" }, lifesteal: { name:"ShadowHeart", stat:"487 Hearts" },
-    boxpvp: { name:"FighterPro", stat:"2680 ELO" }, bedwars: { name:"BedBreaker", stat:"1120 Wins" },
-    eggwars: { name:"EggGuardian", stat:"980 Wins" }, skywars: { name:"SkyLord", stat:"2100 Wins" },
-    thebridge: { name:"BridgeKing", stat:"3450 Wins" }, ctf: { name:"FlagRunner", stat:"890 Captures" },
-    hideandseek: { name:"ShadowHider", stat:"890 Wins" }, murder: { name:"DetectiveMaster", stat:"234 Cases" },
-    skyblock: { name:"IslandMaster", stat:"Level 125" }, oneblock: { name:"BlockMaster", stat:"Stage 12" },
-    survivalgames: { name:"HungerKing", stat:"234 Wins" }, buildbattle: { name:"CreativePro", stat:"345 Wins" },
-    parkour: { name:"ParkourKing", stat:"45.2s Best" }, uhc: { name:"UHCPro", stat:"89 Wins" },
-    kitpvp: { name:"PvPMaster", stat:"3450 Kills" }, blockparty: { name:"DanceMaster", stat:"567 Wins" },
-    tnttag: { name:"TagMaster", stat:"890 Tags" }, kartracers: { name:"RacingPro", stat:"32.5s Best Lap" }
-  };
-
-  let globalLeaderboard = [
-    { rank:1, name:"CraftyKing", kills:10420, wins:890, economy:47800, tier:"diamond", avatar:"CraftyKing" },
-    { rank:2, name:"ShadowHeart", kills:9210, wins:765, economy:41200, tier:"emerald", avatar:"ShadowHeart" },
-    { rank:3, name:"FighterPro", kills:8870, wins:942, economy:36500, tier:"gold", avatar:"FighterPro" },
-    { rank:4, name:"BedBreaker", kills:7890, wins:834, economy:29800, tier:"gold", avatar:"BedBreaker" },
-    { rank:5, name:"SkyLord", kills:7230, wins:901, economy:27600, tier:"silver", avatar:"SkyLord" },
-    { rank:6, name:"PixelWizard", kills:6870, wins:745, economy:25400, tier:"silver", avatar:"PixelWizard" },
-    { rank:7, name:"VampLord", kills:6540, wins:689, economy:23200, tier:"bronze", avatar:"VampLord" },
-    { rank:8, name:"BlockyNinja", kills:6120, wins:598, economy:21800, tier:"bronze", avatar:"BlockyNinja" },
-    { rank:9, name:"MinerMike", kills:5780, wins:512, economy:19700, tier:"bronze", avatar:"MinerMike" },
-    { rank:10, name:"OtkPlayer", kills:3450, wins:287, economy:12500, tier:"bronze", avatar:"OtkPlayer" }
-  ];
-
-  let currentSort = { field: "kills", order: "desc" };
-  function renderLeaderboardTable() {
-    let sorted = [...globalLeaderboard];
-    if (currentSort.field === "kills") sorted.sort((a,b) => currentSort.order === "desc" ? b.kills - a.kills : a.kills - b.kills);
-    else if (currentSort.field === "wins") sorted.sort((a,b) => currentSort.order === "desc" ? b.wins - a.wins : a.wins - b.wins);
-    else if (currentSort.field === "economy") sorted.sort((a,b) => currentSort.order === "desc" ? b.economy - a.economy : a.economy - b.economy);
-    else sorted.sort((a,b) => a.rank - b.rank);
-    const top3 = sorted.slice(0,3);
-    const rest = sorted.slice(3);
-    return `
-      <div class="leaderboard-podium">
-        ${top3.map((p,i) => `<div class="podium-item ${i===0?'first':''}"><img class="podium-avatar" src="https://mc-heads.net/avatar/${p.avatar}" onerror="this.src='https://via.placeholder.com/64'"><div><strong>${p.name}</strong></div><div>${p.kills} kills</div><div>💰 ${p.economy}</div></div>`).join('')}
-      </div>
-      <table class="leaderboard-table">
-        <thead><tr><th>#</th><th>Player</th><th onclick="window.changeSort('kills')">Kills <span>${currentSort.field==='kills'?(currentSort.order==='desc'?'▼':'▲'):'↕'}</span></th><th onclick="window.changeSort('wins')">Wins <span>${currentSort.field==='wins'?(currentSort.order==='desc'?'▼':'▲'):'↕'}</span></th><th onclick="window.changeSort('economy')">Economy <span>${currentSort.field==='economy'?(currentSort.order==='desc'?'▼':'▲'):'↕'}</span></th></tr></thead>
-        <tbody>${rest.map(p => `<tr><td style="font-weight:600;">#${p.rank}</td><td><img src="https://mc-heads.net/avatar/${p.avatar}" width="24" style="border-radius:50%; margin-right:8px;"> ${p.name}</td><td>${p.kills.toLocaleString()}</td><td>${p.wins.toLocaleString()}</td><td>💰 ${p.economy.toLocaleString()}</td></tr>`).join('')}</tbody>
-      </table>
-    `;
-  }
-  window.changeSort = (field) => {
-    if (currentSort.field === field) currentSort.order = currentSort.order === "desc" ? "asc" : "desc";
-    else { currentSort.field = field; currentSort.order = "desc"; }
-    const leaderboardDiv = document.getElementById("leaderboardContainer");
-    if(leaderboardDiv) leaderboardDiv.innerHTML = renderLeaderboardTable();
-  };
-
-  // ---------- LOBBY PAGE GENERATOR (enhanced premium) ----------
-  function generateLobbyPageHTML(modeId) {
-    const mode = modes.find(m => m.id === modeId);
-    if(!mode) return "<h2>Error</h2>";
-    const name = mode.name[currentLang];
-    const color = mode.color;
-    const desc = mode.desc[currentLang];
-    const serverIp = `${modeId}.otk1mc.com:25565`;
-    const top = topPlayers[modeId];
-    const iconMap = { "🌿":"fa-tree","❤️":"fa-heartbeat","⚔️":"fa-cube","🛏️":"fa-bed","🥚":"fa-egg","☁️":"fa-cloud-sun","🌉":"fa-bridge","🏁":"fa-flag-checkered","🔍":"fa-search","🔪":"fa-kitchen-knife","🧱":"fa-cube","🏆":"fa-trophy","🎨":"fa-palette","🏃":"fa-running","⛏️":"fa-pickaxe","🎵":"fa-music","💣":"fa-bomb","🏎️":"fa-car" };
-    const icon = iconMap[mode.icon] || "fa-cube";
-    const topStatValue = parseInt(top.stat.split(' ')[0]);
-    const leaderboardRows = [
-      { rank:1, name:top.name, stat:topStatValue, balance:"100k+" },
-      { rank:2, name:"RunnerUp", stat:Math.floor(topStatValue*0.8), balance:"75k" },
-      { rank:3, name:"Challenger", stat:Math.floor(topStatValue*0.6), balance:"50k" },
-      { rank:4, name:"Contender", stat:Math.floor(topStatValue*0.4), balance:"30k" },
-      { rank:5, name:"Newcomer", stat:Math.floor(topStatValue*0.2), balance:"10k" }
-    ];
-    return `<!DOCTYPE html>
-<html lang="${currentLang}">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Otk1 MC | ${name}</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Inter', sans-serif; background: #0a0418; color: white; overflow-x: hidden; }
-  .orb-bg { position: fixed; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle at 10% 20%, #1f0c3c, #0a0418); }
-  .orb-glow { position: fixed; width: 50vw; height: 50vw; border-radius: 50%; background: radial-gradient(circle, rgba(155,90,255,0.3) 0%, rgba(155,90,255,0) 70%); filter: blur(80px); z-index: -1; animation: floatGlow 20s infinite alternate; }
-  @keyframes floatGlow { 0% { transform: translate(10%, 20%) scale(1); opacity: 0.4; } 100% { transform: translate(-10%, -10%) scale(1.3); opacity: 0.8; } }
-  .container { max-width: 1200px; margin: 0 auto; padding: 2rem; position: relative; z-index: 2; }
-  .back-btn {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    margin-bottom: 2rem; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
-    padding: 0.6rem 1.5rem; border-radius: 3rem; color: ${color}; text-decoration: none;
-    border: 1px solid ${color}; transition: 0.2s; font-weight: 600;
-  }
-  .back-btn:hover { background: ${color}; color: #000; transform: translateX(-5px); }
-  .hero {
-    text-align: center; padding: 3rem 1rem; background: rgba(0,0,0,0.4); backdrop-filter: blur(12px);
-    border-radius: 2rem; border-bottom: 4px solid ${color}; margin-bottom: 2rem;
-    position: relative; overflow: hidden;
-  }
-  .hero i { font-size: 5rem; filter: drop-shadow(0 0 12px ${color}); margin-bottom: 0.5rem; display: block; }
-  .hero h1 { font-size: 3rem; margin: 0.5rem 0; }
-  .hero::after {
-    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
-    animation: rotateGlow 20s linear infinite;
-  }
-  @keyframes rotateGlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  .ip-section {
-    background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); border-radius: 2rem; padding: 1rem;
-    text-align: center; margin: 2rem 0; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;
-    border: 1px solid ${color};
-  }
-  .copy-ip { background: ${color}; border: none; padding: 0.6rem 1.5rem; border-radius: 3rem; color: #000; font-weight: bold; cursor: pointer; }
-  .stat-cards {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 1.5rem; margin: 2rem 0;
-  }
-  .stat-card {
-    background: rgba(0,0,0,0.55); backdrop-filter: blur(8px); border-radius: 1.5rem; padding: 1.2rem;
-    text-align: center; border-left: 4px solid ${color};
-  }
-  .stat-card i { font-size: 2rem; color: ${color}; display: block; margin-bottom: 0.5rem; }
-  .stat-card .number { font-size: 2rem; font-weight: 800; }
-  .leaderboard-container {
-    background: rgba(0,0,0,0.5); border-radius: 1.5rem; padding: 1.5rem; margin: 1.5rem 0;
-  }
-  .rank-table { width: 100%; border-collapse: collapse; }
-  .rank-table th, .rank-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
-  .rank-1 { background: linear-gradient(90deg, rgba(255,215,0,0.2), transparent); }
-  .feature-tags { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin: 1.5rem 0; }
-  .feature { background: rgba(0,0,0,0.5); padding: 0.4rem 1rem; border-radius: 2rem; border-left: 2px solid ${color}; }
-  footer { text-align: center; margin-top: 2rem; color: #aaa; }
-  @media (max-width: 700px) { .hero h1 { font-size: 2rem; } .container { padding: 1rem; } }
-</style>
-</head>
-<body>
-<div class="orb-bg"></div>
-<div class="orb-glow" style="top:-20%; left:-20%;"></div>
-<div class="orb-glow" style="bottom:-30%; right:-20%; animation-duration: 25s;"></div>
-<div class="container">
-  <a href="#" onclick="window.location.href = localStorage.getItem('otk1_main_url') || '/'; return false;" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Hub</a>
-  <div class="hero"><i class="fas ${icon}"></i><h1>${name}</h1><p>${desc}</p></div>
-  <div class="ip-section"><span style="font-family: monospace; font-size: 1.3rem;">${serverIp}</span><button class="copy-ip" onclick="navigator.clipboard.writeText('${serverIp}'); alert('${t("copied")}');">📋 ${t("copyIp")}</button></div>
-  <div class="stat-cards"><div class="stat-card"><i class="fas fa-users"></i><div class="number" id="liveCount">${mode.players}</div><div>${t("online")}</div></div><div class="stat-card"><i class="fas fa-chart-line"></i><div class="number">20.0</div><div>TPS</div></div><div class="stat-card"><i class="fas fa-crown"></i><div class="number">${top.name}</div><div>Top Player</div></div></div>
-  <div class="feature-tags"><div class="feature"><i class="fas fa-check-circle"></i> Competitive</div><div class="feature"><i class="fas fa-check-circle"></i> Leaderboards</div><div class="feature"><i class="fas fa-check-circle"></i> Rewards</div></div>
-  <div class="leaderboard-container"><div class="leaderboard-title"><i class="fas fa-trophy"></i> Hall of Fame</div><table class="rank-table"><thead><tr><th>#</th><th>Player</th><th>${top.stat.split(' ')[1]}</th><th>💰 Balance</th></tr></thead><tbody>${leaderboardRows.map(p => `<tr class="rank-${p.rank}"><td><span style="background:#2a1a4a; width:28px;height:28px;display:inline-block;line-height:28px;text-align:center;border-radius:50%;">${p.rank}</span></td><td><i class="fas fa-user"></i> ${p.name}</td><td>${p.stat}</td><td>💰 ${p.balance}</td></tr>`).join('')}</tbody></table></div>
-  <footer><i class="fas fa-pickaxe"></i> Otk1 MC · ${name}</footer>
-</div>
-<script>let count = ${mode.players}; setInterval(() => { count += Math.floor(Math.random() * 11) - 5; count = Math.max(50, count); document.getElementById('liveCount').innerText = count; }, 7000);<\/script>
-</body>
-</html>`;
-  }
-
-  function openLobby(modeId) {
-    localStorage.setItem('otk1_main_url', window.location.href);
-    const html = generateLobbyPageHTML(modeId);
-    const blob = new Blob([html], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    window.location.href = url;
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-
-  function copyMainIP() {
-    navigator.clipboard.writeText("play.otk1mc.com");
-    alert(t("copied"));
-  }
-
-  let activePage = "home";
-  function renderPage(page) {
-    activePage = page;
-    const main = document.getElementById("mainContent");
-    if(!main) return;
-    if(page === "home") {
-      const topPlayersHtml = modes.map(m => `<div class="top-card"><div class="top-icon">${m.icon}</div><div class="top-info"><h4>${m.name[currentLang]}</h4><p>🏆 ${topPlayers[m.id].name}<br>${topPlayers[m.id].stat}</p></div></div>`).join('');
-      const modesHtml = modes.map(m => `<div class="game-card" data-mode="${m.id}"><div class="game-icon" style="color:${m.color}">${m.icon}</div><div class="game-name">${m.name[currentLang]}</div><div class="game-desc">${m.desc[currentLang]}</div><div class="game-stats"><span>🔥 ${m.players} ${t("online")}</span><span>🏷️ Competitive</span></div><button class="join-game">${t("lobbyBtn")}</button></div>`).join('');
-      main.innerHTML = `
-        <div class="hero-stats">
-          <div class="hero-title"><h2>${t("hero")}</h2><p>20+ unique game modes</p></div>
-          <div class="hero-stats-box"><div class="hero-stat"><div class="number">2,431</div><div>${t("online")}</div></div><div class="hero-stat"><div class="number">4,250</div><div>${t("coins")}</div></div></div>
-          <button class="copy-ip-btn" id="copyMainIpBtn"><i class="far fa-copy"></i> ${t("copyIp")}</button>
-        </div>
-        <div class="grid-title">${t("topTitle")}</div>
-        <div class="top-players-grid">${topPlayersHtml}</div>
-        <div class="grid-title">${t("gamesTitle")}</div>
-        <div class="modes-grid">${modesHtml}</div>
-      `;
-      document.getElementById("copyMainIpBtn")?.addEventListener("click", copyMainIP);
-      document.querySelectorAll(".game-card").forEach(card => {
-        const modeId = card.dataset.mode;
-        card.addEventListener("click", (e) => { if(e.target.classList.contains("join-game")) e.stopPropagation(); openLobby(modeId); });
-        card.querySelector(".join-game")?.addEventListener("click", (e) => { e.stopPropagation(); openLobby(modeId); });
-      });
-    } else if(page === "leaderboard") {
-      main.innerHTML = `<div id="leaderboardContainer">${renderLeaderboardTable()}</div>`;
-    } else if(page === "voting") {
-      main.innerHTML = `<div class="placeholder"><i class="fas fa-vote-yea"></i> ${t("voteMsg")}</div>`;
-    } else if(page === "market") {
-      main.innerHTML = `<div class="placeholder"><i class="fas fa-store"></i> ${t("marketMsg")}</div>`;
-    } else if(page === "social") {
-      main.innerHTML = `<div class="placeholder"><i class="fas fa-comments"></i> ${t("socialMsg")}</div>`;
-    }
-  }
-
-  // initialize navigation
-  document.querySelectorAll(".nav-item").forEach(item => {
-    item.addEventListener("click", () => {
-      document.querySelectorAll(".nav-item").forEach(nav => nav.classList.remove("active"));
-      item.classList.add("active");
-      renderPage(item.dataset.page);
+    document.getElementById("langToggleBtn").addEventListener("click", () => {
+      currentLang = currentLang === "en" ? "ar" : "en";
+      localStorage.setItem('otk1_lang', currentLang);
+      document.getElementById("langText").innerText = currentLang === "en" ? "العربية" : "EN";
+      applyTranslations();
     });
-  });
-  document.querySelector(".nav-item[data-page='home']").classList.add("active");
-  renderPage("home");
+
+    // ---------- GAME DATA (20 MODES) ----------
+    const modes = [
+      { id:"survival", name:{en:"Survival",ar:"سيرفايفر"}, icon:"🌿", color:"#2ecc71", players:412, desc:{en:"Classic survival, claims",ar:"سيرفايفر كلاسيكي"} },
+      { id:"lifesteal", name:{en:"LifeSteal",ar:"سرقة القلوب"}, icon:"❤️", color:"#e74c3c", players:345, desc:{en:"Steal hearts, bounty",ar:"اسرق القلوب"} },
+      { id:"boxpvp", name:{en:"BoxPvP",ar:"بوكس بي في بي"}, icon:"⚔️", color:"#cb9eff", players:378, desc:{en:"ELO ranked, kits",ar:"تصنيف ELO"} },
+      { id:"bedwars", name:{en:"BedWars",ar:"بيد وورز"}, icon:"🛏️", color:"#f39c12", players:512, desc:{en:"Protect bed, team PvP",ar:"احمِ سريرك"} },
+      { id:"eggwars", name:{en:"EggWars",ar:"إيغ وورز"}, icon:"🥚", color:"#1abc9c", players:467, desc:{en:"Egg protection",ar:"حماية البيضة"} },
+      { id:"skywars", name:{en:"SkyWars",ar:"سكاي وورز"}, icon:"☁️", color:"#3498db", players:489, desc:{en:"Island PvP",ar:"قتال في الجزر"} },
+      { id:"thebridge", name:{en:"The Bridge",ar:"الجسر"}, icon:"🌉", color:"#ff6b6b", players:234, desc:{en:"Bridge dueling",ar:"مبارزات الجسر"} },
+      { id:"ctf", name:{en:"Capture The Flag",ar:"أسرع العلم"}, icon:"🏁", color:"#4ecdc4", players:356, desc:{en:"Capture the flag",ar:"أسرع العلم"} },
+      { id:"hideandseek", name:{en:"Hide and Seek",ar:"غميعة"}, icon:"🔍", color:"#ffe66d", players:189, desc:{en:"Classic hide & seek",ar:"غميعة"} },
+      { id:"murder", name:{en:"Murder Mystery",ar:"لغز القتل"}, icon:"🔪", color:"#292f36", players:278, desc:{en:"Social deduction",ar:"استنتاج اجتماعي"} },
+      { id:"skyblock", name:{en:"SkyBlock",ar:"سكاي بلوك"}, icon:"☁️", color:"#4c9aff", players:512, desc:{en:"Island survival",ar:"نجاة في جزيرة"} },
+      { id:"oneblock", name:{en:"OneBlock",ar:"ون بلوك"}, icon:"🧱", color:"#ff9f4a", players:345, desc:{en:"Regenerating block",ar:"كتلة متجددة"} },
+      { id:"survivalgames", name:{en:"Survival Games",ar:"ألعاب البقاء"}, icon:"🏆", color:"#ff4757", players:478, desc:{en:"Hunger Games",ar:"باتل رويال"} },
+      { id:"buildbattle", name:{en:"Build Battle",ar:"معركة البناء"}, icon:"🎨", color:"#70a1ff", players:289, desc:{en:"Creative building",ar:"بناء إبداعي"} },
+      { id:"parkour", name:{en:"Parkour",ar:"باركور"}, icon:"🏃", color:"#ffa502", players:312, desc:{en:"Time trials",ar:"مسارات زمنية"} },
+      { id:"uhc", name:{en:"UHC",ar:"يو إتش سي"}, icon:"⛏️", color:"#cd6133", players:234, desc:{en:"Ultra Hardcore",ar:"هاكور"} },
+      { id:"kitpvp", name:{en:"KitPvP",ar:"كيت بي في بي"}, icon:"⚔️", color:"#eccc68", players:423, desc:{en:"Kit-based PvP",ar:"بي في بي بمجموعات"} },
+      { id:"blockparty", name:{en:"Block Party",ar:"حفلة الكتل"}, icon:"🎵", color:"#ff69b4", players:345, desc:{en:"Music & reaction",ar:"موسيقى ورد فعل"} },
+      { id:"tnttag", name:{en:"TNT Tag",ar:"تاغ التي إن تي"}, icon:"💣", color:"#ff4444", players:389, desc:{en:"Pass the TNT",ar:"مرر التي إن تي"} },
+      { id:"kartracers", name:{en:"Turbo Kart Racers",ar:"سباقات الكارت"}, icon:"🏎️", color:"#00d2d3", players:389, desc:{en:"Kart racing",ar:"سباقات كارت"} }
+    ];
+
+    const topPlayers = {
+      survival: { name:"CraftyKing", stat:"15840 Kills" }, lifesteal: { name:"ShadowHeart", stat:"487 Hearts" },
+      boxpvp: { name:"FighterPro", stat:"2680 ELO" }, bedwars: { name:"BedBreaker", stat:"1120 Wins" },
+      eggwars: { name:"EggGuardian", stat:"980 Wins" }, skywars: { name:"SkyLord", stat:"2100 Wins" },
+      thebridge: { name:"BridgeKing", stat:"3450 Wins" }, ctf: { name:"FlagRunner", stat:"890 Captures" },
+      hideandseek: { name:"ShadowHider", stat:"890 Wins" }, murder: { name:"DetectiveMaster", stat:"234 Cases" },
+      skyblock: { name:"IslandMaster", stat:"Level 125" }, oneblock: { name:"BlockMaster", stat:"Stage 12" },
+      survivalgames: { name:"HungerKing", stat:"234 Wins" }, buildbattle: { name:"CreativePro", stat:"345 Wins" },
+      parkour: { name:"ParkourKing", stat:"45.2s Best" }, uhc: { name:"UHCPro", stat:"89 Wins" },
+      kitpvp: { name:"PvPMaster", stat:"3450 Kills" }, blockparty: { name:"DanceMaster", stat:"567 Wins" },
+      tnttag: { name:"TagMaster", stat:"890 Tags" }, kartracers: { name:"RacingPro", stat:"32.5s Best Lap" }
+    };
+
+    let globalLeaderboard = [
+      { rank:1, name:"CraftyKing", kills:10420, wins:890, economy:47800, tier:"diamond", avatar:"CraftyKing" },
+      { rank:2, name:"ShadowHeart", kills:9210, wins:765, economy:41200, tier:"emerald", avatar:"ShadowHeart" },
+      { rank:3, name:"FighterPro", kills:8870, wins:942, economy:36500, tier:"gold", avatar:"FighterPro" },
+      { rank:4, name:"BedBreaker", kills:7890, wins:834, economy:29800, tier:"gold", avatar:"BedBreaker" },
+      { rank:5, name:"SkyLord", kills:7230, wins:901, economy:27600, tier:"silver", avatar:"SkyLord" },
+      { rank:6, name:"PixelWizard", kills:6870, wins:745, economy:25400, tier:"silver", avatar:"PixelWizard" },
+      { rank:7, name:"VampLord", kills:6540, wins:689, economy:23200, tier:"bronze", avatar:"VampLord" },
+      { rank:8, name:"BlockyNinja", kills:6120, wins:598, economy:21800, tier:"bronze", avatar:"BlockyNinja" },
+      { rank:9, name:"MinerMike", kills:5780, wins:512, economy:19700, tier:"bronze", avatar:"MinerMike" },
+      { rank:10, name:"OtkPlayer", kills:3450, wins:287, economy:12500, tier:"bronze", avatar:"OtkPlayer" }
+    ];
+
+    let currentSort = { field: "kills", order: "desc" };
+    function renderLeaderboardTable() {
+      let sorted = [...globalLeaderboard];
+      if (currentSort.field === "kills") sorted.sort((a,b) => currentSort.order === "desc" ? b.kills - a.kills : a.kills - b.kills);
+      else if (currentSort.field === "wins") sorted.sort((a,b) => currentSort.order === "desc" ? b.wins - a.wins : a.wins - b.wins);
+      else if (currentSort.field === "economy") sorted.sort((a,b) => currentSort.order === "desc" ? b.economy - a.economy : a.economy - b.economy);
+      else sorted.sort((a,b) => a.rank - b.rank);
+      const top3 = sorted.slice(0,3);
+      const rest = sorted.slice(3);
+      return `
+        <div class="leaderboard-podium">
+          ${top3.map((p,i) => `<div class="podium-item ${i===0?'first':''}"><img class="podium-avatar" src="https://mc-heads.net/avatar/${p.avatar}" onerror="this.src='https://via.placeholder.com/64'"><div><strong>${p.name}</strong></div><div>${p.kills} kills</div><div>💰 ${p.economy}</div></div>`).join('')}
+        </div>
+        <table class="leaderboard-table">
+          <thead><tr><th>#</th><th>Player</th><th onclick="window.changeSort('kills')">Kills <span>${currentSort.field==='kills'?(currentSort.order==='desc'?'▼':'▲'):'↕'}</span></th><th onclick="window.changeSort('wins')">Wins <span>${currentSort.field==='wins'?(currentSort.order==='desc'?'▼':'▲'):'↕'}</span></th><th onclick="window.changeSort('economy')">Economy <span>${currentSort.field==='economy'?(currentSort.order==='desc'?'▼':'▲'):'↕'}</span></th></tr></thead>
+          <tbody>${rest.map(p => `<tr><td style="font-weight:600;">#${p.rank}</td><td><img src="https://mc-heads.net/avatar/${p.avatar}" width="24" style="border-radius:50%; margin-right:8px;"> ${p.name}</td><td>${p.kills.toLocaleString()}</td><td>${p.wins.toLocaleString()}</td><td>💰 ${p.economy.toLocaleString()}</td></tr>`).join('')}</tbody>
+        </table>
+      `;
+    }
+    window.changeSort = (field) => {
+      if (currentSort.field === field) currentSort.order = currentSort.order === "desc" ? "asc" : "desc";
+      else { currentSort.field = field; currentSort.order = "desc"; }
+      const leaderboardDiv = document.getElementById("leaderboardContainer");
+      if(leaderboardDiv) leaderboardDiv.innerHTML = renderLeaderboardTable();
+    };
+
+    // ---------- LOBBY PAGE GENERATOR ----------
+    function generateLobbyPageHTML(modeId) {
+      const mode = modes.find(m => m.id === modeId);
+      if(!mode) return "<h2>Error</h2>";
+      const name = mode.name[currentLang];
+      const color = mode.color;
+      const desc = mode.desc[currentLang];
+      const serverIp = `${modeId}.otk1mc.com:25565`;
+      const top = topPlayers[modeId];
+      const iconMap = { "🌿":"fa-tree","❤️":"fa-heartbeat","⚔️":"fa-cube","🛏️":"fa-bed","🥚":"fa-egg","☁️":"fa-cloud-sun","🌉":"fa-bridge","🏁":"fa-flag-checkered","🔍":"fa-search","🔪":"fa-kitchen-knife","🧱":"fa-cube","🏆":"fa-trophy","🎨":"fa-palette","🏃":"fa-running","⛏️":"fa-pickaxe","🎵":"fa-music","💣":"fa-bomb","🏎️":"fa-car" };
+      const icon = iconMap[mode.icon] || "fa-cube";
+      const topStatValue = parseInt(top.stat.split(' ')[0]);
+      const leaderboardRows = [
+        { rank:1, name:top.name, stat:topStatValue, balance:"100k+" },
+        { rank:2, name:"RunnerUp", stat:Math.floor(topStatValue*0.8), balance:"75k" },
+        { rank:3, name:"Challenger", stat:Math.floor(topStatValue*0.6), balance:"50k" },
+        { rank:4, name:"Contender", stat:Math.floor(topStatValue*0.4), balance:"30k" },
+        { rank:5, name:"Newcomer", stat:Math.floor(topStatValue*0.2), balance:"10k" }
+      ];
+      return `<!DOCTYPE html><html lang="${currentLang}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Otk1 MC | ${name}</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><style>
+      * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Inter', sans-serif; background: #0a0418; color: white; overflow-x: hidden; } .orb-bg { position: fixed; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle at 10% 20%, #1f0c3c, #0a0418); } .orb-glow { position: fixed; width: 50vw; height: 50vw; border-radius: 50%; background: radial-gradient(circle, rgba(155,90,255,0.3) 0%, rgba(155,90,255,0) 70%); filter: blur(80px); z-index: -1; animation: floatGlow 20s infinite alternate; } @keyframes floatGlow { 0% { transform: translate(10%, 20%) scale(1); opacity: 0.4; } 100% { transform: translate(-10%, -10%) scale(1.3); opacity: 0.8; } } .container { max-width: 1200px; margin: 0 auto; padding: 2rem; position: relative; z-index: 2; } .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); padding: 0.6rem 1.5rem; border-radius: 3rem; color: ${color}; text-decoration: none; border: 1px solid ${color}; transition: 0.2s; font-weight: 600; } .back-btn:hover { background: ${color}; color: #000; transform: translateX(-5px); } .hero { text-align: center; padding: 3rem 1rem; background: rgba(0,0,0,0.4); backdrop-filter: blur(12px); border-radius: 2rem; border-bottom: 4px solid ${color}; margin-bottom: 2rem; position: relative; overflow: hidden; } .hero i { font-size: 5rem; filter: drop-shadow(0 0 12px ${color}); margin-bottom: 0.5rem; display: block; } .hero h1 { font-size: 3rem; margin: 0.5rem 0; } .ip-section { background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); border-radius: 2rem; padding: 1rem; text-align: center; margin: 2rem 0; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; border: 1px solid ${color}; } .copy-ip { background: ${color}; border: none; padding: 0.6rem 1.5rem; border-radius: 3rem; color: #000; font-weight: bold; cursor: pointer; } .stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 1.5rem; margin: 2rem 0; } .stat-card { background: rgba(0,0,0,0.55); backdrop-filter: blur(8px); border-radius: 1.5rem; padding: 1.2rem; text-align: center; border-left: 4px solid ${color}; } .stat-card i { font-size: 2rem; color: ${color}; display: block; margin-bottom: 0.5rem; } .stat-card .number { font-size: 2rem; font-weight: 800; } .leaderboard-container { background: rgba(0,0,0,0.5); border-radius: 1.5rem; padding: 1.5rem; margin: 1.5rem 0; } .rank-table { width: 100%; border-collapse: collapse; } .rank-table th, .rank-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); } .rank-1 { background: linear-gradient(90deg, rgba(255,215,0,0.2), transparent); } footer { text-align: center; margin-top: 2rem; color: #aaa; }</style></head><body><div class="orb-bg"></div><div class="orb-glow" style="top:-20%; left:-20%;"></div><div class="orb-glow" style="bottom:-30%; right:-20%; animation-duration: 25s;"></div><div class="container"><a href="#" onclick="window.location.href = localStorage.getItem('otk1_main_url') || '/'; return false;" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Hub</a><div class="hero"><i class="fas ${icon}"></i><h1>${name}</h1><p>${desc}</p></div><div class="ip-section"><span style="font-family: monospace; font-size: 1.3rem;">${serverIp}</span><button class="copy-ip" onclick="navigator.clipboard.writeText('${serverIp}'); alert('${t("copied")}');">📋 ${t("copyIp")}</button></div><div class="stat-cards"><div class="stat-card"><i class="fas fa-users"></i><div class="number" id="liveCount">${mode.players}</div><div>${t("online")}</div></div><div class="stat-card"><i class="fas fa-chart-line"></i><div class="number">20.0</div><div>TPS</div></div><div class="stat-card"><i class="fas fa-crown"></i><div class="number">${top.name}</div><div>Top Player</div></div></div><div class="leaderboard-container"><div class="leaderboard-title"><i class="fas fa-trophy"></i> Hall of Fame</div><table class="rank-table"><thead><tr><th>#</th><th>Player</th><th>${top.stat.split(' ')[1]}</th><th>💰 Balance</th></tr></thead><tbody>${leaderboardRows.map(p => `<tr class="rank-${p.rank}"><td><span style="background:#2a1a4a; width:28px;height:28px;display:inline-block;line-height:28px;text-align:center;border-radius:50%;">${p.rank}</span></td><td><i class="fas fa-user"></i> ${p.name}</td><td>${p.stat}</td><td>💰 ${p.balance}</td></tr>`).join('')}</tbody></table></div><footer><i class="fas fa-pickaxe"></i> Otk1 MC · ${name}</footer></div><script>let count = ${mode.players}; setInterval(() => { count += Math.floor(Math.random() * 11) - 5; count = Math.max(50, count); document.getElementById('liveCount').innerText = count; }, 7000);<\/script></body></html>`;
+    }
+
+    function openLobby(modeId) {
+      localStorage.setItem('otk1_main_url', window.location.href);
+      const html = generateLobbyPageHTML(modeId);
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      window.location.href = url;
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function copyMainIP() {
+      navigator.clipboard.writeText("play.otk1mc.com");
+      alert(t("copied"));
+    }
+
+    // ========== SKIN FUNCTIONS (used in Leaderboard) ==========
+    let leaderboardSkinViewer = null;
+
+    async function fetchUUID(username) {
+      const res = await fetch(`https://api.mojang.com/users/profiles/minecraft/${username}`);
+      if (!res.ok) throw new Error('User not found');
+      const data = await res.json();
+      return data.id;
+    }
+
+    async function fetchSkinUrls(uuid) {
+      const res = await fetch(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}?unsigned=false`);
+      const json = await res.json();
+      const prop = json.properties.find(p => p.name === 'textures');
+      if (!prop) return {};
+      const decoded = JSON.parse(atob(prop.value));
+      return { skinUrl: decoded.textures.SKIN?.url || null, capeUrl: decoded.textures.CAPE?.url || null };
+    }
+
+    // ---------- LEADERBOARD WITH 3D SKIN VIEWER ----------
+    function renderLeaderboardWithSkin() {
+      const main = document.getElementById("mainContent");
+      const topPlayer = globalLeaderboard[0];
+      main.innerHTML = `
+        <div class="grid-title">${t("leaderboardTitle")}</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; margin-bottom: 2rem;">
+          <div class="skin-3d" id="leaderSkinContainer"><canvas id="leaderSkinCanvas"></canvas></div>
+          <div>
+            <h2 style="margin-bottom:0.5rem;">#1 Player: ${topPlayer.name}</h2>
+            <p>Kills: ${topPlayer.kills.toLocaleString()} | Wins: ${topPlayer.wins.toLocaleString()} | Economy: ${topPlayer.economy.toLocaleString()}</p>
+          </div>
+        </div>
+        <div id="leaderboardContainer">${renderLeaderboardTable()}</div>
+      `;
+      (async () => {
+        try {
+          const uuid = await fetchUUID(topPlayer.name);
+          const { skinUrl } = await fetchSkinUrls(uuid);
+          if (skinUrl && document.getElementById("leaderSkinCanvas")) {
+            if (leaderboardSkinViewer) leaderboardSkinViewer.dispose();
+            if (typeof skinview3d !== 'undefined') {
+              leaderboardSkinViewer = new skinview3d.SkinViewer({
+                canvas: document.getElementById("leaderSkinCanvas"),
+                width: 200, height: 280,
+                skin: skinUrl
+              });
+            }
+          }
+        } catch(e) {}
+      })();
+    }
+
+    // ---------- STATUS PAGE ----------
+    function renderStatusPage() {
+      const main = document.getElementById("mainContent");
+      const javaIp = "play.otk1mc.com";
+      const bedrockIp = "bedrock.otk1mc.com:19132";
+      const discordLink = "https://discord.gg/otk1mc";
+      main.innerHTML = `
+        <div class="grid-title"><i class="fas fa-server"></i> ${t("statusTitle")}</div>
+        <div class="status-cards">
+          <div class="status-card">
+            <i class="fas fa-users"></i>
+            <div class="value" id="livePlayers">2,431</div>
+            <div class="label">${t("playersOnline")}</div>
+          </div>
+          <div class="status-card">
+            <i class="fas fa-chart-line"></i>
+            <div class="value">20.0</div>
+            <div class="label">${t("tps")}</div>
+          </div>
+          <div class="status-card">
+            <i class="fas fa-clock"></i>
+            <div class="value">14d 6h</div>
+            <div class="label">${t("uptime")}</div>
+          </div>
+        </div>
+        <div class="info-card" style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+          <div><strong>${t("serverIpJava")}:</strong> <span style="font-family: monospace; font-size: 1.2rem;">${javaIp}</span></div>
+          <button class="copy-ip-btn" onclick="navigator.clipboard.writeText('${javaIp}'); alert('${t("copied")}')"><i class="far fa-copy"></i> ${t("copyIp")}</button>
+        </div>
+        <div class="info-card" style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+          <div><strong>${t("serverIpBedrock")}:</strong> <span style="font-family: monospace; font-size: 1.2rem;">${bedrockIp}</span></div>
+          <button class="copy-ip-btn" onclick="navigator.clipboard.writeText('${bedrockIp}'); alert('${t("copied")}')"><i class="far fa-copy"></i> ${t("copyIp")}</button>
+        </div>
+        <div class="info-card" style="text-align: center;">
+          <a href="${discordLink}" target="_blank" class="copy-ip-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 1rem;"><i class="fab fa-discord"></i> ${t("discordInvite")}</a>
+        </div>
+      `;
+      setInterval(() => {
+        const el = document.getElementById("livePlayers");
+        if (el) {
+          let count = 2400 + Math.floor(Math.random() * 200);
+          el.innerText = count.toLocaleString();
+        }
+      }, 8000);
+    }
+
+    // Staff, Rules, FAQ
+    const staffList = [{ name: "Otk1", roleEn: "Owner", roleAr: "المالك", avatar: "Otk1" }];
+    const rulesList = [
+      { titleEn: "No cheating or hacking", descEn: "Any form of unfair advantage (hacked clients, X-ray, auto-clickers) is strictly prohibited.", titleAr: "لا للغش أو الاختراق", descAr: "أي شكل من أشكال الميزة غير العادلة (عملاء مخترقة، إكس راي، نقر تلقائي) ممنوع تمامًا." },
+      { titleEn: "Respect all players", descEn: "Toxicity, harassment, discrimination, or hate speech will not be tolerated.", titleAr: "احترم جميع اللاعبين", descAr: "لن يتم التسامح مع الإساءة أو المضايقة أو التمييز أو خطاب الكراهية." },
+      { titleEn: "No spam or advertising", descEn: "Keep chat clean. No advertising other servers, websites, or soliciting for real money.", titleAr: "لا للإزعاج أو الإعلانات", descAr: "حافظ على نظافة المحادثة. لا تعلن عن سيرفرات أخرى أو مواقع أو تطلب أموالاً حقيقية." },
+      { titleEn: "No griefing in Survival", descEn: "Respect other players' builds and claims. Team griefing is also punishable.", titleAr: "لا للتخريب في وضع البقاء", descAr: "احترم ممتلكات الآخرين. التخريب الجماعي يعاقب عليه أيضًا." },
+      { titleEn: "Follow moderator instructions", descEn: "Staff have the final say. Do not argue or disrespect moderation decisions.", titleAr: "اتبع تعليمات المشرفين", descAr: "للمشرفين الكلمة الأخيرة. لا تجادل أو تستهين بقرارات الإدارة." },
+    ];
+    const faqKeys = [
+      { qKey: "faq1q", aKey: "faq1a" }, { qKey: "faq2q", aKey: "faq2a" }, { qKey: "faq3q", aKey: "faq3a" },
+      { qKey: "faq4q", aKey: "faq4a" }, { qKey: "faq5q", aKey: "faq5a" }, { qKey: "faq6q", aKey: "faq6a" },
+    ];
+
+    // ========== PAGE RENDERER ==========
+    let activePage = "home";
+    function renderPage(page) {
+      activePage = page;
+      const main = document.getElementById("mainContent");
+      if(!main) return;
+      if (leaderboardSkinViewer && page !== "leaderboard") { leaderboardSkinViewer.dispose(); leaderboardSkinViewer = null; }
+
+      if(page === "home") {
+        const topPlayersHtml = modes.map(m => `<div class="top-card"><div class="top-icon">${m.icon}</div><div class="top-info"><h4>${m.name[currentLang]}</h4><p>🏆 ${topPlayers[m.id].name}<br>${topPlayers[m.id].stat}</p></div></div>`).join('');
+        const modesHtml = modes.map(m => `<div class="game-card" data-mode="${m.id}"><div class="game-icon" style="color:${m.color}">${m.icon}</div><div class="game-name">${m.name[currentLang]}</div><div class="game-desc">${m.desc[currentLang]}</div><div class="game-stats"><span>🔥 ${m.players} ${t("online")}</span><span>🏷️ Competitive</span></div><button class="join-game">${t("lobbyBtn")}</button></div>`).join('');
+        main.innerHTML = `
+          <div class="hero-stats">
+            <div class="hero-title"><h2>${t("hero")}</h2><p>20+ unique game modes</p></div>
+            <div class="hero-stats-box"><div class="hero-stat"><div class="number">2,431</div><div>${t("online")}</div></div><div class="hero-stat"><div class="number">4,250</div><div>${t("coins")}</div></div></div>
+            <button class="copy-ip-btn" id="copyMainIpBtn"><i class="far fa-copy"></i> ${t("copyIp")}</button>
+          </div>
+          <div class="grid-title">${t("topTitle")}</div>
+          <div class="top-players-grid">${topPlayersHtml}</div>
+          <div class="grid-title">${t("gamesTitle")}</div>
+          <div class="modes-grid">${modesHtml}</div>
+        `;
+        document.getElementById("copyMainIpBtn")?.addEventListener("click", copyMainIP);
+        document.querySelectorAll(".game-card").forEach(card => {
+          const modeId = card.dataset.mode;
+          card.addEventListener("click", (e) => { if(e.target.classList.contains("join-game")) e.stopPropagation(); openLobby(modeId); });
+          card.querySelector(".join-game")?.addEventListener("click", (e) => { e.stopPropagation(); openLobby(modeId); });
+        });
+      } else if(page === "leaderboard") {
+        renderLeaderboardWithSkin();
+      } else if(page === "status") {
+        renderStatusPage();
+      } else if(page === "voting") {
+        main.innerHTML = `<div class="placeholder"><i class="fas fa-vote-yea"></i> ${t("voteMsg")}</div>`;
+      } else if(page === "market") {
+        main.innerHTML = `<div class="placeholder"><i class="fas fa-store"></i> ${t("marketMsg")}</div>`;
+      } else if(page === "social") {
+        main.innerHTML = `<div class="placeholder"><i class="fas fa-comments"></i> ${t("socialMsg")}</div>`;
+      } else if(page === "staff") {
+        const staffHtml = staffList.map(s => `<div class="info-card"><div class="staff-member"><img src="https://mc-heads.net/avatar/${s.avatar}" class="staff-avatar" onerror="this.src='https://via.placeholder.com/48'"><div><strong>${s.name}</strong><br>${currentLang === "en" ? s.roleEn : s.roleAr}</div></div></div>`).join('');
+        main.innerHTML = `<div class="grid-title">${t("staffTitle")}</div><div class="extra-grid">${staffHtml}</div>`;
+      } else if(page === "rules") {
+        const rulesHtml = rulesList.map(r => `<div class="info-card"><h3>${currentLang === "en" ? r.titleEn : r.titleAr}</h3><p>${currentLang === "en" ? r.descEn : r.descAr}</p></div>`).join('');
+        main.innerHTML = `<div class="grid-title">${t("ruleTitle")}</div><div class="extra-grid">${rulesHtml}</div>`;
+      } else if(page === "faq") {
+        const faqHtml = faqKeys.map((f, idx) => `
+          <div class="info-card">
+            <div class="faq-question" onclick="document.getElementById('faqAns${idx}').style.display = document.getElementById('faqAns${idx}').style.display === 'block' ? 'none' : 'block'">${t(f.qKey)}</div>
+            <div id="faqAns${idx}" class="faq-answer">${t(f.aKey)}</div>
+          </div>
+        `).join('');
+        main.innerHTML = `<div class="grid-title">${t("faqTitle")}</div><div class="extra-grid">${faqHtml}</div>`;
+        faqKeys.forEach((_, idx) => { const ans = document.getElementById(`faqAns${idx}`); if(ans) ans.style.display = 'none'; });
+      } else if(page === "store") {
+        main.innerHTML = `<div class="placeholder"><i class="fas fa-shopping-cart"></i> ${t("storeComingSoon")}</div>`;
+      } else if(page === "discord") {
+        const discordLink = "https://discord.gg/otk1mc";
+        main.innerHTML = `
+          <div class="grid-title"><i class="fab fa-discord"></i> ${t("discord")}</div>
+          <div class="info-card" style="text-align: center;">
+            <p>${t("discordInfo")}</p>
+            <a href="${discordLink}" target="_blank" class="copy-ip-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 1rem; margin-top: 1rem;"><i class="fab fa-discord"></i> ${t("discordInvite")}</a>
+          </div>
+        `;
+      } else if(page === "support") {
+        main.innerHTML = `<div class="placeholder"><i class="fas fa-ticket-alt"></i> ${t("supportInfo")}</div>`;
+      }
+    }
+
+    function applyTranslations() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
+      });
+      renderPage(activePage);
+    }
+
+    // initialize navigation
+    document.querySelectorAll(".nav-item").forEach(item => {
+      item.addEventListener("click", () => {
+        document.querySelectorAll(".nav-item").forEach(nav => nav.classList.remove("active"));
+        item.classList.add("active");
+        renderPage(item.dataset.page);
+      });
+    });
+    document.querySelector(".nav-item[data-page='home']").classList.add("active");
+    applyTranslations();
+    renderPage("home");
+  })();
 </script>
 </body>
 </html>
