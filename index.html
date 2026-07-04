@@ -1,3 +1,6 @@
+<!-- ============================================================
+     index.html
+     ============================================================ -->
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -6,993 +9,11 @@
     <title>Otk1 Network | Space Minecraft Servers</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <style>
-        /* ============================================================
-                   RESET & BASE
-                   ============================================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            background: #0a0618;
-            color: #e8e0f0;
-            overflow-x: hidden;
-            transition: all 0.3s ease;
-        }
-
-        /* ---------- space background ---------- */
-        .space-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            background:
-                radial-gradient(ellipse at 20% 50%, #1a0a30 0%, #0a0618 70%),
-                radial-gradient(ellipse at 80% 20%, #2d1050 0%, #0a0618 60%),
-                radial-gradient(ellipse at 50% 100%, #1f0a3a 0%, #0a0618 50%);
-            overflow: hidden;
-        }
-
-        .space-bg .stars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image:
-                radial-gradient(2px 2px at 20px 30px, #eee, transparent),
-                radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.8), transparent),
-                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-                radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.6), transparent),
-                radial-gradient(2px 2px at 160px 30px, #ddd, transparent),
-                radial-gradient(1px 1px at 200px 60px, #fff, transparent),
-                radial-gradient(2px 2px at 250px 20px, #eee, transparent),
-                radial-gradient(1px 1px at 300px 90px, rgba(255, 255, 255, 0.7), transparent),
-                radial-gradient(2px 2px at 350px 50px, #fff, transparent),
-                radial-gradient(1px 1px at 400px 30px, #ddd, transparent),
-                radial-gradient(2px 2px at 450px 70px, rgba(255, 255, 255, 0.9), transparent),
-                radial-gradient(1px 1px at 500px 20px, #fff, transparent),
-                radial-gradient(2px 2px at 550px 80px, #eee, transparent),
-                radial-gradient(1px 1px at 600px 40px, rgba(255, 255, 255, 0.5), transparent),
-                radial-gradient(2px 2px at 650px 60px, #fff, transparent),
-                radial-gradient(1px 1px at 700px 30px, #ddd, transparent),
-                radial-gradient(2px 2px at 750px 90px, rgba(255, 255, 255, 0.8), transparent),
-                radial-gradient(1px 1px at 800px 50px, #fff, transparent),
-                radial-gradient(2px 2px at 850px 20px, #eee, transparent),
-                radial-gradient(1px 1px at 900px 70px, rgba(255, 255, 255, 0.6), transparent),
-                radial-gradient(2px 2px at 950px 40px, #fff, transparent),
-                radial-gradient(1px 1px at 1000px 80px, #ddd, transparent),
-                radial-gradient(2px 2px at 1050px 30px, rgba(255, 255, 255, 0.7), transparent),
-                radial-gradient(1px 1px at 1100px 60px, #fff, transparent),
-                radial-gradient(2px 2px at 1150px 20px, #eee, transparent),
-                radial-gradient(1px 1px at 1200px 90px, rgba(255, 255, 255, 0.5), transparent);
-            background-size: 200px 200px;
-            opacity: 0.6;
-            animation: twinkle 4s ease-in-out infinite alternate;
-        }
-
-        @keyframes twinkle {
-            0% {
-                opacity: 0.4;
-            }
-            100% {
-                opacity: 0.9;
-            }
-        }
-
-        .space-bg .nebula {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.15;
-        }
-        .space-bg .nebula:nth-child(2) {
-            width: 600px;
-            height: 600px;
-            top: -200px;
-            right: -100px;
-            background: #7b2ffc;
-        }
-        .space-bg .nebula:nth-child(3) {
-            width: 500px;
-            height: 500px;
-            bottom: -150px;
-            left: -100px;
-            background: #ff0055;
-        }
-        .space-bg .nebula:nth-child(4) {
-            width: 400px;
-            height: 400px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #3a1a7a;
-            opacity: 0.08;
-        }
-
-        /* ============================================================
-                   SCROLLBAR
-                   ============================================================ */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0a0618;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #7b2ffc;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a855f7;
-        }
-
-        /* ============================================================
-                   CONTENT WRAPPER
-                   ============================================================ */
-        .main-wrapper {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px 24px 40px;
-        }
-
-        /* ============================================================
-                   NAVIGATION
-                   ============================================================ */
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 14px 20px;
-            padding: 14px 28px;
-            background: rgba(12, 6, 28, 0.75);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border-radius: 60px;
-            border: 1px solid rgba(180, 100, 255, 0.15);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-            margin-bottom: 40px;
-        }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .nav-brand .logo-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #a855f7, #6b21a8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: 800;
-            color: #fff;
-            box-shadow: 0 0 20px rgba(120, 50, 200, 0.4);
-        }
-
-        .nav-brand .brand-name {
-            font-size: 24px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #e0b3ff, #b77aff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-center {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            flex-wrap: wrap;
-        }
-
-        .nav-accounts {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .account-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 18px 6px 14px;
-            border-radius: 40px;
-            font-size: 14px;
-            font-weight: 600;
-            background: rgba(40, 15, 65, 0.6);
-            border: 1px solid rgba(180, 100, 255, 0.15);
-            backdrop-filter: blur(4px);
-            color: #d4c0f0;
-            transition: all 0.25s ease;
-        }
-
-        .account-badge .role-tag {
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            padding: 2px 10px;
-            border-radius: 30px;
-            background: #7b2ffc;
-            color: #fff;
-        }
-
-        .account-badge .role-tag.admin {
-            background: #ff6b6b;
-            color: #fff;
-        }
-
-        .account-badge .role-tag.owner {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            color: #1a0a30;
-        }
-
-        .account-badge .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-        .account-badge .status-dot.online {
-            background: #4ade80;
-            box-shadow: 0 0 12px #4ade80;
-        }
-        .account-badge .status-dot.offline {
-            background: #f87171;
-            box-shadow: 0 0 12px #f87171;
-        }
-
-        .account-badge.coming {
-            opacity: 0.7;
-            border-style: dashed;
-        }
-
-        /* Social icons in nav */
-        .nav-socials {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-socials a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: rgba(40, 15, 65, 0.5);
-            border: 1px solid rgba(180, 100, 255, 0.12);
-            color: #b99ad6;
-            font-size: 17px;
-            transition: all 0.25s ease;
-            text-decoration: none;
-        }
-
-        .nav-socials a:hover {
-            transform: scale(1.1) translateY(-2px);
-            border-color: rgba(180, 100, 255, 0.4);
-            box-shadow: 0 4px 20px rgba(120, 40, 220, 0.3);
-        }
-
-        .nav-socials a.tiktok:hover {
-            color: #ff0050;
-            border-color: #ff0050;
-            box-shadow: 0 4px 20px rgba(255, 0, 80, 0.25);
-        }
-        .nav-socials a.youtube:hover {
-            color: #ff0033;
-            border-color: #ff0033;
-            box-shadow: 0 4px 20px rgba(255, 0, 50, 0.25);
-        }
-        .nav-socials a.instagram:hover {
-            color: #f09433;
-            border-color: #f09433;
-            box-shadow: 0 4px 20px rgba(240, 148, 51, 0.25);
-        }
-
-        .nav-socials .social-label {
-            font-size: 12px;
-            font-weight: 500;
-            color: #9880b8;
-            letter-spacing: 0.5px;
-            margin-right: 2px;
-        }
-
-        /* nav lang toggle inside navbar */
-        .nav-lang {
-            display: flex;
-            gap: 4px;
-            background: rgba(20, 8, 40, 0.5);
-            border-radius: 40px;
-            padding: 4px 4px;
-            border: 1px solid rgba(180, 100, 255, 0.12);
-        }
-
-        .nav-lang button {
-            background: transparent;
-            border: none;
-            color: #a884c9;
-            font-weight: 600;
-            font-size: 13px;
-            padding: 5px 14px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            font-family: inherit;
-        }
-
-        .nav-lang button.active {
-            background: #7b2ffc;
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(120, 40, 220, 0.5);
-        }
-
-        .nav-lang button:hover:not(.active) {
-            color: #d4b5ff;
-            background: rgba(120, 40, 220, 0.2);
-        }
-
-        /* ============================================================
-                   HERO
-                   ============================================================ */
-        .hero {
-            text-align: center;
-            padding: 40px 20px 30px;
-            margin-bottom: 30px;
-        }
-
-        .hero h1 {
-            font-size: 52px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #f0e6ff, #b77aff, #7b2ffc);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 60px rgba(120, 50, 200, 0.3);
-            letter-spacing: -1px;
-            line-height: 1.1;
-        }
-
-        .hero p {
-            font-size: 18px;
-            color: #b99ad6;
-            max-width: 600px;
-            margin: 12px auto 0;
-            font-weight: 300;
-        }
-
-        .hero .sub-glow {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 4px 24px;
-            border-radius: 40px;
-            background: rgba(120, 50, 200, 0.15);
-            border: 1px solid rgba(180, 100, 255, 0.15);
-            font-size: 14px;
-            color: #c9a6ff;
-            letter-spacing: 1px;
-        }
-
-        /* ============================================================
-                   SECTION TITLES
-                   ============================================================ */
-        .section-title {
-            text-align: center;
-            margin: 50px 0 28px;
-        }
-
-        .section-title h2 {
-            font-size: 34px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #e0b3ff, #a855f7);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-        }
-
-        .section-title .sub {
-            display: block;
-            font-size: 15px;
-            font-weight: 400;
-            color: #9880b8;
-            margin-top: 4px;
-        }
-
-        .divider-glow {
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #a855f7, transparent);
-            margin: 8px auto 0;
-            border-radius: 10px;
-        }
-
-        /* ============================================================
-                   SERVER CARDS
-                   ============================================================ */
-        .servers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 28px;
-            margin-top: 10px;
-        }
-
-        .server-card {
-            background: rgba(18, 8, 30, 0.7);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-radius: 32px;
-            padding: 28px 24px 32px;
-            border: 1px solid rgba(180, 100, 255, 0.12);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .server-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 20%, rgba(120, 50, 200, 0.06), transparent 70%);
-            pointer-events: none;
-        }
-
-        .server-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(180, 100, 255, 0.35);
-            box-shadow: 0 24px 56px rgba(90, 20, 180, 0.4);
-        }
-
-        .server-card .card-icon {
-            font-size: 36px;
-            margin-bottom: 10px;
-            display: inline-block;
-        }
-
-        .server-card h3 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #f0e6ff;
-            margin-bottom: 4px;
-        }
-
-        .server-card .server-tag {
-            display: inline-block;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            padding: 2px 14px;
-            border-radius: 30px;
-            background: rgba(120, 50, 200, 0.25);
-            color: #c9a6ff;
-            border: 1px solid rgba(180, 100, 255, 0.15);
-            margin-bottom: 12px;
-        }
-
-        .server-card .server-desc {
-            color: #c8b8e0;
-            font-size: 15px;
-            line-height: 1.7;
-            margin-bottom: 14px;
-        }
-
-        .server-card .server-desc strong {
-            color: #e6ccff;
-        }
-
-        .server-card .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px 16px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 16px;
-            padding: 14px 18px;
-            margin-bottom: 0;
-            border: 1px solid rgba(180, 100, 255, 0.06);
-        }
-
-        .server-card .info-grid .item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: #b99ad6;
-        }
-
-        .server-card .info-grid .item i {
-            color: #a855f7;
-            width: 18px;
-            text-align: center;
-        }
-
-        .server-card .info-grid .item span {
-            font-weight: 500;
-            color: #e0d0f0;
-        }
-
-        /* card variants */
-        .server-card.earth {
-            border-top: 3px solid #4ade80;
-        }
-        .server-card.earth .server-tag {
-            background: rgba(74, 222, 128, 0.15);
-            color: #86efac;
-            border-color: rgba(74, 222, 128, 0.2);
-        }
-
-        .server-card.neptune {
-            border-top: 3px solid #60a5fa;
-        }
-        .server-card.neptune .server-tag {
-            background: rgba(96, 165, 250, 0.15);
-            color: #93c5fd;
-            border-color: rgba(96, 165, 250, 0.2);
-        }
-
-        .server-card.galaxy {
-            border-top: 3px solid #f472b6;
-        }
-        .server-card.galaxy .server-tag {
-            background: rgba(244, 114, 182, 0.15);
-            color: #f9a8d4;
-            border-color: rgba(244, 114, 182, 0.2);
-        }
-
-        /* ============================================================
-                   STORE SECTIONS (Ranks)
-                   ============================================================ */
-        .store-section {
-            background: rgba(18, 8, 30, 0.6);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-radius: 32px;
-            padding: 36px 32px 40px;
-            border: 1px solid rgba(180, 100, 255, 0.1);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
-            margin-top: 20px;
-        }
-
-        .store-section .store-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .store-section .store-header h2 {
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .store-section .store-header .store-badge {
-            font-size: 13px;
-            padding: 6px 18px;
-            border-radius: 40px;
-            background: rgba(251, 191, 36, 0.12);
-            border: 1px solid rgba(251, 191, 36, 0.2);
-            color: #fbbf24;
-        }
-
-        .store-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        /* Rank card inside store */
-        .rank-card {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 24px;
-            padding: 22px 18px 24px;
-            border: 1px solid rgba(180, 100, 255, 0.08);
-            transition: all 0.25s ease;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .rank-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #a855f7, #fbbf24);
-            opacity: 0.3;
-        }
-
-        .rank-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(180, 100, 255, 0.25);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-        }
-
-        .rank-card .rank-icon {
-            font-size: 32px;
-            margin-bottom: 4px;
-        }
-
-        .rank-card .rank-name {
-            font-size: 22px;
-            font-weight: 800;
-            color: #f0e6ff;
-            letter-spacing: -0.3px;
-        }
-
-        .rank-card .rank-prefix {
-            display: inline-block;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 2px 12px;
-            border-radius: 30px;
-            background: rgba(120, 50, 200, 0.2);
-            color: #c9a6ff;
-            border: 1px solid rgba(180, 100, 255, 0.15);
-            margin-bottom: 10px;
-        }
-
-        .rank-card .rank-desc {
-            font-size: 14px;
-            color: #c8b8e0;
-            line-height: 1.6;
-            margin-bottom: 12px;
-        }
-
-        .rank-card .rank-perks,
-        .rank-card .rank-commands {
-            font-size: 13px;
-            color: #b99ad6;
-            margin-bottom: 8px;
-        }
-
-        .rank-card .rank-perks strong,
-        .rank-card .rank-commands strong {
-            color: #e6ccff;
-            font-weight: 600;
-        }
-
-        .rank-card .rank-perks ul,
-        .rank-card .rank-commands ul,
-        .rank-card .rank-kit ul,
-        .rank-card .rank-benefits ul {
-            list-style: none;
-            padding: 0;
-            margin: 4px 0 0 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px 10px;
-        }
-
-        .rank-card .rank-perks ul li,
-        .rank-card .rank-commands ul li,
-        .rank-card .rank-kit ul li,
-        .rank-card .rank-benefits ul li {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 13px;
-            color: #d4c0f0;
-        }
-
-        .rank-card .rank-perks ul li i,
-        .rank-card .rank-commands ul li i,
-        .rank-card .rank-kit ul li i,
-        .rank-card .rank-benefits ul li i {
-            color: #a855f7;
-            font-size: 12px;
-            width: 16px;
-        }
-
-        .rank-card .btn-buy-rank {
-            margin-top: 14px;
-            padding: 8px 20px;
-            border-radius: 40px;
-            border: none;
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            color: #1a0a30;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            align-self: flex-start;
-        }
-
-        .rank-card .btn-buy-rank:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 20px rgba(251, 191, 36, 0.3);
-        }
-
-        .rank-card .more-info {
-            margin-top: 12px;
-            font-size: 13px;
-            color: #b99ad6;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: color 0.2s;
-        }
-        .rank-card .more-info:hover {
-            color: #d4c0f0;
-        }
-
-        /* Earth Survival rank variations */
-        .rank-card.knight {
-            border-top: 3px solid #a0a0a0;
-        }
-        .rank-card.lord {
-            border-top: 3px solid #fbbf24;
-        }
-        .rank-card.paladin {
-            border-top: 3px solid #60a5fa;
-        }
-        .rank-card.duke {
-            border-top: 3px solid #a855f7;
-        }
-        .rank-card.king {
-            border-top: 3px solid #f472b6;
-        }
-
-        /* Galaxy Box PvP rank variations */
-        .rank-card.user {
-            border-top: 3px solid #a0a0a0;
-        }
-        .rank-card.vip {
-            border-top: 3px solid #fbbf24;
-        }
-        .rank-card.terra {
-            border-top: 3px solid #f472b6;
-        }
-        .rank-card.nova {
-            border-top: 3px solid #60a5fa;
-        }
-        .rank-card.nebula {
-            border-top: 3px solid #a855f7;
-        }
-
-        /* Neptune Practice PvP rank variations */
-        .rank-card.neptune-vip {
-            border-top: 3px solid #fbbf24;
-        }
-        .rank-card.neptune-muf {
-            border-top: 3px solid #a855f7;
-        }
-
-        /* ============================================================
-                   FOOTER
-                   ============================================================ */
-        .site-footer {
-            margin-top: 50px;
-            padding: 28px 20px 20px;
-            text-align: center;
-            border-top: 1px solid rgba(180, 100, 255, 0.06);
-            color: rgba(180, 150, 210, 0.4);
-            font-size: 14px;
-        }
-
-        .site-footer .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
-
-        .site-footer .footer-links a {
-            color: rgba(180, 150, 210, 0.5);
-            text-decoration: none;
-            transition: color 0.2s;
-            font-size: 14px;
-        }
-
-        .site-footer .footer-links a:hover {
-            color: #c9a6ff;
-        }
-
-        .site-footer .footer-brand {
-            font-weight: 700;
-            color: rgba(200, 170, 230, 0.5);
-        }
-
-        /* ============================================================
-                   BILINGUAL TOGGLE LOGIC
-                   ============================================================ */
-        .lang-en .ar-text {
-            display: none !important;
-        }
-        .lang-en .en-text {
-            display: inline !important;
-        }
-
-        .lang-ar .en-text {
-            display: none !important;
-        }
-        .lang-ar .ar-text {
-            display: inline !important;
-        }
-
-        /* block-level bilingual */
-        .lang-en .ar-block {
-            display: none !important;
-        }
-        .lang-en .en-block {
-            display: block !important;
-        }
-
-        .lang-ar .en-block {
-            display: none !important;
-        }
-        .lang-ar .ar-block {
-            display: block !important;
-        }
-
-        /* ============================================================
-                   RESPONSIVE
-                   ============================================================ */
-        @media (max-width: 960px) {
-            .navbar {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 12px;
-                padding: 16px 20px;
-                border-radius: 32px;
-            }
-            .nav-brand {
-                justify-content: center;
-            }
-            .nav-center {
-                justify-content: center;
-                flex-direction: column;
-                gap: 12px;
-            }
-            .nav-accounts {
-                justify-content: center;
-            }
-            .nav-socials {
-                justify-content: center;
-            }
-            .nav-lang {
-                justify-content: center;
-            }
-
-            .hero h1 {
-                font-size: 36px;
-            }
-            .hero p {
-                font-size: 16px;
-            }
-
-            .section-title h2 {
-                font-size: 28px;
-            }
-
-            .servers-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .store-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        @media (max-width: 500px) {
-            .main-wrapper {
-                padding: 12px 12px 30px;
-            }
-            .navbar {
-                padding: 12px 16px;
-                border-radius: 24px;
-            }
-            .nav-brand .brand-name {
-                font-size: 20px;
-            }
-            .account-badge {
-                font-size: 12px;
-                padding: 4px 12px 4px 10px;
-            }
-            .account-badge .role-tag {
-                font-size: 9px;
-                padding: 1px 8px;
-            }
-
-            .nav-socials a {
-                width: 34px;
-                height: 34px;
-                font-size: 15px;
-            }
-            .nav-socials .social-label {
-                font-size: 11px;
-            }
-
-            .hero h1 {
-                font-size: 28px;
-            }
-            .hero p {
-                font-size: 14px;
-            }
-
-            .server-card {
-                padding: 22px 18px 26px;
-            }
-            .server-card .info-grid {
-                grid-template-columns: 1fr;
-                gap: 4px;
-            }
-
-            .store-section {
-                padding: 24px 16px 28px;
-            }
-            .store-grid {
-                grid-template-columns: 1fr;
-            }
-            .store-section .store-header h2 {
-                font-size: 22px;
-            }
-
-            .section-title h2 {
-                font-size: 24px;
-            }
-            .nav-lang button {
-                font-size: 12px;
-                padding: 4px 10px;
-            }
-            .site-footer .footer-links {
-                gap: 14px;
-                font-size: 12px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .hero h1 {
-                font-size: 24px;
-            }
-            .server-card h3 {
-                font-size: 20px;
-            }
-            .rank-card .rank-name {
-                font-size: 18px;
-            }
-        }
-    </style>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
 </head>
-
 <body class="lang-en" dir="ltr">
 
     <!-- ===== SPACE BACKGROUND ===== -->
@@ -1003,33 +24,83 @@
         <div class="nebula"></div>
     </div>
 
+    <!-- ===== TOAST NOTIFICATION ===== -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Copied to clipboard!</span>
+    </div>
+
+    <!-- ===== PRICE SELECTOR MODAL ===== -->
+    <div class="price-modal-overlay" id="priceModal">
+        <div class="price-modal">
+            <button class="modal-close" onclick="closePriceModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <span class="modal-rank-icon" id="modalRankIcon">⚔️</span>
+            <div class="modal-rank-name" id="modalRankName">Knight</div>
+            <div style="text-align:center;">
+                <span class="modal-rank-prefix" id="modalRankPrefix">KNIGHT</span>
+            </div>
+            <p class="modal-sub" data-en="Choose your pricing plan for this rank." data-ar="اختر خطة السعر لهذه الرتبة."></p>
+            <div class="modal-options" id="modalOptions">
+                <div class="modal-option" data-plan="weekly" onclick="selectPlan(this)">
+                    <span class="opt-icon">⚡</span>
+                    <div class="opt-name" data-en="Weekly" data-ar="أسبوعي"></div>
+                    <div class="opt-price">$5 <small>/wk</small></div>
+                    <div class="opt-desc" data-en="Perfect for trying out" data-ar="مثالي للتجربة"></div>
+                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
+                </div>
+                <div class="modal-option popular-opt" data-plan="monthly" onclick="selectPlan(this)">
+                    <span class="opt-icon">🔥</span>
+                    <div class="opt-name" data-en="Monthly" data-ar="شهري"></div>
+                    <div class="opt-price">$20 <small>/mo</small></div>
+                    <div class="opt-desc" data-en="Best value for active players" data-ar="أفضل قيمة للاعبين النشطين"></div>
+                    <span class="opt-badge">Popular</span>
+                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
+                </div>
+                <div class="modal-option" data-plan="3months" onclick="selectPlan(this)">
+                    <span class="opt-icon">💎</span>
+                    <div class="opt-name" data-en="3 Months" data-ar="3 أشهر"></div>
+                    <div class="opt-price">$60 <small>/3mo</small></div>
+                    <div class="opt-desc" data-en="Save big with commitment" data-ar="وفّر كثيراً مع التزام"></div>
+                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
+                </div>
+                <div class="modal-option" data-plan="lifetime" onclick="selectPlan(this)">
+                    <span class="opt-icon">👑</span>
+                    <div class="opt-name" data-en="Lifetime" data-ar="مدى الحياة"></div>
+                    <div class="opt-price">$120 <small>/life</small></div>
+                    <div class="opt-desc" data-en="Ultimate status – forever" data-ar="الرتبة النهائية – للأبد"></div>
+                    <span class="opt-badge">Best Deal</span>
+                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-confirm" id="modalConfirmBtn" disabled onclick="confirmPlan()">
+                    <span data-en="Select Plan" data-ar="اختر الخطة"></span>
+                </button>
+                <button class="btn-cancel" onclick="closePriceModal()">
+                    <span data-en="Cancel" data-ar="إلغاء"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== MAIN WRAPPER ===== -->
     <div class="main-wrapper">
 
-        <!-- ============================================================
-        NAVIGATION
-        ============================================================ -->
+        <!-- ===== NAVIGATION ===== -->
         <nav class="navbar">
-
-            <!-- brand -->
             <div class="nav-brand">
                 <div class="logo-icon">O</div>
                 <span class="brand-name">Otk1</span>
             </div>
-
-            <!-- center: accounts + socials -->
             <div class="nav-center">
-
-                <!-- accounts -->
                 <div class="nav-accounts">
-                    <!-- Owner -->
                     <div class="account-badge">
                         <span class="status-dot online"></span>
                         <span>Otk1</span>
                         <span class="role-tag owner">Owner</span>
                     </div>
-
-                    <!-- Admin (coming soon) -->
                     <div class="account-badge coming">
                         <span class="status-dot offline"></span>
                         <span class="en-text">Admin</span>
@@ -1037,751 +108,374 @@
                         <span class="role-tag admin">Soon</span>
                     </div>
                 </div>
-
-                <!-- social links -->
                 <div class="nav-socials">
-                    <span class="social-label en-text"><i class="fas fa-share-alt" style="margin-right: 4px;"></i>Follow</span>
-                    <span class="social-label ar-text"><i class="fas fa-share-alt" style="margin-right: 4px;"></i>تابع</span>
-
-                    <a href="https://www.tiktok.com/@otk1141?_r=1&_t=ZS-97H6fwPKSVp" target="_blank" rel="noopener noreferrer" class="tiktok" aria-label="TikTok">
-                        <i class="fab fa-tiktok"></i>
-                    </a>
-                    <a href="https://youtube.com/@otk1141?si=0APCdeiyfZSV3AMO" target="_blank" rel="noopener noreferrer" class="youtube" aria-label="YouTube">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a href="https://www.instagram.com/37.8b?igsh=eWI3MmdjYjNpbXF4" target="_blank" rel="noopener noreferrer" class="instagram" aria-label="Instagram">
-                        <i class="fab fa-instagram"></i>
-                    </a>
+                    <span class="social-label"><i class="fas fa-share-alt" style="margin-right:4px;"></i><span data-en="Follow" data-ar="تابع"></span></span>
+                    <a href="https://www.tiktok.com/@otk1141?_r=1&_t=ZS-97H6fwPKSVp" target="_blank" rel="noopener noreferrer" class="tiktok" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://youtube.com/@otk1141?si=0APCdeiyfZSV3AMO" target="_blank" rel="noopener noreferrer" class="youtube" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.instagram.com/37.8b?igsh=eWI3MmdjYjNpbXF4" target="_blank" rel="noopener noreferrer" class="instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                 </div>
-
             </div>
-
-            <!-- language toggle -->
             <div class="nav-lang">
                 <button id="btnEn" class="active" onclick="setLanguage('en')">EN</button>
                 <button id="btnAr" onclick="setLanguage('ar')">AR</button>
             </div>
-
         </nav>
 
-        <!-- ============================================================
-        HERO
-        ============================================================ -->
-        <section class="hero">
-            <h1>
-                <span class="en-text">🚀 Otk1 Network</span>
-                <span class="ar-text">🚀 شبكة Otk1</span>
-            </h1>
-            <p class="en-text">Explore the cosmos of Minecraft — Survival, PvP, and beyond.</p>
-            <p class="ar-text">استكشف عالم ماين كرافت — سيرفرات بقاء، بي في بي، وأكثر.</p>
-            <div class="sub-glow">
-                <span class="en-text"><i class="fas fa-globe" style="margin-right: 6px;"></i> Earth · Neptune · Galaxy</span>
-                <span class="ar-text"><i class="fas fa-globe" style="margin-right: 6px;"></i> إيرث · نبتون · جالاكسي</span>
-            </div>
-        </section>
+        <!-- ===== TABS CONTAINER ===== -->
+        <div class="tabs-container">
 
-        <!-- ============================================================
-        SERVERS SECTION
-        ============================================================ -->
-        <div class="section-title">
-            <h2>
-                <span class="en-text">⚡ Our Servers</span>
-                <span class="ar-text">⚡ سيرفراتنا</span>
-            </h2>
-            <span class="sub en-text">Choose your world, start your adventure.</span>
-            <span class="sub ar-text">اختر عالمك، وابدأ مغامرتك.</span>
-            <div class="divider-glow"></div>
-        </div>
-
-        <div class="servers-grid">
-
-            <!-- EARTH SURVIVAL -->
-            <div class="server-card earth">
-                <div class="card-icon">🌍</div>
-                <h3>
-                    <span class="en-text">Earth Survival</span>
-                    <span class="ar-text">سيرفر البقاء إيرث</span>
-                </h3>
-                <div class="server-tag">
-                    <span class="en-text">Survival · Earth Map</span>
-                    <span class="ar-text">بقاء · خريطة الأرض</span>
-                </div>
-                <div class="server-desc en-text">
-                    <strong>Live on a realistic Earth map!</strong> Build, explore, and
-                    survive with <strong>claims</strong>, <strong>economy</strong>, and
-                    a friendly community.
-                </div>
-                <div class="server-desc ar-text">
-                    <strong>عش على خريطة أرض واقعية!</strong> ابنِ واستكشف ونجا
-                    مع <strong>حماية الأراضي</strong> و <strong>الاقتصاد</strong> ومجتمع ودود.
-                </div>
-
-                <div class="info-grid">
-                    <div class="item"><i class="fas fa-users"></i> <span class="en-text">Player Cap:</span><span class="ar-text">الحد الأقصى:</span> <span>100</span></div>
-                    <div class="item"><i class="fas fa-clock"></i> <span class="en-text">Uptime:</span><span class="ar-text">وقت التشغيل:</span> <span>99.9%</span></div>
-                    <div class="item"><i class="fas fa-tag"></i> <span class="en-text">Version:</span><span class="ar-text">الإصدار:</span> <span>1.20.4</span></div>
-                    <div class="item"><i class="fas fa-gamepad"></i> <span class="en-text">Style:</span><span class="ar-text">النمط:</span> <span class="en-text">Towny · Economy</span><span class="ar-text">تاوني · اقتصاد</span></div>
-                </div>
+            <!-- Tabs Navigation -->
+            <div class="tabs-nav">
+                <button class="tab-btn active" data-tab="home"><i class="fas fa-home"></i><span data-en="Home" data-ar="الرئيسية"></span></button>
+                <button class="tab-btn" data-tab="ranks"><i class="fas fa-crown"></i><span data-en="Ranks" data-ar="الرتب"></span></button>
+                <button class="tab-btn" data-tab="store"><i class="fas fa-store"></i><span data-en="Store" data-ar="المتجر"></span></button>
+                <button class="tab-btn" data-tab="rules"><i class="fas fa-gavel"></i><span data-en="Rules" data-ar="القوانين"></span></button>
+                <button class="tab-btn" data-tab="support"><i class="fas fa-headset"></i><span data-en="Support" data-ar="الدعم"></span></button>
+                <button class="tab-btn" data-tab="faq"><i class="fas fa-question-circle"></i><span data-en="FAQ" data-ar="الأسئلة"></span></button>
+                <button class="tab-btn" data-tab="ip"><i class="fas fa-server"></i><span data-en="IP" data-ar="الآي بي"></span><span class="badge-tab">Connect</span></button>
             </div>
 
-            <!-- NEPTUNE PRACTICE PVP -->
-            <div class="server-card neptune">
-                <div class="card-icon">🌊</div>
-                <h3>
-                    <span class="en-text">Neptune Practice PvP</span>
-                    <span class="ar-text">نبتون بي في بي تدريب</span>
-                </h3>
-                <div class="server-tag">
-                    <span class="en-text">Practice · Ranked</span>
-                    <span class="ar-text">تدريب · ترتيب</span>
-                </div>
-                <div class="server-desc en-text">
-                    <strong>Sharpen your skills!</strong> 1v1, 2v2, and <strong>ranked</strong>
-                    matches with <strong>custom kits</strong>, <strong>Elo system</strong>,
-                    and leaderboards.
-                </div>
-                <div class="server-desc ar-text">
-                    <strong>صقل مهاراتك!</strong> مباريات 1v1 و 2v2 و <strong>مرتبة</strong>
-                    مع <strong>كيتات مخصصة</strong> و <strong>نظام إيلو</strong> ولوحات المتصدرين.
-                </div>
+            <!-- Tabs Content -->
+            <div class="tabs-content">
 
-                <div class="info-grid">
-                    <div class="item"><i class="fas fa-users"></i> <span class="en-text">Player Cap:</span><span class="ar-text">الحد الأقصى:</span> <span>50</span></div>
-                    <div class="item"><i class="fas fa-clock"></i> <span class="en-text">Uptime:</span><span class="ar-text">وقت التشغيل:</span> <span>99.8%</span></div>
-                    <div class="item"><i class="fas fa-tag"></i> <span class="en-text">Version:</span><span class="ar-text">الإصدار:</span> <span>1.20.4</span></div>
-                    <div class="item"><i class="fas fa-gamepad"></i> <span class="en-text">Style:</span><span class="ar-text">النمط:</span> <span class="en-text">Practice · Ranked</span><span class="ar-text">تدريب · ترتيب</span></div>
-                </div>
-            </div>
-
-            <!-- GALAXY BOX PVP -->
-            <div class="server-card galaxy">
-                <div class="card-icon">🌌</div>
-                <h3>
-                    <span class="en-text">Galaxy Box PvP</span>
-                    <span class="ar-text">جالاكسي بوكس بي في بي</span>
-                </h3>
-                <div class="server-tag">
-                    <span class="en-text">Box PvP · Chests</span>
-                    <span class="ar-text">بوكس بي في بي · صناديق</span>
-                </div>
-                <div class="server-desc en-text">
-                    <strong>Fight for loot!</strong> Open <strong>chests</strong>, get
-                    powerful gear, and battle others in a <strong>fast-paced</strong>
-                    PvP arena with <strong>custom enchantments</strong>.
-                </div>
-                <div class="server-desc ar-text">
-                    <strong>قاتل من أجل الغنائم!</strong> افتح <strong>الصناديق</strong>،
-                    احصل على معدات قوية، واشتبك مع الآخرين في ساحة <strong>سريعة</strong>
-                    مع <strong>سحر مخصص</strong>.
-                </div>
-
-                <div class="info-grid">
-                    <div class="item"><i class="fas fa-users"></i> <span class="en-text">Player Cap:</span><span class="ar-text">الحد الأقصى:</span> <span>60</span></div>
-                    <div class="item"><i class="fas fa-clock"></i> <span class="en-text">Uptime:</span><span class="ar-text">وقت التشغيل:</span> <span>99.7%</span></div>
-                    <div class="item"><i class="fas fa-tag"></i> <span class="en-text">Version:</span><span class="ar-text">الإصدار:</span> <span>1.20.4</span></div>
-                    <div class="item"><i class="fas fa-gamepad"></i> <span class="en-text">Style:</span><span class="ar-text">النمط:</span> <span class="en-text">Box PvP · Loot</span><span class="ar-text">بوكس بي في بي · غنائم</span></div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- ============================================================
-        STORE SECTION — EARTH SURVIVAL RANKS
-        ============================================================ -->
-        <div class="store-section">
-            <div class="store-header">
-                <h2>
-                    <i class="fas fa-crown" style="margin-right: 10px;"></i>
-                    <span class="en-text">Earth Survival Ranks</span>
-                    <span class="ar-text">رتب سيرفر البقاء إيرث</span>
-                </h2>
-                <span class="store-badge">
-                    <i class="fas fa-coins"></i>
-                    <span class="en-text">Coinshop</span>
-                    <span class="ar-text">متجر العملات</span>
-                </span>
-            </div>
-
-            <div class="store-grid">
-
-                <!-- KNIGHT -->
-                <div class="rank-card knight">
-                    <div class="rank-icon">⚔️</div>
-                    <div class="rank-name">
-                        <span class="en-text">Knight</span>
-                        <span class="ar-text">نايت</span>
+                <!-- ===== HOME TAB ===== -->
+                <div class="tab-pane active" id="tab-home">
+                    <div class="home-hero">
+                        <h1 class="main-title" data-en="🌌 Welcome to Otk1 Network" data-ar="🌌 مرحباً بك في شبكة Otk1"></h1>
+                        <p class="main-sub" data-en="هل تبحث عن سيرفر يجمع بين المنافسة، البقاء، والمتعة في مكان واحد؟ لقد وصلت إلى المكان الصحيح." data-ar="هل تبحث عن سيرفر يجمع بين المنافسة، البقاء، والمتعة في مكان واحد؟ لقد وصلت إلى المكان الصحيح."></p>
+                        <div class="divider-glow"></div>
                     </div>
-                    <div class="rank-prefix">
-                        <span class="en-text">Prefix: KNIGHT</span>
-                        <span class="ar-text">البادئة: نايت</span>
+                    <div class="home-grid">
+                        <div class="home-card">
+                            <span class="card-icon-big">🌍</span>
+                            <h4 data-en="Earth Survival" data-ar="سيرفر البقاء إيرث"></h4>
+                            <div class="card-tag" data-en="Survival · Towny · Economy" data-ar="بقاء · تاوني · اقتصاد"></div>
+                            <p data-en="استمتع بعالم مستوحى من كوكب الأرض، ابنِ مدينتك، كوّن صداقات، واستكشف تجربة Survival مختلفة ومليئة بالمغامرات." data-ar="استمتع بعالم مستوحى من كوكب الأرض، ابنِ مدينتك، كوّن صداقات، واستكشف تجربة Survival مختلفة ومليئة بالمغامرات."></p>
+                            <div class="status-online"><i class="fas fa-circle"></i> 24/7 Online</div>
+                        </div>
+                        <div class="home-card">
+                            <span class="card-icon-big">🌊</span>
+                            <h4 data-en="Neptune Practice" data-ar="نبتون تدريب"></h4>
+                            <div class="card-tag" data-en="Practice · Ranked · Kits" data-ar="تدريب · ترتيب · كيتات"></div>
+                            <p data-en="أفضل مكان لتطوير مهاراتك في PvP مع مباريات سريعة، Kits متنوعة، وتدريب احترافي لتصبح أقوى لاعب." data-ar="أفضل مكان لتطوير مهاراتك في PvP مع مباريات سريعة، Kits متنوعة، وتدريب احترافي لتصبح أقوى لاعب."></p>
+                            <div class="status-online"><i class="fas fa-circle"></i> 24/7 Online</div>
+                        </div>
+                        <div class="home-card">
+                            <span class="card-icon-big">🌌</span>
+                            <h4 data-en="Galaxy BoxPvP" data-ar="جالاكسي بوكس بي في بي"></h4>
+                            <div class="card-tag" data-en="Box PvP · Loot · Chests" data-ar="بوكس بي في بي · غنائم · صناديق"></div>
+                            <p data-en="ادخل إلى أقوى معارك الـPvP، طوّر عتادك، قاتل اللاعبين، واصعد إلى القمة في نظام مليء بالتحديات والحماس." data-ar="ادخل إلى أقوى معارك الـPvP، طوّر عتادك، قاتل اللاعبين، واصعد إلى القمة في نظام مليء بالتحديات والحماس."></p>
+                            <div class="status-online"><i class="fas fa-circle"></i> 24/7 Online</div>
+                        </div>
                     </div>
-                    <div class="rank-desc en-text">
-                        The Knight rank will give you various useful perks on the server.
-                        You can obtain Knight in the coinshop!
+                    <div style="text-align:center; margin-top:22px;">
+                        <span style="font-size:18px; font-weight:700; color:#b99ad6; font-family:'Orbitron',sans-serif;" data-en="🔥 Coming Soon" data-ar="🔥 قريباً"></span>
+                        <div class="coming-soon-grid">
+                            <span class="coming-chip"><i class="fas fa-heart"></i> Lifesteal</span>
+                            <span class="coming-chip"><i class="fas fa-bed"></i> BedWars</span>
+                            <span class="coming-chip"><i class="fas fa-cloud"></i> SkyWars</span>
+                        </div>
                     </div>
-                    <div class="rank-desc ar-text">
-                        رتبة نايت ستمنحك العديد من المزايا المفيدة على السيرفر.
-                        يمكنك الحصول على نايت في متجر العملات!
+                    <div class="why-section">
+                        <h3 class="why-title" data-en="⭐ لماذا سيرفرنا؟" data-ar="⭐ لماذا سيرفرنا؟"></h3>
+                        <div class="why-grid">
+                            <div class="why-item">
+                                <span class="why-icon">🚀</span>
+                                <div class="why-label" data-en="Fast Performance" data-ar="أداء سريع"></div>
+                                <div class="why-desc" data-en="أداء سريع وPing ممتاز" data-ar="أداء سريع وPing ممتاز"></div>
+                            </div>
+                            <div class="why-item">
+                                <span class="why-icon">🛡️</span>
+                                <div class="why-label" data-en="Strong Protection" data-ar="حماية قوية"></div>
+                                <div class="why-desc" data-en="حماية قوية ضد الغش" data-ar="حماية قوية ضد الغش"></div>
+                            </div>
+                            <div class="why-item">
+                                <span class="why-icon">👥</span>
+                                <div class="why-label" data-en="Active Community" data-ar="مجتمع نشط"></div>
+                                <div class="why-desc" data-en="مجتمع محترم وإدارة متفاعلة" data-ar="مجتمع محترم وإدارة متفاعلة"></div>
+                            </div>
+                            <div class="why-item">
+                                <span class="why-icon">🎁</span>
+                                <div class="why-label" data-en="Constant Updates" data-ar="تحديثات مستمرة"></div>
+                                <div class="why-desc" data-en="تحديثات ومحتوى جديد باستمرار" data-ar="تحديثات ومحتوى جديد باستمرار"></div>
+                            </div>
+                            <div class="why-item">
+                                <span class="why-icon">⭐</span>
+                                <div class="why-label" data-en="All-in-One Experience" data-ar="تجربة شاملة"></div>
+                                <div class="why-desc" data-en="تجربة تجمع بين التنافس، البقاء، والمرح" data-ar="تجربة تجمع بين التنافس، البقاء، والمرح"></div>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="rank-perks">
-                        <strong><i class="fas fa-star"></i> <span class="en-text">Perks:</span><span class="ar-text">المزايا:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-home"></i> <span class="en-text">5x Homes</span><span class="ar-text">5 منازل</span></li>
-                            <li><i class="fas fa-box"></i> <span class="en-text">Kit Knight</span><span class="ar-text">كيت نايت</span></li>
-                        </ul>
-                    </div>
-
-                    <div class="rank-commands">
-                        <strong><i class="fas fa-terminal"></i> <span class="en-text">Commands:</span><span class="ar-text">الأوامر:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-tag"></i> /Nick</li>
-                            <li><i class="fas fa-undo-alt"></i> /Back</li>
-                            <li><i class="fas fa-book"></i> /Recipe</li>
-                            <li><i class="fas fa-utensils"></i> /Feed</li>
-                            <li><i class="fas fa-trash"></i> /Disposal</li>
-                        </ul>
-                    </div>
-
-                    <button class="btn-buy-rank">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="en-text">Buy</span>
-                        <span class="ar-text">شراء</span>
-                    </button>
                 </div>
 
-                <!-- LORD -->
-                <div class="rank-card lord">
-                    <div class="rank-icon">👑</div>
-                    <div class="rank-name">
-                        <span class="en-text">Lord</span>
-                        <span class="ar-text">لورد</span>
+                <!-- ===== RANKS TAB ===== -->
+                <div class="tab-pane" id="tab-ranks">
+                    <div class="rank-section-title"><i class="fas fa-crown"></i><span data-en="Earth Survival Ranks" data-ar="رتب سيرفر البقاء إيرث"></span></div>
+                    <div class="rank-section-sub" data-en="Choose your rank and unlock powerful perks on Earth Survival." data-ar="اختر رتبتك وافتح مزايا قوية على سيرفر البقاء إيرث."></div>
+                    <div class="rank-grid">
+                        <div class="rank-mini knight">
+                            <span class="rank-mini-icon">⚔️</span>
+                            <div class="rank-mini-name">Knight</div>
+                            <div class="rank-mini-prefix">KNIGHT</div>
+                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="5x Homes" data-ar="5 منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span></div>
+                            <span class="rank-price" onclick="openPriceModal('Knight', '⚔️', 'KNIGHT')">$5 <span class="price-hint">▶</span></span>
+                        </div>
+                        <div class="rank-mini lord">
+                            <span class="rank-mini-icon">👑</span>
+                            <div class="rank-mini-name">Lord</div>
+                            <div class="rank-mini-prefix">LORD</div>
+                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="10x Homes" data-ar="10 منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span></div>
+                            <span class="rank-price" onclick="openPriceModal('Lord', '👑', 'LORD')">$20 <span class="price-hint">▶</span></span>
+                        </div>
+                        <div class="rank-mini paladin">
+                            <span class="rank-mini-icon">🛡️</span>
+                            <div class="rank-mini-name">Paladin</div>
+                            <div class="rank-mini-prefix">PALADIN</div>
+                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="∞ Homes" data-ar="∞ منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span></div>
+                            <span class="rank-price" onclick="openPriceModal('Paladin', '🛡️', 'PALADIN')">$60 <span class="price-hint">▶</span></span>
+                        </div>
+                        <div class="rank-mini duke">
+                            <span class="rank-mini-icon">🏰</span>
+                            <div class="rank-mini-name">Duke</div>
+                            <div class="rank-mini-prefix">DUKE</div>
+                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="∞ Homes" data-ar="∞ منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span> · <i class="fas fa-feather-alt"></i> <span data-en="Fly" data-ar="طيران"></span></div>
+                            <span class="rank-price" onclick="openPriceModal('Duke', '🏰', 'DUKE')">$120 <span class="price-hint">▶</span></span>
+                        </div>
+                        <div class="rank-mini king">
+                            <span class="rank-mini-icon">🌟</span>
+                            <div class="rank-mini-name">King</div>
+                            <div class="rank-mini-prefix">KING</div>
+                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="∞ Homes" data-ar="∞ منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span> · <i class="fas fa-feather-alt"></i> <span data-en="Fly" data-ar="طيران"></span> · <i class="fas fa-heartbeat"></i> <span data-en="Heal" data-ar="شفاء"></span></div>
+                            <span class="rank-price" onclick="openPriceModal('King', '🌟', 'KING')">$120 <span class="price-hint">▶</span></span>
+                        </div>
                     </div>
-                    <div class="rank-prefix">
-                        <span class="en-text">Prefix: LORD</span>
-                        <span class="ar-text">البادئة: لورد</span>
+                    <div class="rank-section-title" style="margin-top:32px;"><i class="fas fa-box-open"></i><span data-en="Galaxy BoxPvP Ranks" data-ar="رتب جالاكسي بوكس بي في بي"></span></div>
+                    <div class="rank-section-sub" data-en="Upgrade your kit and dominate the arena." data-ar="طوّر كيتك وسيطر على الساحة."></div>
+                    <div class="rank-grid">
+                        <div class="rank-mini user">
+                            <span class="rank-mini-icon">🪖</span>
+                            <div class="rank-mini-name">User</div>
+                            <div class="rank-mini-prefix">USER</div>
+                            <div class="rank-mini-benefits"><span data-en="Wooden Kit · Iron Armor" data-ar="كيت خشبي · درع حديدي"></span></div>
+                            <span class="rank-price" style="background:linear-gradient(135deg,#4ade80,#22c55e);" onclick="showToast('User rank is free! Claim it now.')">Free <span class="price-hint">▶</span></span>
+                        </div>
+                        <div class="rank-mini vip">
+                            <span class="rank-mini-icon">⭐</span>
+                            <div class="rank-mini-name">VIP</div>
+                            <div class="rank-mini-prefix">VIP</div>
+                            <div class="rank-mini-benefits"><span data-en="Iron Armor Prot II · 24 Carrots" data-ar="درع حديدي حماية II · 24 جزر"></span></div>
+                            <span class="rank-price" onclick="openPriceModal('VIP', '⭐', 'VIP')">$5 <span class="price-hint">▶</span></span>
+                        </div>
+                        <div class="rank-mini terra">
+                            <span class="rank-mini-icon">🌍</span>
+                            <div class="rank-mini-name">Terra</div>
+                            <div class="rank-mini-prefix">TERRA</div>
+                            <div class="rank-mini-benefits"><span data-en="Iron Prot III · Mending · 32 Carrots" data-ar="حديدي حماية III · إصلاح · 32 جزر"></span></div>
+                            <span class="rank-price" onclick="openPriceModal('Terra', '🌍', 'TERRA')">$20 <span class="price-hint">▶</span></span>
+                        </div>
+                        <div class="rank-mini nova">
+                            <span class="rank-mini-icon">🌟</span>
+                            <div class="rank-mini-name">Nova</div>
+                            <div class="rank-mini-prefix">NOVA</div>
+                            <div class="rank-mini-benefits"><span data-en="Diamond Prot III · 46 Carrots · 12 GApples" data-ar="ماسي حماية III · 46 جزر · 12 تفاح ذهبي"></span></div>
+                            <span class="rank-price" onclick="openPriceModal('Nova', '🌟', 'NOVA')">$60 <span class="price-hint">▶</span></span>
+                        </div>
+                        <div class="rank-mini nebula">
+                            <span class="rank-mini-icon">🌌</span>
+                            <div class="rank-mini-name">Nebula</div>
+                            <div class="rank-mini-prefix">NEBULA</div>
+                            <div class="rank-mini-benefits"><span data-en="Diamond Prot IV · 64 Carrots · 16 GApples" data-ar="ماسي حماية IV · 64 جزر · 16 تفاح ذهبي"></span></div>
+                            <span class="rank-price" onclick="openPriceModal('Nebula', '🌌', 'NEBULA')">$120 <span class="price-hint">▶</span></span>
+                        </div>
                     </div>
-                    <div class="rank-desc en-text">
-                        The Lord rank will give you various useful perks on the server.
-                        You can obtain Lord in the coinshop!
+                    <div class="rank-section-title" style="margin-top:32px;"><i class="fas fa-fist-raised"></i><span data-en="Neptune Practice Ranks" data-ar="رتب نبتون تدريب"></span></div>
+                    <div class="rank-section-sub" data-en="Exclusive membership tiers for competitive players." data-ar="طبقات عضوية حصرية للاعبين التنافسيين."></div>
+                    <div class="rank-grid">
+                        <div class="rank-mini neptune-vip">
+                            <span class="rank-mini-icon">⭐</span>
+                            <div class="rank-mini-name">VIP</div>
+                            <div class="rank-mini-prefix">VIP</div>
+                            <div class="rank-mini-benefits"><span data-en="Full Servers · Daily Rewards · Party 25" data-ar="سيرفرات ممتلئة · مكافآت يومية · حفلة 25"></span></div>
+                            <span class="rank-price" onclick="openPriceModal('VIP', '⭐', 'VIP')">$5 <span class="price-hint">▶</span></span>
+                        </div>
+                        <div class="rank-mini neptune-mvp">
+                            <span class="rank-mini-icon">👑</span>
+                            <div class="rank-mini-name">MVP</div>
+                            <div class="rank-mini-prefix">MVP</div>
+                            <div class="rank-mini-benefits"><span data-en="All VIP Perks · Priority Support · Party 50" data-ar="جميع مزايا VIP · دعم أولوية · حفلة 50"></span></div>
+                            <span class="rank-price" onclick="openPriceModal('MVP', '👑', 'MVP')">$20 <span class="price-hint">▶</span></span>
+                        </div>
                     </div>
-                    <div class="rank-desc ar-text">
-                        رتبة لورد ستمنحك العديد من المزايا المفيدة على السيرفر.
-                        يمكنك الحصول على لورد في متجر العملات!
+                    <div style="margin-top:32px;">
+                        <div class="rank-section-title" style="font-size:24px;"><i class="fas fa-tags"></i><span data-en="Pricing Plans" data-ar="خطط الأسعار"></span></div>
+                        <div class="rank-section-sub" data-en="Choose the plan that fits your playstyle." data-ar="اختر الخطة التي تناسب أسلوب لعبك."></div>
+                        <div class="pricing-grid">
+                            <div class="pricing-card"><span class="pricing-icon">⚡</span><div class="pricing-name" data-en="Weekly" data-ar="أسبوعي"></div><div class="pricing-price">$5 <small>/week</small></div><div class="pricing-desc" data-en="Perfect for trying out a rank." data-ar="مثالي لتجربة رتبة."></div></div>
+                            <div class="pricing-card popular"><span class="pricing-icon">🔥</span><div class="pricing-name" data-en="Monthly" data-ar="شهري"></div><div class="pricing-price">$20 <small>/month</small></div><div class="pricing-desc" data-en="Best value for active players." data-ar="أفضل قيمة للاعبين النشطين."></div></div>
+                            <div class="pricing-card"><span class="pricing-icon">💎</span><div class="pricing-name" data-en="3 Months" data-ar="3 أشهر"></div><div class="pricing-price">$60 <small>/3mo</small></div><div class="pricing-desc" data-en="Save big with a longer commitment." data-ar="وفّر كثيراً مع التزام أطول."></div></div>
+                            <div class="pricing-card"><span class="pricing-icon">👑</span><div class="pricing-name" data-en="Lifetime" data-ar="مدى الحياة"></div><div class="pricing-price">$120 <small>/life</small></div><div class="pricing-desc" data-en="Ultimate status – forever." data-ar="الرتبة النهائية – للأبد."></div><span class="pricing-badge">Best Deal</span></div>
+                        </div>
                     </div>
-
-                    <div class="rank-perks">
-                        <strong><i class="fas fa-star"></i> <span class="en-text">Perks:</span><span class="ar-text">المزايا:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-home"></i> <span class="en-text">10x Homes</span><span class="ar-text">10 منازل</span></li>
-                            <li><i class="fas fa-box"></i> <span class="en-text">Kit Lord</span><span class="ar-text">كيت لورد</span></li>
-                        </ul>
-                    </div>
-
-                    <div class="rank-commands">
-                        <strong><i class="fas fa-terminal"></i> <span class="en-text">Commands:</span><span class="ar-text">الأوامر:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-tag"></i> /Nick</li>
-                            <li><i class="fas fa-undo-alt"></i> /Back</li>
-                            <li><i class="fas fa-book"></i> /Recipe</li>
-                            <li><i class="fas fa-utensils"></i> /Feed</li>
-                            <li><i class="fas fa-trash"></i> /Disposal</li>
-                            <li><i class="fas fa-crosshairs"></i> /Near</li>
-                            <li><i class="fas fa-hammer"></i> /Craft</li>
-                        </ul>
-                    </div>
-
-                    <button class="btn-buy-rank">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="en-text">Buy</span>
-                        <span class="ar-text">شراء</span>
-                    </button>
                 </div>
 
-                <!-- PALADIN -->
-                <div class="rank-card paladin">
-                    <div class="rank-icon">🛡️</div>
-                    <div class="rank-name">
-                        <span class="en-text">Paladin</span>
-                        <span class="ar-text">بالادين</span>
+                <!-- ===== STORE TAB ===== -->
+                <div class="tab-pane" id="tab-store">
+                    <div class="rank-section-title"><i class="fas fa-store"></i><span data-en="Store" data-ar="المتجر"></span></div>
+                    <div class="rank-section-sub" data-en="Purchase ranks and items to enhance your experience." data-ar="اشترِ الرتب والعناصر لتعزيز تجربتك."></div>
+                    <div style="margin-top:24px;">
+                        <h4 style="color:#f0e6ff; font-size:20px; margin-bottom:14px; font-family:'Orbitron',sans-serif;"><i class="fas fa-crown" style="color:#fbbf24;"></i> <span data-en="Earth Survival" data-ar="سيرفر البقاء إيرث"></span></h4>
+                        <div class="store-tab-grid">
+                            <div class="store-tab-item"><span class="store-icon">⚔️</span><div class="store-name">Knight</div><div class="store-price">$5/wk</div><div class="store-desc" data-en="5x Homes · Kit Knight" data-ar="5 منازل · كيت نايت"></div><button class="btn-store-buy" onclick="showToast('Knight rank added to cart!')">Buy</button></div>
+                            <div class="store-tab-item"><span class="store-icon">👑</span><div class="store-name">Lord</div><div class="store-price">$20/mo</div><div class="store-desc" data-en="10x Homes · Kit Lord" data-ar="10 منازل · كيت لورد"></div><button class="btn-store-buy" onclick="showToast('Lord rank added to cart!')">Buy</button></div>
+                            <div class="store-tab-item"><span class="store-icon">🛡️</span><div class="store-name">Paladin</div><div class="store-price">$60/3mo</div><div class="store-desc" data-en="∞ Homes · Kit Paladin" data-ar="∞ منازل · كيت بالادين"></div><button class="btn-store-buy" onclick="showToast('Paladin rank added to cart!')">Buy</button></div>
+                            <div class="store-tab-item"><span class="store-icon">🏰</span><div class="store-name">Duke</div><div class="store-price">$120/life</div><div class="store-desc" data-en="∞ Homes · Fly · Heal" data-ar="∞ منازل · طيران · شفاء"></div><button class="btn-store-buy" onclick="showToast('Duke rank added to cart!')">Buy</button></div>
+                            <div class="store-tab-item"><span class="store-icon">🌟</span><div class="store-name">King</div><div class="store-price">$120/life</div><div class="store-desc" data-en="∞ Homes · All Commands" data-ar="∞ منازل · جميع الأوامر"></div><button class="btn-store-buy" onclick="showToast('King rank added to cart!')">Buy</button></div>
+                        </div>
                     </div>
-                    <div class="rank-prefix">
-                        <span class="en-text">Prefix: PALADIN</span>
-                        <span class="ar-text">البادئة: بالادين</span>
+                    <div style="margin-top:28px;">
+                        <h4 style="color:#f0e6ff; font-size:20px; margin-bottom:14px; font-family:'Orbitron',sans-serif;"><i class="fas fa-box-open" style="color:#f472b6;"></i> <span data-en="Galaxy BoxPvP" data-ar="جالاكسي بوكس بي في بي"></span></h4>
+                        <div class="store-tab-grid">
+                            <div class="store-tab-item"><span class="store-icon">🪖</span><div class="store-name">User</div><div class="store-price">Free</div><div class="store-desc" data-en="Starter Kit" data-ar="كيت مبتدئ"></div><button class="btn-store-buy" onclick="showToast('User kit claimed!')">Claim</button></div>
+                            <div class="store-tab-item"><span class="store-icon">⭐</span><div class="store-name">VIP</div><div class="store-price">$5/wk</div><div class="store-desc" data-en="Iron Prot II · 24 Carrots" data-ar="حديدي حماية II · 24 جزر"></div><button class="btn-store-buy" onclick="showToast('VIP rank added to cart!')">Buy</button></div>
+                            <div class="store-tab-item"><span class="store-icon">🌍</span><div class="store-name">Terra</div><div class="store-price">$20/mo</div><div class="store-desc" data-en="Iron Prot III · Mending" data-ar="حديدي حماية III · إصلاح"></div><button class="btn-store-buy" onclick="showToast('Terra rank added to cart!')">Buy</button></div>
+                            <div class="store-tab-item"><span class="store-icon">🌟</span><div class="store-name">Nova</div><div class="store-price">$60/3mo</div><div class="store-desc" data-en="Diamond Prot III · 46 Carrots" data-ar="ماسي حماية III · 46 جزر"></div><button class="btn-store-buy" onclick="showToast('Nova rank added to cart!')">Buy</button></div>
+                            <div class="store-tab-item"><span class="store-icon">🌌</span><div class="store-name">Nebula</div><div class="store-price">$120/life</div><div class="store-desc" data-en="Diamond Prot IV · 64 Carrots" data-ar="ماسي حماية IV · 64 جزر"></div><button class="btn-store-buy" onclick="showToast('Nebula rank added to cart!')">Buy</button></div>
+                        </div>
                     </div>
-                    <div class="rank-desc en-text">
-                        The Paladin rank will give you various useful perks on the server.
-                        You can obtain Paladin in the coinshop!
+                    <div style="margin-top:28px;">
+                        <h4 style="color:#f0e6ff; font-size:20px; margin-bottom:14px; font-family:'Orbitron',sans-serif;"><i class="fas fa-fist-raised" style="color:#60a5fa;"></i> <span data-en="Neptune Practice" data-ar="نبتون تدريب"></span></h4>
+                        <div class="store-tab-grid">
+                            <div class="store-tab-item"><span class="store-icon">⭐</span><div class="store-name">VIP</div><div class="store-price">$5/wk</div><div class="store-desc" data-en="Full Servers · Daily Rewards" data-ar="سيرفرات ممتلئة · مكافآت يومية"></div><button class="btn-store-buy" onclick="showToast('VIP rank added to cart!')">Buy</button></div>
+                            <div class="store-tab-item"><span class="store-icon">👑</span><div class="store-name">MVP</div><div class="store-price">$20/mo</div><div class="store-desc" data-en="All VIP Perks · Priority Support" data-ar="جميع مزايا VIP · دعم أولوية"></div><button class="btn-store-buy" onclick="showToast('MVP rank added to cart!')">Buy</button></div>
+                        </div>
                     </div>
-                    <div class="rank-desc ar-text">
-                        رتبة بالادين ستمنحك العديد من المزايا المفيدة على السيرفر.
-                        يمكنك الحصول على بالادين في متجر العملات!
-                    </div>
-
-                    <div class="rank-perks">
-                        <strong><i class="fas fa-star"></i> <span class="en-text">Perks:</span><span class="ar-text">المزايا:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-home"></i> <span class="en-text">Unlimited Homes</span><span class="ar-text">منازل غير محدودة</span></li>
-                            <li><i class="fas fa-box"></i> <span class="en-text">Kit Paladin</span><span class="ar-text">كيت بالادين</span></li>
-                        </ul>
-                    </div>
-
-                    <div class="rank-commands">
-                        <strong><i class="fas fa-terminal"></i> <span class="en-text">Commands:</span><span class="ar-text">الأوامر:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-tag"></i> /Nick</li>
-                            <li><i class="fas fa-undo-alt"></i> /Back</li>
-                            <li><i class="fas fa-book"></i> /Recipe</li>
-                            <li><i class="fas fa-utensils"></i> /Feed</li>
-                            <li><i class="fas fa-trash"></i> /Disposal</li>
-                            <li><i class="fas fa-crosshairs"></i> /Near</li>
-                            <li><i class="fas fa-hammer"></i> /Craft</li>
-                            <li><i class="fas fa-chess-queen"></i> /Enderchest</li>
-                            <li><i class="fas fa-clock"></i> /Ftime</li>
-                        </ul>
-                    </div>
-
-                    <button class="btn-buy-rank">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="en-text">Buy</span>
-                        <span class="ar-text">شراء</span>
-                    </button>
                 </div>
 
-                <!-- DUKE -->
-                <div class="rank-card duke">
-                    <div class="rank-icon">🏰</div>
-                    <div class="rank-name">
-                        <span class="en-text">Duke</span>
-                        <span class="ar-text">ديوك</span>
+                <!-- ===== RULES TAB ===== -->
+                <div class="tab-pane" id="tab-rules">
+                    <div class="rank-section-title"><i class="fas fa-gavel"></i><span data-en="Server Rules" data-ar="قوانين السيرفر"></span></div>
+                    <div class="rank-section-sub" data-en="Follow the rules to ensure a fair and fun experience for everyone." data-ar="اتبع القوانين لضمان تجربة عادلة وممتعة للجميع."></div>
+                    <div class="rules-grid">
+                        <div class="rules-card">
+                            <span class="rules-icon">🌐</span>
+                            <h4 data-en="Global Rules" data-ar="قوانين عامة"></h4>
+                            <ul>
+                                <li><i class="fas fa-shield-alt"></i> <span data-en="No hacking, cheating, or exploiting bugs." data-ar="لا للغش أو استغلال الأخطاء."></span> <span class="rule-badge">Zero Tolerance</span></li>
+                                <li><i class="fas fa-comment-slash"></i> <span data-en="Respect all players – no toxicity, racism, or harassment." data-ar="احترم جميع اللاعبين – لا للسمية أو العنصرية أو المضايقة."></span></li>
+                                <li><i class="fas fa-microphone-alt"></i> <span data-en="No spamming or advertising other servers." data-ar="لا للسبام أو الإعلان عن سيرفرات أخرى."></span></li>
+                                <li><i class="fas fa-user-secret"></i> <span data-en="No inappropriate usernames or skins." data-ar="لا لأسماء أو جلود غير لائقة."></span></li>
+                                <li><i class="fas fa-flag"></i> <span data-en="Follow staff instructions at all times." data-ar="اتبع تعليمات الطاقم في جميع الأوقات."></span></li>
+                            </ul>
+                        </div>
+                        <div class="rules-card">
+                            <span class="rules-icon">🌍</span>
+                            <h4 data-en="Earth Survival Rules" data-ar="قوانين سيرفر البقاء إيرث"></h4>
+                            <ul>
+                                <li><i class="fas fa-home"></i> <span data-en="No griefing – protect your builds with claims." data-ar="لا للتخريب – احمِ مبانيّك بالحماية."></span> <span class="rule-badge green">Protected</span></li>
+                                <li><i class="fas fa-hand-holding-usd"></i> <span data-en="No scamming or exploiting economy systems." data-ar="لا للنصب أو استغلال أنظمة الاقتصاد."></span></li>
+                                <li><i class="fas fa-tree"></i> <span data-en="No destroying natural terrain without permission." data-ar="لا لتدمير التضاريس الطبيعية دون إذن."></span></li>
+                                <li><i class="fas fa-clock"></i> <span data-en="AFK farming is allowed but limited to 15 minutes." data-ar="الزراعة أثناء AFK مسموحة ولكن محددة بـ 15 دقيقة."></span></li>
+                            </ul>
+                        </div>
+                        <div class="rules-card">
+                            <span class="rules-icon">🌌</span>
+                            <h4 data-en="Galaxy BoxPvP Rules" data-ar="قوانين جالاكسي بوكس بي في بي"></h4>
+                            <ul>
+                                <li><i class="fas fa-crosshairs"></i> <span data-en="No teaming in free-for-all modes." data-ar="لا للتحالفات في أوضاع free-for-all."></span> <span class="rule-badge gold">Fair Play</span></li>
+                                <li><i class="fas fa-box-open"></i> <span data-en="No stealing from other players' chests." data-ar="لا لسرقة صناديق اللاعبين الآخرين."></span></li>
+                                <li><i class="fas fa-swords"></i> <span data-en="No spawn camping – give players a chance." data-ar="لا للكمائن عند نقطة الإحياء – امنح اللاعبين فرصة."></span></li>
+                                <li><i class="fas fa-tachometer-alt"></i> <span data-en="No exploiting glitches or using unfair advantages." data-ar="لا لاستغلال الأخطاء أو استخدام مزايا غير عادلة."></span></li>
+                            </ul>
+                        </div>
+                        <div class="rules-card">
+                            <span class="rules-icon">🌊</span>
+                            <h4 data-en="Neptune Practice Rules" data-ar="قوانين نبتون تدريب"></h4>
+                            <ul>
+                                <li><i class="fas fa-handshake"></i> <span data-en="No toxicity – respect your opponent." data-ar="لا للسمية – احترم خصمك."></span> <span class="rule-badge green">Sportsmanship</span></li>
+                                <li><i class="fas fa-sliders-h"></i> <span data-en="No using banned items or kits in ranked matches." data-ar="لا لاستخدام عناصر أو كيتات محظورة في المباريات المرتبة."></span></li>
+                                <li><i class="fas fa-flag-checkered"></i> <span data-en="No leaving mid-match to avoid a loss." data-ar="لا للمغادرة أثناء المباراة لتجنب الخسارة."></span></li>
+                                <li><i class="fas fa-users"></i> <span data-en="Party limits must be respected." data-ar="يجب احترام حدود الحفلة."></span></li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="rank-prefix">
-                        <span class="en-text">Prefix: DUKE</span>
-                        <span class="ar-text">البادئة: ديوك</span>
+                    <div style="margin-top:20px; padding:16px 20px; background:rgba(255,107,107,0.06); border-radius:16px; border:1px solid rgba(255,107,107,0.1); text-align:center;">
+                        <p style="color:#ff6b6b; font-size:14px;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span data-en="Violating any rule may result in a mute, kick, ban, or rank removal at staff discretion." data-ar="قد يؤدي مخالفة أي قانون إلى كتم، طرد، حظر، أو إزالة الرتبة حسب تقدير الطاقم."></span>
+                        </p>
                     </div>
-                    <div class="rank-desc en-text">
-                        The Duke rank will give you various useful perks on the server.
-                        You can obtain Duke in the coinshop!
-                    </div>
-                    <div class="rank-desc ar-text">
-                        رتبة ديوك ستمنحك العديد من المزايا المفيدة على السيرفر.
-                        يمكنك الحصول على ديوك في متجر العملات!
-                    </div>
-
-                    <div class="rank-perks">
-                        <strong><i class="fas fa-star"></i> <span class="en-text">Perks:</span><span class="ar-text">المزايا:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-home"></i> <span class="en-text">Unlimited Homes</span><span class="ar-text">منازل غير محدودة</span></li>
-                            <li><i class="fas fa-box"></i> <span class="en-text">Kit Duke</span><span class="ar-text">كيت ديوك</span></li>
-                        </ul>
-                    </div>
-
-                    <div class="rank-commands">
-                        <strong><i class="fas fa-terminal"></i> <span class="en-text">Commands:</span><span class="ar-text">الأوامر:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-tag"></i> /Nick</li>
-                            <li><i class="fas fa-undo-alt"></i> /Back</li>
-                            <li><i class="fas fa-book"></i> /Recipe</li>
-                            <li><i class="fas fa-utensils"></i> /Feed</li>
-                            <li><i class="fas fa-trash"></i> /Disposal</li>
-                            <li><i class="fas fa-crosshairs"></i> /Near</li>
-                            <li><i class="fas fa-hammer"></i> /Craft</li>
-                            <li><i class="fas fa-chess-queen"></i> /Enderchest</li>
-                            <li><i class="fas fa-clock"></i> /Time</li>
-                            <li><i class="fas fa-heartbeat"></i> /Heal</li>
-                            <li><i class="fas fa-feather-alt"></i> /Fly</li>
-                        </ul>
-                    </div>
-
-                    <button class="btn-buy-rank">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="en-text">Buy</span>
-                        <span class="ar-text">شراء</span>
-                    </button>
                 </div>
 
-                <!-- KING -->
-                <div class="rank-card king">
-                    <div class="rank-icon">🌟</div>
-                    <div class="rank-name">
-                        <span class="en-text">King</span>
-                        <span class="ar-text">كينغ</span>
+                <!-- ===== SUPPORT TAB ===== -->
+                <div class="tab-pane" id="tab-support">
+                    <div class="rank-section-title"><i class="fas fa-headset"></i><span data-en="Support" data-ar="الدعم"></span></div>
+                    <div class="rank-section-sub" data-en="We're here to help! Contact us and we'll get back to you as soon as possible." data-ar="نحن هنا للمساعدة! تواصل معنا وسنرد عليك في أقرب وقت ممكن."></div>
+                    <div class="support-container">
+                        <div class="support-form">
+                            <h4 data-en="📩 Send a Ticket" data-ar="📩 أرسل تذكرة"></h4>
+                            <p class="form-sub" data-en="Fill out the form and our team will respond within 24 hours." data-ar="املأ النموذج وسيرد فريقنا في غضون 24 ساعة."></p>
+                            <form id="supportForm" onsubmit="return handleSupport(event)">
+                                <div class="form-group"><label data-en="Your Name" data-ar="اسمك"></label><input type="text" id="supportName" placeholder="Enter your name..." required /></div>
+                                <div class="form-group"><label data-en="Email Address" data-ar="البريد الإلكتروني"></label><input type="email" id="supportEmail" placeholder="your@email.com" required /></div>
+                                <div class="form-group"><label data-en="Issue Type" data-ar="نوع المشكلة"></label>
+                                    <select id="supportType"><option value="bug" data-en="Bug Report" data-ar="تقرير خطأ"></option><option value="rank" data-en="Rank Issue" data-ar="مشكلة في الرتبة"></option><option value="payment" data-en="Payment Problem" data-ar="مشكلة في الدفع"></option><option value="other" data-en="Other" data-ar="أخرى"></option></select>
+                                </div>
+                                <div class="form-group"><label data-en="Message" data-ar="الرسالة"></label><textarea id="supportMessage" placeholder="Describe your issue in detail..." required></textarea></div>
+                                <button type="submit" class="btn-submit"><span data-en="Send Message" data-ar="إرسال"></span></button>
+                            </form>
+                        </div>
+                        <div class="support-info">
+                            <div class="info-card"><div class="info-icon"><i class="fas fa-discord"></i></div><div class="info-content"><h5 data-en="Join our Discord" data-ar="انضم إلى ديسكورد"></h5><p data-en="Get instant support and connect with the community." data-ar="احصل على دعم فوري وتواصل مع المجتمع."><br><a href="#">discord.gg/otk1</a></p></div></div>
+                            <div class="info-card"><div class="info-icon"><i class="fas fa-envelope"></i></div><div class="info-content"><h5 data-en="Email Support" data-ar="الدعم عبر البريد"></h5><p data-en="For serious issues, reach out directly." data-ar="للمشاكل الجادة، تواصل مباشرة."><br><a href="mailto:support@otk1.net">support@otk1.net</a></p></div></div>
+                            <div class="info-card"><div class="info-icon"><i class="fas fa-clock"></i></div><div class="info-content"><h5 data-en="Response Time" data-ar="وقت الرد"></h5><p data-en="We aim to respond within 24 hours." data-ar="نهدف إلى الرد خلال 24 ساعة."></p></div></div>
+                            <div class="info-card"><div class="info-icon"><i class="fas fa-shield-alt"></i></div><div class="info-content"><h5 data-en="Trust & Safety" data-ar="الثقة والأمان"></h5><p data-en="Your data is safe with us. We never share your information." data-ar="بياناتك آمنة معنا. لا نشارك معلوماتك أبداً."></p></div></div>
+                        </div>
                     </div>
-                    <div class="rank-prefix">
-                        <span class="en-text">Prefix: KING</span>
-                        <span class="ar-text">البادئة: كينغ</span>
-                    </div>
-                    <div class="rank-desc en-text">
-                        The King rank will give you various useful perks on the server.
-                        You can obtain King in the coinshop!
-                    </div>
-                    <div class="rank-desc ar-text">
-                        رتبة كينغ ستمنحك العديد من المزايا المفيدة على السيرفر.
-                        يمكنك الحصول على كينغ في متجر العملات!
-                    </div>
-
-                    <div class="rank-perks">
-                        <strong><i class="fas fa-star"></i> <span class="en-text">Perks:</span><span class="ar-text">المزايا:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-home"></i> <span class="en-text">Unlimited Homes</span><span class="ar-text">منازل غير محدودة</span></li>
-                            <li><i class="fas fa-box"></i> <span class="en-text">Kit King</span><span class="ar-text">كيت كينغ</span></li>
-                        </ul>
-                    </div>
-
-                    <div class="rank-commands">
-                        <strong><i class="fas fa-terminal"></i> <span class="en-text">Commands:</span><span class="ar-text">الأوامر:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-tag"></i> /Nick</li>
-                            <li><i class="fas fa-undo-alt"></i> /Back</li>
-                            <li><i class="fas fa-book"></i> /Recipe</li>
-                            <li><i class="fas fa-utensils"></i> /Feed</li>
-                            <li><i class="fas fa-trash"></i> /Disposal</li>
-                            <li><i class="fas fa-crosshairs"></i> /Near</li>
-                            <li><i class="fas fa-hammer"></i> /Craft</li>
-                            <li><i class="fas fa-chess-queen"></i> /Enderchest</li>
-                            <li><i class="fas fa-clock"></i> /Fime</li>
-                            <li><i class="fas fa-heartbeat"></i> /Heal</li>
-                            <li><i class="fas fa-feather-alt"></i> /Fly</li>
-                            <li><i class="fas fa-cloud-sun"></i> /Fweather</li>
-                            <li><i class="fas fa-hammer"></i> /Repair</li>
-                        </ul>
-                    </div>
-
-                    <button class="btn-buy-rank">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="en-text">Buy</span>
-                        <span class="ar-text">شراء</span>
-                    </button>
                 </div>
 
-            </div>
-        </div>
-
-        <!-- ============================================================
-        STORE SECTION — GALAXY BOX PVP RANKS
-        ============================================================ -->
-        <div class="store-section">
-            <div class="store-header">
-                <h2>
-                    <i class="fas fa-box-open" style="margin-right: 10px;"></i>
-                    <span class="en-text">Galaxy Box PvP Ranks</span>
-                    <span class="ar-text">رتب جالاكسي بوكس بي في بي</span>
-                </h2>
-                <span class="store-badge">
-                    <i class="fas fa-coins"></i>
-                    <span class="en-text">Coinshop</span>
-                    <span class="ar-text">متجر العملات</span>
-                </span>
-            </div>
-
-            <div class="store-grid">
-
-                <!-- USER RANK -->
-                <div class="rank-card user">
-                    <div class="rank-icon">🪖</div>
-                    <div class="rank-name">
-                        <span class="en-text">User</span>
-                        <span class="ar-text">يوزر</span>
+                <!-- ===== FAQ TAB ===== -->
+                <div class="tab-pane" id="tab-faq">
+                    <div class="rank-section-title"><i class="fas fa-question-circle"></i><span data-en="Frequently Asked Questions" data-ar="الأسئلة الشائعة"></span></div>
+                    <div class="rank-section-sub" data-en="Everything you need to know about Otk1 Network." data-ar="كل ما تحتاج معرفته عن شبكة Otk1."></div>
+                    <div class="faq-list">
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ How do I join the server?" data-ar="❓ كيف أنضم إلى السيرفر؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Simply copy the server IP from the IP tab above, open Minecraft (Java Edition 1.20.4), click Multiplayer, then Add Server, paste the IP, and join!" data-ar="ببساطة انسخ الآي بي من تبويب IP أعلاه، افتح ماين كرافت (إصدار 1.20.4)، اضغط Multiplayer، ثم Add Server، الصق الآي بي وانضم!"></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ What Minecraft version do I need?" data-ar="❓ ما هو إصدار ماين كرافت المطلوب؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="All our servers run on Minecraft Java Edition 1.20.4. We recommend using this version for the best experience." data-ar="جميع سيرفراتنا تعمل على ماين كرافت جافا إصدار 1.20.4. نوصي باستخدام هذا الإصدار للحصول على أفضل تجربة."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ How do I buy a rank?" data-ar="❓ كيف أشتري رتبة؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Ranks are purchased using in-game coins earned by playing on the server. Visit the Store tab to see all available ranks and their requirements. You can also purchase directly with real money via our store." data-ar="تُشترى الرتب باستخدام العملات داخل اللعبة التي تكسبها من اللعب على السيرفر. زر المتجر لترى جميع الرتب المتاحة ومتطلباتها. يمكنك أيضاً الشراء مباشرة بالمال الحقيقي عبر متجرنا."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ Is there a Discord server?" data-ar="❓ هل يوجد سيرفر ديسكورد؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Yes! Join our Discord community to stay updated, chat with other players, and get support. The invite link is available in-game or visit the Support tab." data-ar="نعم! انضم إلى مجتمعنا على ديسكورد للبقاء على اطلاع، والدردشة مع اللاعبين الآخرين، والحصول على الدعم. رابط الدعوة متاح داخل اللعبة أو زر تبويب الدعم."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ Can I play with friends?" data-ar="❓ هل يمكنني اللعب مع الأصدقاء؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Absolutely! All our servers support multiplayer. You can team up, create parties, and compete together. Party limits vary by rank – check the Ranks tab for details." data-ar="بالتأكيد! جميع سيرفراتنا تدعم اللعب الجماعي. يمكنك تشكيل فرق، وإنشاء حفلات، والتنافس معًا. حدود الحفلة تختلف حسب الرتبة – تحقق من تبويب الرتب للتفاصيل."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ What is the server's uptime?" data-ar="❓ ما هو وقت تشغيل السيرفر؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Our servers are online 24/7 with 99.9% uptime. We perform regular maintenance to ensure the best performance for all players." data-ar="سيرفراتنا تعمل 24/7 مع uptime 99.9%. نقوم بصيانة دورية لضمان أفضل أداء لجميع اللاعبين."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ How do I report a player?" data-ar="❓ كيف أبلغ عن لاعب؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="You can report a player using /report (player) (reason) in-game, or open a ticket in the Support tab. Our staff will review it promptly." data-ar="يمكنك الإبلاغ عن لاعب باستخدام /report (اللاعب) (السبب) داخل اللعبة، أو فتح تذكرة في تبويب الدعم. سيراجع طاقمنا الأمر بسرعة."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ What are the rules?" data-ar="❓ ما هي القوانين؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="You can find all server rules in the Rules tab. We have global rules as well as game-specific rules for each server mode." data-ar="يمكنك العثور على جميع قوانين السيرفر في تبويب القوانين. لدينا قوانين عامة بالإضافة إلى قوانين خاصة بكل نمط لعب."></div></div>
                     </div>
-                    <div class="rank-prefix">
-                        <span class="en-text">Rank: USER</span>
-                        <span class="ar-text">الرتبة: يوزر</span>
-                    </div>
-                    <div class="rank-desc en-text">
-                        The starter rank for Galaxy Box PvP. Get a solid kit to begin your loot battles!
-                    </div>
-                    <div class="rank-desc ar-text">
-                        الرتبة المبدئية لجالاكسي بوكس بي في بي. احصل على كيت قوي لبدء معاركك!
-                    </div>
-
-                    <div class="rank-kit">
-                        <strong><i class="fas fa-box"></i> <span class="en-text">Kit Contents:</span><span class="ar-text">محتويات الكيت:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-sword"></i> Wooden Sword (Sharpness I, Unbreaking I)</li>
-                            <li><i class="fas fa-pickaxe"></i> Iron Pickaxe (Efficiency III, Unbreaking I)</li>
-                            <li><i class="fas fa-carrot"></i> 12 Golden Carrots</li>
-                            <li><i class="fas fa-fire"></i> 48 Fireworks</li>
-                            <li><i class="fas fa-helmet-safety"></i> Iron Helmet (Protection I, Unbreaking I)</li>
-                            <li><i class="fas fa-shield"></i> Iron Leggings (Protection I, Unbreaking I)</li>
-                            <li><i class="fas fa-boots"></i> Iron Boots (Protection I, Unbreaking I)</li>
-                            <li><i class="fas fa-wings"></i> Elytra (Mending I, Unbreaking III)</li>
-                        </ul>
-                    </div>
-
-                    <button class="btn-buy-rank">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="en-text">Buy</span>
-                        <span class="ar-text">شراء</span>
-                    </button>
                 </div>
 
-                <!-- VIP RANK -->
-                <div class="rank-card vip">
-                    <div class="rank-icon">⭐</div>
-                    <div class="rank-name">
-                        <span class="en-text">VIP</span>
-                        <span class="ar-text">في آي بي</span>
+                <!-- ===== IP TAB ===== -->
+                <div class="tab-pane" id="tab-ip">
+                    <div class="ip-section">
+                        <div class="ip-display">
+                            <div class="ip-label" data-en="✦ SERVER IP ✦" data-ar="✦ آي بي السيرفر ✦"></div>
+                            <div class="ip-address" id="serverIp">play.otk1.net</div>
+                            <button class="ip-copy" id="copyBtn" onclick="copyIp()"><i class="fas fa-copy"></i> <span data-en="Copy IP" data-ar="نسخ الآي بي"></span></button>
+                        </div>
+                        <div class="ip-info-grid">
+                            <div class="ip-info-item"><span class="ip-info-icon"><i class="fas fa-users"></i></span><div class="ip-info-label" data-en="Online Players" data-ar="اللاعبون المتصلون"></div><div class="ip-info-value" id="playerCount">128</div></div>
+                            <div class="ip-info-item"><span class="ip-info-icon"><i class="fas fa-signal"></i></span><div class="ip-info-label" data-en="Status" data-ar="الحالة"></div><div class="ip-info-value" style="color:#4ade80;"><i class="fas fa-circle" style="font-size:10px;"></i> <span data-en="Online" data-ar="متصل"></span></div></div>
+                            <div class="ip-info-item"><span class="ip-info-icon"><i class="fas fa-tag"></i></span><div class="ip-info-label" data-en="Version" data-ar="الإصدار"></div><div class="ip-info-value">1.20.4</div></div>
+                            <div class="ip-info-item"><span class="ip-info-icon"><i class="fas fa-globe"></i></span><div class="ip-info-label" data-en="Location" data-ar="الموقع"></div><div class="ip-info-value" data-en="Global" data-ar="عالمي"></div></div>
+                        </div>
+                        <div style="margin-top:28px; padding:20px; background:rgba(0,0,0,0.2); border-radius:20px; border:1px solid rgba(180,100,255,0.06);">
+                            <p style="color:#b99ad6; font-size:15px; line-height:1.8;">
+                                <i class="fas fa-rocket" style="color:#a855f7;"></i>
+                                <span data-en="Join now and start your adventure! Copy the IP above, open Minecraft, and connect." data-ar="انضم الآن وابدأ مغامرتك! انسخ الآي بي أعلاه، افتح ماين كرافت، وتواصل."></span>
+                            </p>
+                        </div>
                     </div>
-                    <div class="rank-prefix">
-                        <span class="en-text">Rank: VIP</span>
-                        <span class="ar-text">الرتبة: في آي بي</span>
-                    </div>
-                    <div class="rank-desc en-text">
-                        The VIP rank gives you enhanced gear and more resources to dominate the arena.
-                    </div>
-                    <div class="rank-desc ar-text">
-                        رتبة في آي بي تمنحك معدات محسّنة ومزيد من الموارد للسيطرة على الساحة.
-                    </div>
-
-                    <div class="rank-kit">
-                        <strong><i class="fas fa-box"></i> <span class="en-text">Kit Contents:</span><span class="ar-text">محتويات الكيت:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-helmet-safety"></i> Full Iron Armor (Unbreaking I, Protection II)</li>
-                            <li><i class="fas fa-carrot"></i> 24 Golden Carrots</li>
-                            <li><i class="fas fa-apple-alt"></i> 3 Golden Apples</li>
-                            <li><i class="fas fa-fire"></i> 64 Fireworks</li>
-                            <li><i class="fas fa-pickaxe"></i> Iron Pickaxe (Efficiency IV, Mending I, Unbreaking III)</li>
-                        </ul>
-                    </div>
-
-                    <button class="btn-buy-rank">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="en-text">Buy</span>
-                        <span class="ar-text">شراء</span>
-                    </button>
                 </div>
 
-                <!-- TERRA RANK -->
-                <div class="rank-card terra">
-                    <div class="rank-icon">🌍</div>
-                    <div class="rank-name">
-                        <span class="en-text">Terra</span>
-                        <span class="ar-text">تيرا</span>
-                    </div>
-                    <div class="rank-prefix">
-                        <span class="en-text">Rank: TERRA</span>
-                        <span class="ar-text">الرتبة: تيرا</span>
-                    </div>
-                    <div class="rank-desc en-text">
-                        The ultimate Terra rank – superior protection, more food, and extra golden apples.
-                    </div>
-                    <div class="rank-desc ar-text">
-                        الرتبة النهائية تيرا – حماية فائقة، طعام إضافي، وذهب إضافي.
-                    </div>
+            </div><!-- /tabs-content -->
+        </div><!-- /tabs-container -->
 
-                    <div class="rank-kit">
-                        <strong><i class="fas fa-box"></i> <span class="en-text">Kit Contents:</span><span class="ar-text">محتويات الكيت:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-helmet-safety"></i> Iron Helmet (Protection III, Unbreaking I)</li>
-                            <li><i class="fas fa-shield"></i> Iron Chestplate (Protection III, Unbreaking I, Mending I)</li>
-                            <li><i class="fas fa-shield"></i> Iron Leggings (Protection III, Unbreaking I, Mending I)</li>
-                            <li><i class="fas fa-boots"></i> Iron Boots (Protection III, Unbreaking I)</li>
-                            <li><i class="fas fa-carrot"></i> 32 Golden Carrots</li>
-                            <li><i class="fas fa-fire"></i> 96 Fireworks</li>
-                            <li><i class="fas fa-apple-alt"></i> 6 Golden Apples</li>
-                            <li><i class="fas fa-pickaxe"></i> Iron Pickaxe (Efficiency IV, Mending I, Unbreaking III)</li>
-                        </ul>
-                    </div>
-
-                    <button class="btn-buy-rank">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="en-text">Buy</span>
-                        <span class="ar-text">شراء</span>
-                    </button>
-                </div>
-
-                <!-- NOVA RANK -->
-                <div class="rank-card nova">
-                    <div class="rank-icon">🌟</div>
-                    <div class="rank-name">
-                        <span class="en-text">Nova</span>
-                        <span class="ar-text">نوفا</span>
-                    </div>
-                    <div class="rank-prefix">
-                        <span class="en-text">Rank: NOVA</span>
-                        <span class="ar-text">الرتبة: نوفا</span>
-                    </div>
-                    <div class="rank-desc en-text">
-                        The Nova rank – advanced diamond gear with high protection and powerful tools.
-                    </div>
-                    <div class="rank-desc ar-text">
-                        رتبة نوفا – معدات ماسية متطورة مع حماية عالية وأدوات قوية.
-                    </div>
-
-                    <div class="rank-kit">
-                        <strong><i class="fas fa-box"></i> <span class="en-text">Kit Contents:</span><span class="ar-text">محتويات الكيت:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-helmet-safety"></i> Diamond Helmet (Protection III, Unbreaking II, Mending I)</li>
-                            <li><i class="fas fa-shield"></i> Diamond Chestplate (Protection III, Unbreaking II, Mending I)</li>
-                            <li><i class="fas fa-shield"></i> Diamond Leggings (Protection III, Unbreaking II, Mending I)</li>
-                            <li><i class="fas fa-boots"></i> Diamond Boots (Protection III, Unbreaking II, Mending I)</li>
-                            <li><i class="fas fa-pickaxe"></i> Diamond Pickaxe (Efficiency V, Mending I, Unbreaking III)</li>
-                            <li><i class="fas fa-carrot"></i> 46 Golden Carrots</li>
-                            <li><i class="fas fa-apple-alt"></i> 12 Golden Apples</li>
-                            <li><i class="fas fa-fire"></i> 128 Fireworks</li>
-                        </ul>
-                    </div>
-
-                    <button class="btn-buy-rank">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="en-text">Buy</span>
-                        <span class="ar-text">شراء</span>
-                    </button>
-                </div>
-
-                <!-- NEBULA RANK -->
-                <div class="rank-card nebula">
-                    <div class="rank-icon">🌌</div>
-                    <div class="rank-name">
-                        <span class="en-text">Nebula</span>
-                        <span class="ar-text">نيبولا</span>
-                    </div>
-                    <div class="rank-prefix">
-                        <span class="en-text">Rank: NEBULA</span>
-                        <span class="ar-text">الرتبة: نيبولا</span>
-                    </div>
-                    <div class="rank-desc en-text">
-                        The ultimate Nebula rank – top-tier diamond gear with maximum protection and enchantments.
-                    </div>
-                    <div class="rank-desc ar-text">
-                        الرتبة النهائية نيبولا – معدات ماسية من الدرجة الأولى مع أقصى حماية وسحر.
-                    </div>
-
-                    <div class="rank-kit">
-                        <strong><i class="fas fa-box"></i> <span class="en-text">Kit Contents:</span><span class="ar-text">محتويات الكيت:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-helmet-safety"></i> Diamond Helmet (Protection IV, Unbreaking IV, Mending I)</li>
-                            <li><i class="fas fa-shield"></i> Diamond Chestplate (Protection IV, Unbreaking IV, Mending I)</li>
-                            <li><i class="fas fa-shield"></i> Diamond Leggings (Protection IV, Unbreaking IV, Mending I)</li>
-                            <li><i class="fas fa-boots"></i> Diamond Boots (Protection IV, Unbreaking IV, Mending I)</li>
-                            <li><i class="fas fa-pickaxe"></i> Diamond Pickaxe (Efficiency VI, Mending I, Unbreaking IV)</li>
-                            <li><i class="fas fa-carrot"></i> 64 Golden Carrots</li>
-                            <li><i class="fas fa-apple-alt"></i> 16 Golden Apples</li>
-                            <li><i class="fas fa-fire"></i> 160 Fireworks</li>
-                        </ul>
-                    </div>
-
-                    <button class="btn-buy-rank">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="en-text">Buy</span>
-                        <span class="ar-text">شراء</span>
-                    </button>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- ============================================================
-        STORE SECTION — NEPTUNE PRACTICE PVP RANKS (VIP & MUF)
-        ============================================================ -->
-        <div class="store-section">
-            <div class="store-header">
-                <h2>
-                    <i class="fas fa-fist-raised" style="margin-right: 10px;"></i>
-                    <span class="en-text">Neptune Practice PvP Ranks</span>
-                    <span class="ar-text">رتب نبتون بي في بي تدريب</span>
-                </h2>
-                <span class="store-badge">
-                    <i class="fas fa-coins"></i>
-                    <span class="en-text">Coinshop</span>
-                    <span class="ar-text">متجر العملات</span>
-                </span>
-            </div>
-
-            <div class="store-grid">
-
-                <!-- VIP RANK (Neptune) -->
-                <div class="rank-card neptune-vip">
-                    <div class="rank-icon">⭐</div>
-                    <div class="rank-name">
-                        <span class="en-text">VIP</span>
-                        <span class="ar-text">في آي بي</span>
-                    </div>
-                    <div class="rank-prefix">
-                        <span class="en-text">Rank: VIP</span>
-                        <span class="ar-text">الرتبة: في آي بي</span>
-                    </div>
-                    <div class="rank-desc en-text">
-                        Exclusive membership tier – unlock exclusive perks, skip queues, and earn bonus rewards.
-                    </div>
-                    <div class="rank-desc ar-text">
-                        طبقة عضوية حصرية – افتح مزايا حصرية، وتجاوز الطوابير، واكسب مكافآت إضافية.
-                    </div>
-
-                    <div class="rank-benefits">
-                        <strong><i class="fas fa-star"></i> <span class="en-text">Benefits:</span><span class="ar-text">المزايا:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-door-open"></i> <span class="en-text">Join Full Servers</span><span class="ar-text">دخول السيرفرات الممتلئة</span></li>
-                            <li><i class="fas fa-gift"></i> <span class="en-text">Bonus Daily Rewards</span><span class="ar-text">مكافآت يومية إضافية</span></li>
-                            <li><i class="fas fa-trophy"></i> <span class="en-text">Bonus Win Rewards</span><span class="ar-text">مكافآت فوز إضافية</span></li>
-                            <li><i class="fas fa-tag"></i> <span class="en-text">VIP Prefix Badge</span><span class="ar-text">شارة في آي بي</span></li>
-                            <li><i class="fas fa-bullhorn"></i> <span class="en-text">Advertise Party Publicly</span><span class="ar-text">الإعلان عن الحفلة علنًا</span></li>
-                            <li><i class="fas fa-users"></i> <span class="en-text">Party Limit: 25 Members</span><span class="ar-text">حد الحفلة: 25 عضوًا</span></li>
-                        </ul>
-                    </div>
-
-                    <a href="#" class="more-info">
-                        <i class="fas fa-info-circle"></i>
-                        <span class="en-text">Click for more info</span>
-                        <span class="ar-text">انقر للمزيد</span>
-                    </a>
-
-                    <button class="btn-buy-rank">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="en-text">Buy</span>
-                        <span class="ar-text">شراء</span>
-                    </button>
-                </div>
-
-                <!-- MUF RANK (Neptune) -->
-                <div class="rank-card neptune-muf">
-                    <div class="rank-icon">👑</div>
-                    <div class="rank-name">
-                        <span class="en-text">MUF</span>
-                        <span class="ar-text">إم يو إف</span>
-                    </div>
-                    <div class="rank-prefix">
-                        <span class="en-text">Rank: MUF</span>
-                        <span class="ar-text">الرتبة: إم يو إف</span>
-                    </div>
-                    <div class="rank-desc en-text">
-                        Premium membership tier – all VIP perks plus priority support, extra rewards, and more.
-                    </div>
-                    <div class="rank-desc ar-text">
-                        طبقة عضوية مميزة – جميع مزايا في آي بي بالإضافة إلى دعم ذو أولوية ومكافآت إضافية.
-                    </div>
-
-                    <div class="rank-benefits">
-                        <strong><i class="fas fa-star"></i> <span class="en-text">Benefits:</span><span class="ar-text">المزايا:</span></strong>
-                        <ul>
-                            <li><i class="fas fa-check-circle"></i> <span class="en-text">All VIP Perks Included</span><span class="ar-text">جميع مزايا في آي بي مشمولة</span></li>
-                            <li><i class="fas fa-gift"></i> <span class="en-text">Extra Bonus Daily Rewards</span><span class="ar-text">مكافآت يومية إضافية</span></li>
-                            <li><i class="fas fa-trophy"></i> <span class="en-text">Extra Bonus Win Rewards</span><span class="ar-text">مكافآت فوز إضافية</span></li>
-                            <li><i class="fas fa-tag"></i> <span class="en-text">MUF Prefix Badge</span><span class="ar-text">شارة إم يو إف</span></li>
-                            <li><i class="fas fa-headset"></i> <span class="en-text">Priority Support Access</span><span class="ar-text">دعم ذو أولوية</span></li>
-                            <li><i class="fas fa-users"></i> <span class="en-text">Party Limit: 50 Members</span><span class="ar-text">حد الحفلة: 50 عضوًا</span></li>
-                        </ul>
-                    </div>
-
-                    <a href="#" class="more-info">
-                        <i class="fas fa-info-circle"></i>
-                        <span class="en-text">Click for more info</span>
-                        <span class="ar-text">انقر للمزيد</span>
-                    </a>
-
-                    <button class="btn-buy-rank">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="en-text">Buy</span>
-                        <span class="ar-text">شراء</span>
-                    </button>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- ============================================================
-        FOOTER
-        ============================================================ -->
+        <!-- ===== FOOTER ===== -->
         <footer class="site-footer">
             <div class="footer-links">
                 <a href="https://www.tiktok.com/@otk1141?_r=1&_t=ZS-97H6fwPKSVp" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i> TikTok</a>
@@ -1791,47 +485,14 @@
             </div>
             <div>
                 <span class="footer-brand">Otk1</span>
-                <span class="en-text"> · 2026 · All rights reserved.</span>
-                <span class="ar-text"> · 2026 · جميع الحقوق محفوظة.</span>
-                <span style="margin-left: 8px; opacity:0.3;">
-                    <i class="fas fa-infinity"></i>
-                </span>
+                <span data-en=" · 2026 · All rights reserved." data-ar=" · 2026 · جميع الحقوق محفوظة."></span>
+                <span style="margin-left:8px; opacity:0.3;"><i class="fas fa-infinity"></i></span>
             </div>
         </footer>
 
-    </div>
+    </div><!-- /main-wrapper -->
 
-    <!-- ============================================================
-    SCRIPT
-    ============================================================ -->
-    <script>
-        function setLanguage(lang) {
-            const body = document.body;
-            const btnEn = document.getElementById('btnEn');
-            const btnAr = document.getElementById('btnAr');
-
-            if (lang === 'en') {
-                body.className = 'lang-en';
-                body.dir = 'ltr';
-                btnEn.classList.add('active');
-                btnAr.classList.remove('active');
-            } else {
-                body.className = 'lang-ar';
-                body.dir = 'rtl';
-                btnAr.classList.add('active');
-                btnEn.classList.remove('active');
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            if (!document.body.classList.contains('lang-ar')) {
-                document.body.className = 'lang-en';
-                document.body.dir = 'ltr';
-                document.getElementById('btnEn').classList.add('active');
-                document.getElementById('btnAr').classList.remove('active');
-            }
-        });
-    </script>
-
+    <!-- ===== JavaScript ===== -->
+    <script src="script.js"></script>
 </body>
 </html>
