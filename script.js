@@ -1,663 +1,607 @@
-/* ============================================================
-   COMPLETE JAVASCRIPT (with particles and Google login)
-   ============================================================ */
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Otk1 Network | Space Minecraft Servers</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body class="lang-en" dir="ltr">
 
-// ============================================================
-// PARTICLE SYSTEM (canvas)
-// ============================================================
-const canvas = document.getElementById('particlesCanvas');
-const ctx = canvas.getContext('2d');
-let width, height;
-let particles = [];
-const PARTICLE_COUNT = 120;
+    <!-- PARTICLE CANVAS -->
+    <canvas id="particlesCanvas"></canvas>
 
-function resizeCanvas() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
+    <!-- SPACE BACKGROUND -->
+    <div class="space-bg">
+        <div class="stars"></div>
+        <div class="nebula"></div>
+        <div class="nebula"></div>
+        <div class="nebula"></div>
+    </div>
 
-class Particle {
-    constructor() {
-        this.reset();
-    }
-    reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.size = Math.random() * 2.5 + 0.5;
-        this.speedX = (Math.random() - 0.5) * 0.4;
-        this.speedY = (Math.random() - 0.5) * 0.4;
-        this.opacity = Math.random() * 0.7 + 0.3;
-        this.hue = 260 + Math.random() * 40; // purple to blue
-    }
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.x < 0 || this.x > width) this.speedX *= -1;
-        if (this.y < 0 || this.y > height) this.speedY *= -1;
-        // gently pull toward center for a nebula effect
-        const cx = width/2, cy = height/2;
-        const dx = cx - this.x, dy = cy - this.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist > 200) {
-            this.speedX += dx / dist * 0.005;
-            this.speedY += dy / dist * 0.005;
-        }
-        // limit speed
-        const maxSpeed = 0.8;
-        const spd = Math.sqrt(this.speedX*this.speedX + this.speedY*this.speedY);
-        if (spd > maxSpeed) {
-            this.speedX = (this.speedX / spd) * maxSpeed;
-            this.speedY = (this.speedY / spd) * maxSpeed;
-        }
-        this.opacity = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin(Date.now() / 3000 + this.x));
-    }
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${this.hue}, 80%, 70%, ${this.opacity * 0.5})`;
-        ctx.fill();
-        // glow
-        ctx.shadowColor = `hsla(${this.hue}, 90%, 70%, 0.3)`;
-        ctx.shadowBlur = 12;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-    }
-}
+    <!-- PROGRESS BAR -->
+    <div class="progress-bar" id="progressBar"></div>
 
-// Create particles
-for (let i = 0; i < PARTICLE_COUNT; i++) {
-    particles.push(new Particle());
-}
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Copied to clipboard!</span>
+    </div>
 
-function drawParticles() {
-    ctx.clearRect(0, 0, width, height);
-    for (const p of particles) {
-        p.update();
-        p.draw();
-    }
-    // draw connecting lines (subtle)
-    for (let i = 0; i < particles.length; i++) {
-        for (let j = i+1; j < particles.length; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const dist = Math.sqrt(dx*dx + dy*dy);
-            if (dist < 150) {
-                ctx.beginPath();
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.strokeStyle = `rgba(150, 100, 255, ${0.08 * (1 - dist/150)})`;
-                ctx.lineWidth = 0.5;
-                ctx.stroke();
-            }
-        }
-    }
-    requestAnimationFrame(drawParticles);
-}
-drawParticles();
+    <!-- USER PROFILE -->
+    <div class="user-profile" id="userProfile" style="display:none;">
+        <img id="userAvatar" src="" alt="avatar" />
+        <span id="userName">User</span>
+        <button onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
 
-// ============================================================
-// RANK BENEFITS DATA (updated: Member rank added)
-// ============================================================
-const rankBenefits = {
-    'Knight': {
-        perks: ['5x Homes', 'Kit Knight'],
-        commands: ['/Nick', '/Back', '/Recipe', '/Feed', '/Disposal']
-    },
-    'Lord': {
-        perks: ['10x Homes', 'Kit Lord'],
-        commands: ['/Nick', '/Back', '/Recipe', '/Feed', '/Disposal', '/Near', '/Craft']
-    },
-    'Paladin': {
-        perks: ['Unlimited Homes', 'Kit Paladin'],
-        commands: ['/Nick', '/Back', '/Recipe', '/Feed', '/Disposal', '/Near', '/Craft', '/Enderchest', '/Ftime']
-    },
-    'Duke': {
-        perks: ['Unlimited Homes', 'Kit Duke', 'Fly'],
-        commands: ['/Nick', '/Back', '/Recipe', '/Feed', '/Disposal', '/Near', '/Craft', '/Enderchest', '/Time', '/Heal', '/Fly']
-    },
-    'King': {
-        perks: ['Unlimited Homes', 'Kit King', 'Fly', 'Heal'],
-        commands: ['/Nick', '/Back', '/Recipe', '/Feed', '/Disposal', '/Near', '/Craft', '/Enderchest', '/Fime', '/Heal', '/Fly', '/Fweather', '/Repair']
-    },
-    'Member': {
-        perks: ['Wooden Kit', 'Iron Armor'],
-        commands: []
-    },
-    'VIP': {
-        perks: ['Iron Armor Prot II', '24 Carrots'],
-        commands: []
-    },
-    'Terra': {
-        perks: ['Iron Prot III', 'Mending', '32 Carrots'],
-        commands: []
-    },
-    'Nova': {
-        perks: ['Diamond Prot III', '46 Carrots', '12 Golden Apples'],
-        commands: []
-    },
-    'Nebula': {
-        perks: ['Diamond Prot IV', '64 Carrots', '16 Golden Apples'],
-        commands: []
-    },
-    'MVP': {
-        perks: ['All VIP Perks', 'Priority Support', 'Party 50'],
-        commands: []
-    }
-};
+    <!-- LOGIN MODAL -->
+    <div class="login-modal-overlay" id="loginModal">
+        <div class="login-modal">
+            <button class="modal-close" onclick="closeLoginModal()"><i class="fas fa-times"></i></button>
+            <h2><i class="fas fa-user-astronaut"></i> <span data-en="Welcome Back" data-ar="مرحباً بعودتك"></span></h2>
+            <p data-en="Sign in to access your ranks and purchases." data-ar="سجل الدخول للوصول إلى رتبك ومشترياتك."></p>
+            <button class="google-login-btn" onclick="googleLogin()">
+                <i class="fab fa-google"></i> <span data-en="Sign in with Google" data-ar="سجل الدخول باستخدام جوجل"></span>
+            </button>
+            <p class="login-note" data-en="Demo: click to simulate login" data-ar="تجريبي: اضغط لمحاكاة الدخول"></p>
+        </div>
+    </div>
 
-// ============================================================
-// BENEFITS MODAL (unchanged)
-// ============================================================
-function openBenefitsModal(rankName, rankIcon, rankPrefix) {
-    const data = rankBenefits[rankName];
-    if (!data) {
-        showToast('Rank details coming soon!', true);
-        return;
-    }
-    document.getElementById('benefitsRankIcon').textContent = rankIcon;
-    document.getElementById('benefitsRankName').textContent = rankName;
-    document.getElementById('benefitsRankPrefix').textContent = rankPrefix;
+    <!-- CART OVERLAY -->
+    <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
-    const perksList = document.getElementById('benefitsPerksList');
-    perksList.innerHTML = '';
-    data.perks.forEach(perk => {
-        const span = document.createElement('span');
-        span.className = 'benefit-item';
-        span.innerHTML = `<i class="fas fa-star"></i> ${perk}`;
-        perksList.appendChild(span);
-    });
+    <!-- CART PANEL -->
+    <div class="cart-panel" id="cartPanel">
+        <div class="cart-header">
+            <h2><i class="fas fa-shopping-cart"></i> <span data-en="Your Cart" data-ar="سلة المشتريات"></span></h2>
+            <button class="cart-close" onclick="closeCart()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <p data-en="Your cart is empty" data-ar="سلة المشتريات فارغة"></p>
+                <span class="sub" data-en="Browse ranks and add items to get started" data-ar="تصفح الرتب وأضف العناصر للبدء"></span>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span class="total-label" data-en="Total" data-ar="المجموع"></span>
+                <span class="total-price" id="cartTotal">$0.00</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn" disabled onclick="checkout()">
+                <i class="fas fa-lock"></i>
+                <span data-en="Proceed to Checkout" data-ar="متابعة الدفع"></span>
+            </button>
+        </div>
+    </div>
 
-    const commandsList = document.getElementById('benefitsCommandsList');
-    commandsList.innerHTML = '';
-    if (data.commands.length === 0) {
-        const span = document.createElement('span');
-        span.className = 'cmd-item';
-        span.style.color = '#9880b8';
-        span.textContent = 'No special commands';
-        commandsList.appendChild(span);
-    } else {
-        data.commands.forEach(cmd => {
-            const span = document.createElement('span');
-            span.className = 'cmd-item';
-            span.innerHTML = `<i class="fas fa-terminal"></i> ${cmd}`;
-            commandsList.appendChild(span);
-        });
-    }
+    <!-- BENEFITS MODAL -->
+    <div class="benefits-modal-overlay" id="benefitsModal">
+        <div class="benefits-modal">
+            <button class="modal-close" onclick="closeBenefitsModal()"><i class="fas fa-times"></i></button>
+            <span class="benefits-rank-icon" id="benefitsRankIcon">⚔️</span>
+            <div class="benefits-rank-name" id="benefitsRankName">Knight</div>
+            <div style="text-align:center;"><span class="benefits-rank-prefix" id="benefitsRankPrefix">KNIGHT</span></div>
+            <div class="benefits-divider"></div>
+            <div class="benefits-section">
+                <span class="benefits-label" data-en="✦ Perks" data-ar="✦ المزايا"></span>
+                <div class="benefits-list" id="benefitsPerksList"></div>
+            </div>
+            <div class="benefits-section">
+                <span class="benefits-label" data-en="✦ Commands" data-ar="✦ الأوامر"></span>
+                <div class="commands-list" id="benefitsCommandsList"></div>
+            </div>
+            <button class="benefits-close-btn" onclick="closeBenefitsModal()">
+                <span data-en="Got it!" data-ar="حسناً!"></span>
+            </button>
+        </div>
+    </div>
 
-    const currentLang = document.body.classList.contains('lang-en') ? 'en' : 'ar';
-    document.querySelectorAll('#benefitsModal [data-en][data-ar]').forEach(el => {
-        el.textContent = el.getAttribute('data-' + currentLang);
-    });
-
-    document.getElementById('benefitsModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeBenefitsModal() {
-    document.getElementById('benefitsModal').classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-// ============================================================
-// CART SYSTEM (unchanged)
-// ============================================================
-let cart = [];
-
-function addToCart(rankName, rankIcon, planName, price) {
-    const item = {
-        id: rankName + '-' + planName,
-        name: rankName,
-        icon: rankIcon,
-        plan: planName,
-        price: price
-    };
-    const existing = cart.find(i => i.id === item.id);
-    if (existing) {
-        showToast(`${rankName} (${planName}) is already in your cart!`, true);
-        return;
-    }
-    cart.push(item);
-    updateCartUI();
-    showToast(`✅ ${rankName} (${planName}) added to cart!`);
-    openCart();
-}
-
-function removeFromCart(id) {
-    cart = cart.filter(item => item.id !== id);
-    updateCartUI();
-    showToast('Item removed from cart');
-}
-
-function updateCartUI() {
-    const itemsContainer = document.getElementById('cartItems');
-    const badge = document.getElementById('cartBadge');
-    const totalEl = document.getElementById('cartTotal');
-    const checkoutBtn = document.getElementById('checkoutBtn');
-
-    const count = cart.length;
-    if (count > 0) {
-        badge.textContent = count;
-        badge.classList.remove('hidden');
-    } else {
-        badge.classList.add('hidden');
-    }
-
-    if (cart.length === 0) {
-        itemsContainer.innerHTML = `
-                <div class="empty-cart">
-                    <i class="fas fa-shopping-cart"></i>
-                    <p data-en="Your cart is empty" data-ar="سلة المشتريات فارغة"></p>
-                    <span class="sub" data-en="Browse ranks and add items to get started" data-ar="تصفح الرتب وأضف العناصر للبدء"></span>
+    <!-- PRICE MODAL -->
+    <div class="price-modal-overlay" id="priceModal">
+        <div class="price-modal">
+            <button class="modal-close" onclick="closePriceModal()"><i class="fas fa-times"></i></button>
+            <span class="modal-rank-icon" id="modalRankIcon">⚔️</span>
+            <div class="modal-rank-name" id="modalRankName">Knight</div>
+            <div style="text-align:center;"><span class="modal-rank-prefix" id="modalRankPrefix">KNIGHT</span></div>
+            <p class="modal-sub" id="modalSub" data-en="Choose your pricing plan for this rank." data-ar="اختر خطة السعر لهذه الرتبة."></p>
+            <div class="modal-options" id="modalOptions">
+                <div class="modal-option" data-plan="weekly" onclick="selectPlan(this)">
+                    <span class="opt-icon">⚡</span>
+                    <div class="opt-name" data-en="Weekly" data-ar="أسبوعي"></div>
+                    <div class="opt-price">$5 <small>/wk</small></div>
+                    <div class="opt-desc" data-en="Perfect for trying out" data-ar="مثالي للتجربة"></div>
+                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
                 </div>
-            `;
-        const currentLang = document.body.classList.contains('lang-en') ? 'en' : 'ar';
-        document.querySelectorAll('#cartItems [data-en][data-ar]').forEach(el => {
-            el.textContent = el.getAttribute('data-' + currentLang);
-        });
-        checkoutBtn.disabled = true;
-        totalEl.textContent = '$0.00';
-        return;
-    }
+                <div class="modal-option popular-opt" data-plan="monthly" onclick="selectPlan(this)">
+                    <span class="opt-icon">🔥</span>
+                    <div class="opt-name" data-en="Monthly" data-ar="شهري"></div>
+                    <div class="opt-price">$20 <small>/mo</small></div>
+                    <div class="opt-desc" data-en="Best value for active players" data-ar="أفضل قيمة للاعبين النشطين"></div>
+                    <span class="opt-badge">Popular</span>
+                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
+                </div>
+                <div class="modal-option" data-plan="3months" onclick="selectPlan(this)">
+                    <span class="opt-icon">💎</span>
+                    <div class="opt-name" data-en="3 Months" data-ar="3 أشهر"></div>
+                    <div class="opt-price">$60 <small>/3mo</small></div>
+                    <div class="opt-desc" data-en="Save big with commitment" data-ar="وفّر كثيراً مع التزام"></div>
+                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
+                </div>
+                <div class="modal-option" data-plan="lifetime" onclick="selectPlan(this)">
+                    <span class="opt-icon">👑</span>
+                    <div class="opt-name" data-en="Lifetime" data-ar="مدى الحياة"></div>
+                    <div class="opt-price">$120 <small>/life</small></div>
+                    <div class="opt-desc" data-en="Ultimate status – forever" data-ar="الرتبة النهائية – للأبد"></div>
+                    <span class="opt-badge">Best Deal</span>
+                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
+                </div>
+            </div>
+            <div class="modal-options" id="modalFreeOption" style="display:none;">
+                <div class="modal-option" data-plan="free" onclick="selectPlan(this)" style="border-color:#4ade80;">
+                    <span class="opt-icon">🎁</span>
+                    <div class="opt-name" data-en="Free" data-ar="مجاني"></div>
+                    <div class="opt-price" style="color:#4ade80;">$0</div>
+                    <div class="opt-desc" data-en="Claim now – no cost!" data-ar="احصل عليه الآن – مجاني!"></div>
+                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-confirm" id="modalConfirmBtn" disabled onclick="confirmPlan()">
+                    <span data-en="Add to Cart" data-ar="أضف إلى السلة"></span>
+                </button>
+                <button class="btn-cancel" onclick="closePriceModal()">
+                    <span data-en="Cancel" data-ar="إلغاء"></span>
+                </button>
+            </div>
+        </div>
+    </div>
 
-    let html = '';
-    let total = 0;
-    cart.forEach(item => {
-        total += item.price;
-        html += `
-                <div class="cart-item">
-                    <span class="item-icon">${item.icon}</span>
-                    <div class="item-info">
-                        <div class="item-name">${item.name}</div>
-                        <div class="item-plan"><span data-en="Plan" data-ar="الخطة"></span>: ${item.plan}</div>
+    <!-- ===== MAIN WRAPPER ===== -->
+    <div class="main-wrapper">
+
+        <!-- ===== NAVBAR ===== -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <div class="logo-icon">O</div>
+                <span class="brand-name">Otk1</span>
+            </div>
+            <div class="nav-center">
+                <div class="nav-accounts">
+                    <div class="account-badge">
+                        <span class="status-dot online"></span>
+                        <span>Otk1</span>
+                        <span class="role-tag owner">Owner</span>
                     </div>
-                    <div class="item-price">$${item.price}</div>
-                    <button class="item-remove" onclick="removeFromCart('${item.id}')"><i class="fas fa-times"></i></button>
+                    <div class="account-badge coming">
+                        <span class="status-dot offline"></span>
+                        <span class="en-text">Admin</span>
+                        <span class="ar-text">مدير</span>
+                        <span class="role-tag admin">Soon</span>
+                    </div>
                 </div>
-            `;
-    });
+                <div class="nav-socials">
+                    <span class="social-label"><i class="fas fa-share-alt" style="margin-right:4px;"></i><span data-en="Follow" data-ar="تابع"></span></span>
+                    <a href="https://www.tiktok.com/@otk1141" target="_blank" rel="noopener noreferrer" class="tiktok" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://youtube.com/@otk1141" target="_blank" rel="noopener noreferrer" class="youtube" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.instagram.com/37.8b" target="_blank" rel="noopener noreferrer" class="instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+                <div class="nav-auth">
+                    <button id="loginBtn" class="login-btn" onclick="openLoginModal()">
+                        <i class="fas fa-user"></i> <span data-en="Sign In" data-ar="تسجيل الدخول"></span>
+                    </button>
+                    <div class="user-profile-compact" id="userProfileCompact" style="display:none;">
+                        <img id="userAvatarCompact" src="" alt="avatar" />
+                        <span id="userNameCompact">User</span>
+                    </div>
+                </div>
+                <div class="nav-cart" onclick="toggleCart()" id="cartBtn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge hidden" id="cartBadge">0</span>
+                </div>
+            </div>
+            <div class="nav-lang">
+                <button id="btnEn" class="active" onclick="setLanguage('en')">EN</button>
+                <button id="btnAr" onclick="setLanguage('ar')">AR</button>
+            </div>
+        </nav>
 
-    itemsContainer.innerHTML = html;
-    totalEl.textContent = '$' + total.toFixed(2);
-    checkoutBtn.disabled = false;
+        <!-- ===== TABS CONTAINER ===== -->
+        <div class="tabs-container">
 
-    const lang = document.body.classList.contains('lang-en') ? 'en' : 'ar';
-    document.querySelectorAll('#cartItems [data-en][data-ar]').forEach(el => {
-        el.textContent = el.getAttribute('data-' + lang);
-    });
-}
+            <div class="tabs-nav">
+                <button class="tab-btn active" data-tab="home"><i class="fas fa-home"></i><span data-en="Home" data-ar="الرئيسية"></span></button>
+                <button class="tab-btn" data-tab="ranks"><i class="fas fa-crown"></i><span data-en="Ranks" data-ar="الرتب"></span></button>
+                <button class="tab-btn" data-tab="store"><i class="fas fa-store"></i><span data-en="Store" data-ar="المتجر"></span></button>
+                <button class="tab-btn" data-tab="rules"><i class="fas fa-gavel"></i><span data-en="Rules" data-ar="القوانين"></span></button>
+                <button class="tab-btn" data-tab="support"><i class="fas fa-headset"></i><span data-en="Support" data-ar="الدعم"></span></button>
+                <button class="tab-btn" data-tab="faq"><i class="fas fa-question-circle"></i><span data-en="FAQ" data-ar="الأسئلة"></span></button>
+                <button class="tab-btn" data-tab="social"><i class="fas fa-share-alt"></i><span data-en="Social" data-ar="وسائل التواصل"></span></button>
+                <button class="tab-btn" data-tab="ip"><i class="fas fa-server"></i><span data-en="IP" data-ar="الآي بي"></span><span class="badge-tab">Soon</span></button>
+            </div>
 
-function toggleCart() {
-    const panel = document.getElementById('cartPanel');
-    const overlay = document.getElementById('cartOverlay');
-    panel.classList.toggle('open');
-    overlay.classList.toggle('active');
-    document.body.style.overflow = panel.classList.contains('open') ? 'hidden' : '';
-}
+            <div class="tabs-content">
 
-function openCart() {
-    const panel = document.getElementById('cartPanel');
-    const overlay = document.getElementById('cartOverlay');
-    panel.classList.add('open');
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
+                <!-- ===== HOME TAB ===== -->
+                <div class="tab-pane active" id="tab-home">
+                    <div class="home-hero">
+                        <h1 class="main-title" data-en="🌌 Welcome to Otk1 Network" data-ar="🌌 مرحباً بك في شبكة Otk1"></h1>
+                        <p class="main-sub" data-en="Looking for a server that combines competition, survival, and fun in one place? You've come to the right spot." data-ar="هل تبحث عن سيرفر يجمع بين المنافسة، البقاء، والمتعة في مكان واحد؟ لقد وصلت إلى المكان الصحيح."></p>
+                        <div class="divider-glow"></div>
+                    </div>
+                    <div class="home-grid">
+                        <div class="home-card">
+                            <span class="card-icon-big">🌍</span>
+                            <h4 data-en="Earth Survival" data-ar="سيرفر البقاء إيرث"></h4>
+                            <div class="card-tag" data-en="Survival · Towny · Economy" data-ar="بقاء · تاوني · اقتصاد"></div>
+                            <p data-en="Enjoy a world inspired by planet Earth. Build your city, make friends, and explore a unique Survival experience filled with adventures." data-ar="استمتع بعالم مستوحى من كوكب الأرض، ابنِ مدينتك، كوّن صداقات، واستكشف تجربة Survival مختلفة ومليئة بالمغامرات."></p>
+                            <div class="status-online"><i class="fas fa-circle"></i> 24/7 Online</div>
+                        </div>
+                        <div class="home-card">
+                            <span class="card-icon-big">🌊</span>
+                            <h4 data-en="Neptune Practice" data-ar="نبتون تدريب"></h4>
+                            <div class="card-tag" data-en="Practice · Ranked · Kits" data-ar="تدريب · ترتيب · كيتات"></div>
+                            <p data-en="The best place to sharpen your PvP skills with fast matches, varied kits, and professional training to become the strongest player." data-ar="أفضل مكان لتطوير مهاراتك في PvP مع مباريات سريعة، Kits متنوعة، وتدريب احترافي لتصبح أقوى لاعب."></p>
+                            <div class="status-coming"><i class="fas fa-hourglass-half"></i> <span data-en="Coming Soon" data-ar="قريباً"></span></div>
+                        </div>
+                        <div class="home-card">
+                            <span class="card-icon-big">🌌</span>
+                            <h4 data-en="Galaxy BoxPvP" data-ar="جالاكسي بوكس بي في بي"></h4>
+                            <div class="card-tag" data-en="Box PvP · Loot · Chests" data-ar="بوكس بي في بي · غنائم · صناديق"></div>
+                            <p data-en="Enter the strongest PvP battles, upgrade your gear, fight players, and climb to the top in a system full of challenges and excitement." data-ar="ادخل إلى أقوى معارك الـPvP، طوّر عتادك، قاتل اللاعبين، واصعد إلى القمة في نظام مليء بالتحديات والحماس."></p>
+                            <div class="status-coming"><i class="fas fa-hourglass-half"></i> <span data-en="Coming Soon" data-ar="قريباً"></span></div>
+                        </div>
+                    </div>
+                    <div style="text-align:center; margin-top:22px;">
+                        <span style="font-size:18px; font-weight:700; color:#b99ad6; font-family:'Orbitron',sans-serif;" data-en="🔥 Coming Soon" data-ar="🔥 قريباً"></span>
+                        <div class="coming-soon-grid">
+                            <span class="coming-chip"><i class="fas fa-heart"></i> Lifesteal</span>
+                            <span class="coming-chip"><i class="fas fa-bed"></i> BedWars</span>
+                            <span class="coming-chip"><i class="fas fa-cloud"></i> SkyWars</span>
+                        </div>
+                    </div>
+                    <div class="why-section">
+                        <h3 class="why-title" data-en="⭐ Why Our Server?" data-ar="⭐ لماذا سيرفرنا؟"></h3>
+                        <div class="why-grid">
+                            <div class="why-item"><span class="why-icon">🚀</span><div class="why-label" data-en="Fast Performance" data-ar="أداء سريع"></div><div class="why-desc" data-en="Fast performance and great ping" data-ar="أداء سريع وPing ممتاز"></div></div>
+                            <div class="why-item"><span class="why-icon">🛡️</span><div class="why-label" data-en="Strong Protection" data-ar="حماية قوية"></div><div class="why-desc" data-en="Strong anti-cheat protection" data-ar="حماية قوية ضد الغش"></div></div>
+                            <div class="why-item"><span class="why-icon">👥</span><div class="why-label" data-en="Active Community" data-ar="مجتمع نشط"></div><div class="why-desc" data-en="Respectful community and active staff" data-ar="مجتمع محترم وإدارة متفاعلة"></div></div>
+                            <div class="why-item"><span class="why-icon">🎁</span><div class="why-label" data-en="Constant Updates" data-ar="تحديثات مستمرة"></div><div class="why-desc" data-en="Regular updates and new content" data-ar="تحديثات ومحتوى جديد باستمرار"></div></div>
+                            <div class="why-item"><span class="why-icon">⭐</span><div class="why-label" data-en="All-in-One Experience" data-ar="تجربة شاملة"></div><div class="why-desc" data-en="An experience combining competition, survival, and fun" data-ar="تجربة تجمع بين التنافس، البقاء، والمرح"></div></div>
+                        </div>
+                    </div>
+                </div>
 
-function closeCart() {
-    const panel = document.getElementById('cartPanel');
-    const overlay = document.getElementById('cartOverlay');
-    panel.classList.remove('open');
-    overlay.classList.remove('active');
-    document.body.style.overflow = '';
-}
+                <!-- ===== RANKS TAB ===== -->
+                <div class="tab-pane" id="tab-ranks">
+                    <div class="rank-section-title"><i class="fas fa-crown"></i><span data-en="Earth Survival Ranks" data-ar="رتب سيرفر البقاء إيرث"></span></div>
+                    <div class="rank-section-sub" data-en="Click on any rank to see what it gives you." data-ar="انقر على أي رتبة لترى ما تقدمه لك."></div>
+                    <div class="rank-grid">
+                        <div class="rank-mini knight" data-rank-name="Knight" data-rank-icon="⚔️" data-rank-prefix="KNIGHT">
+                            <span class="rank-mini-icon">⚔️</span>
+                            <div class="rank-mini-name">Knight</div>
+                            <div class="rank-mini-prefix">KNIGHT</div>
+                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="5x Homes" data-ar="5 منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span></div>
+                            <div class="rank-click-hint" data-en="Click for details" data-ar="انقر للتفاصيل"></div>
+                        </div>
+                        <div class="rank-mini lord" data-rank-name="Lord" data-rank-icon="👑" data-rank-prefix="LORD">
+                            <span class="rank-mini-icon">👑</span>
+                            <div class="rank-mini-name">Lord</div>
+                            <div class="rank-mini-prefix">LORD</div>
+                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="10x Homes" data-ar="10 منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span></div>
+                            <div class="rank-click-hint" data-en="Click for details" data-ar="انقر للتفاصيل"></div>
+                        </div>
+                        <div class="rank-mini paladin" data-rank-name="Paladin" data-rank-icon="🛡️" data-rank-prefix="PALADIN">
+                            <span class="rank-mini-icon">🛡️</span>
+                            <div class="rank-mini-name">Paladin</div>
+                            <div class="rank-mini-prefix">PALADIN</div>
+                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="∞ Homes" data-ar="∞ منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span></div>
+                            <div class="rank-click-hint" data-en="Click for details" data-ar="انقر للتفاصيل"></div>
+                        </div>
+                        <div class="rank-mini duke" data-rank-name="Duke" data-rank-icon="🏰" data-rank-prefix="DUKE">
+                            <span class="rank-mini-icon">🏰</span>
+                            <div class="rank-mini-name">Duke</div>
+                            <div class="rank-mini-prefix">DUKE</div>
+                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="∞ Homes" data-ar="∞ منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span> · <i class="fas fa-feather-alt"></i> <span data-en="Fly" data-ar="طيران"></span></div>
+                            <div class="rank-click-hint" data-en="Click for details" data-ar="انقر للتفاصيل"></div>
+                        </div>
+                        <div class="rank-mini king" data-rank-name="King" data-rank-icon="🌟" data-rank-prefix="KING">
+                            <span class="rank-mini-icon">🌟</span>
+                            <div class="rank-mini-name">King</div>
+                            <div class="rank-mini-prefix">KING</div>
+                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="∞ Homes" data-ar="∞ منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span> · <i class="fas fa-feather-alt"></i> <span data-en="Fly" data-ar="طيران"></span> · <i class="fas fa-heartbeat"></i> <span data-en="Heal" data-ar="شفاء"></span></div>
+                            <div class="rank-click-hint" data-en="Click for details" data-ar="انقر للتفاصيل"></div>
+                        </div>
+                    </div>
 
-function checkout() {
-    if (cart.length === 0) {
-        showToast('Your cart is empty!', true);
-        return;
-    }
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
-    const itemNames = cart.map(i => i.name + ' (' + i.plan + ')').join(', ');
-    showToast(`🛒 Checkout complete! Total: $${total.toFixed(2)} for ${itemNames}`);
-    cart = [];
-    updateCartUI();
-    closeCart();
-}
+                    <!-- Galaxy BoxPvP Ranks (Coming Soon) – Member instead of User -->
+                    <div class="rank-section-title" style="margin-top:32px;"><i class="fas fa-box-open"></i><span data-en="Galaxy BoxPvP Ranks" data-ar="رتب جالاكسي بوكس بي في بي"></span> <span class="badge-tab soon" style="font-size:12px; padding:2px 14px;">Coming Soon</span></div>
+                    <div class="rank-section-sub" data-en="These ranks will be available soon. Stay tuned!" data-ar="هذه الرتب ستكون متاحة قريباً. ترقبوا!"></div>
+                    <div class="rank-grid">
+                        <div class="rank-mini member coming-soon-rank" data-rank-name="Member" data-rank-icon="🪖" data-rank-prefix="MEMBER">
+                            <span class="rank-mini-icon">🪖</span>
+                            <div class="rank-mini-name">Member</div>
+                            <div class="rank-mini-prefix">MEMBER</div>
+                            <div class="rank-mini-benefits"><span data-en="Wooden Kit · Iron Armor" data-ar="كيت خشبي · درع حديدي"></span></div>
+                            <div class="rank-coming-badge">Coming Soon</div>
+                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
+                        </div>
+                        <div class="rank-mini vip coming-soon-rank" data-rank-name="VIP" data-rank-icon="⭐" data-rank-prefix="VIP">
+                            <span class="rank-mini-icon">⭐</span>
+                            <div class="rank-mini-name">VIP</div>
+                            <div class="rank-mini-prefix">VIP</div>
+                            <div class="rank-mini-benefits"><span data-en="Iron Armor Prot II · 24 Carrots" data-ar="درع حديدي حماية II · 24 جزر"></span></div>
+                            <div class="rank-coming-badge">Coming Soon</div>
+                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
+                        </div>
+                        <div class="rank-mini terra coming-soon-rank" data-rank-name="Terra" data-rank-icon="🌍" data-rank-prefix="TERRA">
+                            <span class="rank-mini-icon">🌍</span>
+                            <div class="rank-mini-name">Terra</div>
+                            <div class="rank-mini-prefix">TERRA</div>
+                            <div class="rank-mini-benefits"><span data-en="Iron Prot III · Mending · 32 Carrots" data-ar="حديدي حماية III · إصلاح · 32 جزر"></span></div>
+                            <div class="rank-coming-badge">Coming Soon</div>
+                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
+                        </div>
+                        <div class="rank-mini nova coming-soon-rank" data-rank-name="Nova" data-rank-icon="🌟" data-rank-prefix="NOVA">
+                            <span class="rank-mini-icon">🌟</span>
+                            <div class="rank-mini-name">Nova</div>
+                            <div class="rank-mini-prefix">NOVA</div>
+                            <div class="rank-mini-benefits"><span data-en="Diamond Prot III · 46 Carrots · 12 GApples" data-ar="ماسي حماية III · 46 جزر · 12 تفاح ذهبي"></span></div>
+                            <div class="rank-coming-badge">Coming Soon</div>
+                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
+                        </div>
+                        <div class="rank-mini nebula coming-soon-rank" data-rank-name="Nebula" data-rank-icon="🌌" data-rank-prefix="NEBULA">
+                            <span class="rank-mini-icon">🌌</span>
+                            <div class="rank-mini-name">Nebula</div>
+                            <div class="rank-mini-prefix">NEBULA</div>
+                            <div class="rank-mini-benefits"><span data-en="Diamond Prot IV · 64 Carrots · 16 GApples" data-ar="ماسي حماية IV · 64 جزر · 16 تفاح ذهبي"></span></div>
+                            <div class="rank-coming-badge">Coming Soon</div>
+                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
+                        </div>
+                    </div>
 
-// ============================================================
-// PAGE LOAD, SCROLL, LANGUAGE (unchanged)
-// ============================================================
-window.addEventListener('load', function() {
-    document.body.classList.add('loaded');
-    // Check if user is already logged in (simulated)
-    const user = JSON.parse(localStorage.getItem('otk1_user'));
-    if (user) {
-        updateUserUI(user);
-    }
-});
+                    <!-- Neptune Practice Ranks (Coming Soon) -->
+                    <div class="rank-section-title" style="margin-top:32px;"><i class="fas fa-fist-raised"></i><span data-en="Neptune Practice Ranks" data-ar="رتب نبتون تدريب"></span> <span class="badge-tab soon" style="font-size:12px; padding:2px 14px;">Coming Soon</span></div>
+                    <div class="rank-section-sub" data-en="These ranks will be available soon. Stay tuned!" data-ar="هذه الرتب ستكون متاحة قريباً. ترقبوا!"></div>
+                    <div class="rank-grid">
+                        <div class="rank-mini neptune-vip coming-soon-rank" data-rank-name="VIP" data-rank-icon="⭐" data-rank-prefix="VIP">
+                            <span class="rank-mini-icon">⭐</span>
+                            <div class="rank-mini-name">VIP</div>
+                            <div class="rank-mini-prefix">VIP</div>
+                            <div class="rank-mini-benefits"><span data-en="Full Servers · Daily Rewards · Party 25" data-ar="سيرفرات ممتلئة · مكافآت يومية · حفلة 25"></span></div>
+                            <div class="rank-coming-badge">Coming Soon</div>
+                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
+                        </div>
+                        <div class="rank-mini neptune-mvp coming-soon-rank" data-rank-name="MVP" data-rank-icon="👑" data-rank-prefix="MVP">
+                            <span class="rank-mini-icon">👑</span>
+                            <div class="rank-mini-name">MVP</div>
+                            <div class="rank-mini-prefix">MVP</div>
+                            <div class="rank-mini-benefits"><span data-en="All VIP Perks · Priority Support · Party 50" data-ar="جميع مزايا VIP · دعم أولوية · حفلة 50"></span></div>
+                            <div class="rank-coming-badge">Coming Soon</div>
+                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
+                        </div>
+                    </div>
 
-window.addEventListener('scroll', function() {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = (scrollTop / docHeight) * 100;
-    document.getElementById('progressBar').style.width = progress + '%';
+                    <div style="margin-top:32px;">
+                        <div class="rank-section-title" style="font-size:24px;"><i class="fas fa-tags"></i><span data-en="Pricing Plans" data-ar="خطط الأسعار"></span></div>
+                        <div class="rank-section-sub" data-en="Choose the plan that fits your playstyle." data-ar="اختر الخطة التي تناسب أسلوب لعبك."></div>
+                        <div class="pricing-grid">
+                            <div class="pricing-card"><span class="pricing-icon">⚡</span><div class="pricing-name" data-en="Weekly" data-ar="أسبوعي"></div><div class="pricing-price">$5 <small>/week</small></div><div class="pricing-desc" data-en="Perfect for trying out a rank." data-ar="مثالي لتجربة رتبة."></div></div>
+                            <div class="pricing-card popular"><span class="pricing-icon">🔥</span><div class="pricing-name" data-en="Monthly" data-ar="شهري"></div><div class="pricing-price">$20 <small>/month</small></div><div class="pricing-desc" data-en="Best value for active players." data-ar="أفضل قيمة للاعبين النشطين."></div></div>
+                            <div class="pricing-card"><span class="pricing-icon">💎</span><div class="pricing-name" data-en="3 Months" data-ar="3 أشهر"></div><div class="pricing-price">$60 <small>/3mo</small></div><div class="pricing-desc" data-en="Save big with a longer commitment." data-ar="وفّر كثيراً مع التزام أطول."></div></div>
+                            <div class="pricing-card"><span class="pricing-icon">👑</span><div class="pricing-name" data-en="Lifetime" data-ar="مدى الحياة"></div><div class="pricing-price">$120 <small>/life</small></div><div class="pricing-desc" data-en="Ultimate status – forever." data-ar="الرتبة النهائية – للأبد."></div><span class="pricing-badge">Best Deal</span></div>
+                        </div>
+                    </div>
+                </div>
 
-    const btn = document.getElementById('backToTop');
-    if (window.scrollY > 300) {
-        btn.classList.add('visible');
-    } else {
-        btn.classList.remove('visible');
-    }
-});
+                <!-- ===== STORE TAB ===== -->
+                <div class="tab-pane" id="tab-store">
+                    <div class="rank-section-title"><i class="fas fa-store"></i><span data-en="Store" data-ar="المتجر"></span></div>
+                    <div class="rank-section-sub" data-en="Click any rank to see all pricing options." data-ar="انقر على أي رتبة لترى جميع خيارات الأسعار."></div>
 
-function setLanguage(lang) {
-    const body = document.body;
-    const btnEn = document.getElementById('btnEn');
-    const btnAr = document.getElementById('btnAr');
+                    <!-- Earth Survival Store -->
+                    <div style="margin-top:24px;">
+                        <h4 style="color:#f0e6ff; font-size:20px; margin-bottom:14px; font-family:'Orbitron',sans-serif;"><i class="fas fa-crown" style="color:#fbbf24;"></i> <span data-en="Earth Survival" data-ar="سيرفر البقاء إيرث"></span></h4>
+                        <div class="store-tab-grid">
+                            <div class="store-tab-item" data-rank-name="Knight" data-rank-icon="⚔️" data-rank-prefix="KNIGHT"><span class="store-icon">⚔️</span><div class="store-name">Knight</div><div class="store-price">$5/wk</div><div class="store-desc" data-en="5x Homes · Kit Knight" data-ar="5 منازل · كيت نايت"></div><button class="btn-store-buy" onclick="event.stopPropagation();openPriceModal('Knight', '⚔️', 'KNIGHT')">Buy</button></div>
+                            <div class="store-tab-item" data-rank-name="Lord" data-rank-icon="👑" data-rank-prefix="LORD"><span class="store-icon">👑</span><div class="store-name">Lord</div><div class="store-price">$20/mo</div><div class="store-desc" data-en="10x Homes · Kit Lord" data-ar="10 منازل · كيت لورد"></div><button class="btn-store-buy" onclick="event.stopPropagation();openPriceModal('Lord', '👑', 'LORD')">Buy</button></div>
+                            <div class="store-tab-item" data-rank-name="Paladin" data-rank-icon="🛡️" data-rank-prefix="PALADIN"><span class="store-icon">🛡️</span><div class="store-name">Paladin</div><div class="store-price">$60/3mo</div><div class="store-desc" data-en="∞ Homes · Kit Paladin" data-ar="∞ منازل · كيت بالادين"></div><button class="btn-store-buy" onclick="event.stopPropagation();openPriceModal('Paladin', '🛡️', 'PALADIN')">Buy</button></div>
+                            <div class="store-tab-item" data-rank-name="Duke" data-rank-icon="🏰" data-rank-prefix="DUKE"><span class="store-icon">🏰</span><div class="store-name">Duke</div><div class="store-price">$120/life</div><div class="store-desc" data-en="∞ Homes · Fly · Heal" data-ar="∞ منازل · طيران · شفاء"></div><button class="btn-store-buy" onclick="event.stopPropagation();openPriceModal('Duke', '🏰', 'DUKE')">Buy</button></div>
+                            <div class="store-tab-item" data-rank-name="King" data-rank-icon="🌟" data-rank-prefix="KING"><span class="store-icon">🌟</span><div class="store-name">King</div><div class="store-price">$120/life</div><div class="store-desc" data-en="∞ Homes · All Commands" data-ar="∞ منازل · جميع الأوامر"></div><button class="btn-store-buy" onclick="event.stopPropagation();openPriceModal('King', '🌟', 'KING')">Buy</button></div>
+                        </div>
+                    </div>
 
-    body.classList.remove('lang-en', 'lang-ar');
-    body.classList.add('lang-' + lang);
-    body.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+                    <!-- Galaxy BoxPvP Store (Coming Soon) – Member instead of User -->
+                    <div style="margin-top:28px;">
+                        <h4 style="color:#f0e6ff; font-size:20px; margin-bottom:14px; font-family:'Orbitron',sans-serif;"><i class="fas fa-box-open" style="color:#f472b6;"></i> <span data-en="Galaxy BoxPvP" data-ar="جالاكسي بوكس بي في بي"></span> <span class="badge-tab soon" style="font-size:11px; padding:2px 12px;">Coming Soon</span></h4>
+                        <div class="store-tab-grid">
+                            <div class="store-tab-item coming-store"><span class="store-icon">🪖</span><div class="store-name">Member</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="Starter Kit" data-ar="كيت مبتدئ"></div><button class="btn-store-buy" disabled>Soon</button></div>
+                            <div class="store-tab-item coming-store"><span class="store-icon">⭐</span><div class="store-name">VIP</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="Iron Prot II · 24 Carrots" data-ar="حديدي حماية II · 24 جزر"></div><button class="btn-store-buy" disabled>Soon</button></div>
+                            <div class="store-tab-item coming-store"><span class="store-icon">🌍</span><div class="store-name">Terra</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="Iron Prot III · Mending" data-ar="حديدي حماية III · إصلاح"></div><button class="btn-store-buy" disabled>Soon</button></div>
+                            <div class="store-tab-item coming-store"><span class="store-icon">🌟</span><div class="store-name">Nova</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="Diamond Prot III · 46 Carrots" data-ar="ماسي حماية III · 46 جزر"></div><button class="btn-store-buy" disabled>Soon</button></div>
+                            <div class="store-tab-item coming-store"><span class="store-icon">🌌</span><div class="store-name">Nebula</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="Diamond Prot IV · 64 Carrots" data-ar="ماسي حماية IV · 64 جزر"></div><button class="btn-store-buy" disabled>Soon</button></div>
+                        </div>
+                    </div>
 
-    btnEn.classList.toggle('active', lang === 'en');
-    btnAr.classList.toggle('active', lang === 'ar');
+                    <!-- Neptune Practice Store (Coming Soon) -->
+                    <div style="margin-top:28px;">
+                        <h4 style="color:#f0e6ff; font-size:20px; margin-bottom:14px; font-family:'Orbitron',sans-serif;"><i class="fas fa-fist-raised" style="color:#60a5fa;"></i> <span data-en="Neptune Practice" data-ar="نبتون تدريب"></span> <span class="badge-tab soon" style="font-size:11px; padding:2px 12px;">Coming Soon</span></h4>
+                        <div class="store-tab-grid">
+                            <div class="store-tab-item coming-store"><span class="store-icon">⭐</span><div class="store-name">VIP</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="Full Servers · Daily Rewards" data-ar="سيرفرات ممتلئة · مكافآت يومية"></div><button class="btn-store-buy" disabled>Soon</button></div>
+                            <div class="store-tab-item coming-store"><span class="store-icon">👑</span><div class="store-name">MVP</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="All VIP Perks · Priority Support" data-ar="جميع مزايا VIP · دعم أولوية"></div><button class="btn-store-buy" disabled>Soon</button></div>
+                        </div>
+                    </div>
+                </div>
 
-    document.querySelectorAll('[data-en][data-ar]').forEach(el => {
-        const text = el.getAttribute('data-' + lang);
-        if (text !== null) el.textContent = text;
-    });
+                <!-- ===== RULES TAB ===== -->
+                <div class="tab-pane" id="tab-rules">
+                    <div class="rank-section-title"><i class="fas fa-gavel"></i><span data-en="Server Rules" data-ar="قوانين السيرفر"></span></div>
+                    <div class="rank-section-sub" data-en="Follow the rules to ensure a fair and fun experience for everyone." data-ar="اتبع القوانين لضمان تجربة عادلة وممتعة للجميع."></div>
+                    <div class="rules-grid">
+                        <div class="rules-card">
+                            <span class="rules-icon">🌐</span>
+                            <h4 data-en="Global Rules" data-ar="قوانين عامة"></h4>
+                            <ul>
+                                <li><i class="fas fa-shield-alt"></i> <span data-en="No hacking, cheating, or exploiting bugs." data-ar="لا للغش أو استغلال الأخطاء."></span> <span class="rule-badge">Zero Tolerance</span></li>
+                                <li><i class="fas fa-comment-slash"></i> <span data-en="Respect all players – no toxicity, racism, or harassment." data-ar="احترم جميع اللاعبين – لا للسمية أو العنصرية أو المضايقة."></span></li>
+                                <li><i class="fas fa-microphone-alt"></i> <span data-en="No spamming or advertising other servers." data-ar="لا للسبام أو الإعلان عن سيرفرات أخرى."></span></li>
+                                <li><i class="fas fa-user-secret"></i> <span data-en="No inappropriate usernames or skins." data-ar="لا لأسماء أو جلود غير لائقة."></span></li>
+                                <li><i class="fas fa-flag"></i> <span data-en="Follow staff instructions at all times." data-ar="اتبع تعليمات الطاقم في جميع الأوقات."></span></li>
+                            </ul>
+                        </div>
+                        <div class="rules-card">
+                            <span class="rules-icon">🌍</span>
+                            <h4 data-en="Earth Survival Rules" data-ar="قوانين سيرفر البقاء إيرث"></h4>
+                            <ul>
+                                <li><i class="fas fa-home"></i> <span data-en="No griefing – protect your builds with claims." data-ar="لا للتخريب – احمِ مبانيّك بالحماية."></span> <span class="rule-badge green">Protected</span></li>
+                                <li><i class="fas fa-hand-holding-usd"></i> <span data-en="No scamming or exploiting economy systems." data-ar="لا للنصب أو استغلال أنظمة الاقتصاد."></span></li>
+                                <li><i class="fas fa-tree"></i> <span data-en="No destroying natural terrain without permission." data-ar="لا لتدمير التضاريس الطبيعية دون إذن."></span></li>
+                                <li><i class="fas fa-clock"></i> <span data-en="AFK farming is allowed but limited to 15 minutes." data-ar="الزراعة أثناء AFK مسموحة ولكن محددة بـ 15 دقيقة."></span></li>
+                            </ul>
+                        </div>
+                        <div class="rules-card">
+                            <span class="rules-icon">🌌</span>
+                            <h4 data-en="Galaxy BoxPvP Rules" data-ar="قوانين جالاكسي بوكس بي في بي"></h4>
+                            <ul>
+                                <li><i class="fas fa-crosshairs"></i> <span data-en="No teaming in free-for-all modes." data-ar="لا للتحالفات في أوضاع free-for-all."></span> <span class="rule-badge gold">Fair Play</span></li>
+                                <li><i class="fas fa-box-open"></i> <span data-en="No stealing from other players' chests." data-ar="لا لسرقة صناديق اللاعبين الآخرين."></span></li>
+                                <li><i class="fas fa-swords"></i> <span data-en="No spawn camping – give players a chance." data-ar="لا للكمائن عند نقطة الإحياء – امنح اللاعبين فرصة."></span></li>
+                                <li><i class="fas fa-tachometer-alt"></i> <span data-en="No exploiting glitches or using unfair advantages." data-ar="لا لاستغلال الأخطاء أو استخدام مزايا غير عادلة."></span></li>
+                            </ul>
+                        </div>
+                        <div class="rules-card">
+                            <span class="rules-icon">🌊</span>
+                            <h4 data-en="Neptune Practice Rules" data-ar="قوانين نبتون تدريب"></h4>
+                            <ul>
+                                <li><i class="fas fa-handshake"></i> <span data-en="No toxicity – respect your opponent." data-ar="لا للسمية – احترم خصمك."></span> <span class="rule-badge green">Sportsmanship</span></li>
+                                <li><i class="fas fa-sliders-h"></i> <span data-en="No using banned items or kits in ranked matches." data-ar="لا لاستخدام عناصر أو كيتات محظورة في المباريات المرتبة."></span></li>
+                                <li><i class="fas fa-flag-checkered"></i> <span data-en="No leaving mid-match to avoid a loss." data-ar="لا للمغادرة أثناء المباراة لتجنب الخسارة."></span></li>
+                                <li><i class="fas fa-users"></i> <span data-en="Party limits must be respected." data-ar="يجب احترام حدود الحفلة."></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="margin-top:20px; padding:16px 20px; background:rgba(255,107,107,0.06); border-radius:16px; border:1px solid rgba(255,107,107,0.1); text-align:center;">
+                        <p style="color:#ff6b6b; font-size:14px;"><i class="fas fa-exclamation-triangle"></i> <span data-en="Violating any rule may result in a mute, kick, ban, or rank removal at staff discretion." data-ar="قد يؤدي مخالفة أي قانون إلى كتم، طرد، حظر، أو إزالة الرتبة حسب تقدير الطاقم."></span></p>
+                    </div>
+                </div>
 
-    document.querySelectorAll('#cartItems [data-en][data-ar]').forEach(el => {
-        el.textContent = el.getAttribute('data-' + lang);
-    });
+                <!-- ===== SUPPORT TAB ===== -->
+                <div class="tab-pane" id="tab-support">
+                    <div class="rank-section-title"><i class="fas fa-headset"></i><span data-en="Support" data-ar="الدعم"></span></div>
+                    <div class="rank-section-sub" data-en="We're here to help! Contact us and we'll get back to you as soon as possible." data-ar="نحن هنا للمساعدة! تواصل معنا وسنرد عليك في أقرب وقت ممكن."></div>
+                    <div class="support-container">
+                        <div class="support-form">
+                            <h4 data-en="📩 Send a Ticket" data-ar="📩 أرسل تذكرة"></h4>
+                            <p class="form-sub" data-en="Fill out the form and our team will respond within 24 hours." data-ar="املأ النموذج وسيرد فريقنا في غضون 24 ساعة."></p>
+                            <form id="supportForm" onsubmit="return handleSupport(event)">
+                                <div class="form-group"><label data-en="Your Name" data-ar="اسمك"></label><input type="text" id="supportName" placeholder="Enter your name..." required /></div>
+                                <div class="form-group"><label data-en="Email Address" data-ar="البريد الإلكتروني"></label><input type="email" id="supportEmail" placeholder="your@email.com" required /></div>
+                                <div class="form-group"><label data-en="Issue Type" data-ar="نوع المشكلة"></label>
+                                    <select id="supportType"><option value="bug" data-en="Bug Report" data-ar="تقرير خطأ"></option><option value="rank" data-en="Rank Issue" data-ar="مشكلة في الرتبة"></option><option value="payment" data-en="Payment Problem" data-ar="مشكلة في الدفع"></option><option value="other" data-en="Other" data-ar="أخرى"></option></select>
+                                </div>
+                                <div class="form-group"><label data-en="Message" data-ar="الرسالة"></label><textarea id="supportMessage" placeholder="Describe your issue in detail..." required></textarea></div>
+                                <button type="submit" class="btn-submit"><span data-en="Send Message" data-ar="إرسال"></span></button>
+                            </form>
+                        </div>
+                        <div class="support-info">
+                            <div class="info-card"><div class="info-icon"><i class="fas fa-discord"></i></div><div class="info-content"><h5 data-en="Join our Discord" data-ar="انضم إلى ديسكورد"></h5><p data-en="Get instant support and connect with the community." data-ar="احصل على دعم فوري وتواصل مع المجتمع."><br><a href="#">discord.gg/otk1</a></p></div></div>
+                            <div class="info-card"><div class="info-icon"><i class="fas fa-envelope"></i></div><div class="info-content"><h5 data-en="Email Support" data-ar="الدعم عبر البريد"></h5><p data-en="For serious issues, reach out directly." data-ar="للمشاكل الجادة، تواصل مباشرة."><br><a href="mailto:support@otk1.net">support@otk1.net</a></p></div></div>
+                            <div class="info-card"><div class="info-icon"><i class="fas fa-clock"></i></div><div class="info-content"><h5 data-en="Response Time" data-ar="وقت الرد"></h5><p data-en="We aim to respond within 24 hours." data-ar="نهدف إلى الرد خلال 24 ساعة."></p></div></div>
+                            <div class="info-card"><div class="info-icon"><i class="fas fa-shield-alt"></i></div><div class="info-content"><h5 data-en="Trust & Safety" data-ar="الثقة والأمان"></h5><p data-en="Your data is safe with us. We never share your information." data-ar="بياناتك آمنة معنا. لا نشارك معلوماتك أبداً."></p></div></div>
+                        </div>
+                    </div>
+                </div>
 
-    document.querySelectorAll('#benefitsModal [data-en][data-ar]').forEach(el => {
-        el.textContent = el.getAttribute('data-' + lang);
-    });
+                <!-- ===== FAQ TAB ===== -->
+                <div class="tab-pane" id="tab-faq">
+                    <div class="rank-section-title"><i class="fas fa-question-circle"></i><span data-en="Frequently Asked Questions" data-ar="الأسئلة الشائعة"></span></div>
+                    <div class="rank-section-sub" data-en="Everything you need to know about Otk1 Network." data-ar="كل ما تحتاج معرفته عن شبكة Otk1."></div>
+                    <div class="faq-list">
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ How do I join the server?" data-ar="❓ كيف أنضم إلى السيرفر؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Simply copy the server IP from the IP tab above, open Minecraft (Java Edition 1.20.4), click Multiplayer, then Add Server, paste the IP, and join!" data-ar="ببساطة انسخ الآي بي من تبويب IP أعلاه، افتح ماين كرافت (إصدار 1.20.4)، اضغط Multiplayer، ثم Add Server، الصق الآي بي وانضم!"></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ What Minecraft version do I need?" data-ar="❓ ما هو إصدار ماين كرافت المطلوب؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="All our servers run on Minecraft Java Edition 1.20.4. We recommend using this version for the best experience." data-ar="جميع سيرفراتنا تعمل على ماين كرافت جافا إصدار 1.20.4. نوصي باستخدام هذا الإصدار للحصول على أفضل تجربة."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ How do I buy a rank?" data-ar="❓ كيف أشتري رتبة؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Ranks are purchased using in-game coins earned by playing on the server. Visit the Store tab to see all available ranks and their requirements. You can also purchase directly with real money via our store." data-ar="تُشترى الرتب باستخدام العملات داخل اللعبة التي تكسبها من اللعب على السيرفر. زر المتجر لترى جميع الرتب المتاحة ومتطلباتها. يمكنك أيضاً الشراء مباشرة بالمال الحقيقي عبر متجرنا."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ Is there a Discord server?" data-ar="❓ هل يوجد سيرفر ديسكورد؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Yes! Join our Discord community to stay updated, chat with other players, and get support. The invite link is available in-game or visit the Support tab." data-ar="نعم! انضم إلى مجتمعنا على ديسكورد للبقاء على اطلاع، والدردشة مع اللاعبين الآخرين، والحصول على الدعم. رابط الدعوة متاح داخل اللعبة أو زر تبويب الدعم."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ Can I play with friends?" data-ar="❓ هل يمكنني اللعب مع الأصدقاء؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Absolutely! All our servers support multiplayer. You can team up, create parties, and compete together. Party limits vary by rank – check the Ranks tab for details." data-ar="بالتأكيد! جميع سيرفراتنا تدعم اللعب الجماعي. يمكنك تشكيل فرق، وإنشاء حفلات، والتنافس معًا. حدود الحفلة تختلف حسب الرتبة – تحقق من تبويب الرتب للتفاصيل."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ What is the server's uptime?" data-ar="❓ ما هو وقت تشغيل السيرفر؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Our servers are online 24/7 with 99.9% uptime. We perform regular maintenance to ensure the best performance for all players." data-ar="سيرفراتنا تعمل 24/7 مع uptime 99.9%. نقوم بصيانة دورية لضمان أفضل أداء لجميع اللاعبين."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ How do I report a player?" data-ar="❓ كيف أبلغ عن لاعب؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="You can report a player using /report (player) (reason) in-game, or open a ticket in the Support tab. Our staff will review it promptly." data-ar="يمكنك الإبلاغ عن لاعب باستخدام /report (اللاعب) (السبب) داخل اللعبة، أو فتح تذكرة في تبويب الدعم. سيراجع طاقمنا الأمر بسرعة."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ What are the rules?" data-ar="❓ ما هي القوانين؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="You can find all server rules in the Rules tab. We have global rules as well as game-specific rules for each server mode." data-ar="يمكنك العثور على جميع قوانين السيرفر في تبويب القوانين. لدينا قوانين عامة بالإضافة إلى قوانين خاصة بكل نمط لعب."></div></div>
+                    </div>
+                </div>
 
-    localStorage.setItem('otk1-lang', lang);
-}
+                <!-- ===== SOCIAL TAB ===== -->
+                <div class="tab-pane" id="tab-social">
+                    <div class="rank-section-title"><i class="fas fa-share-alt"></i><span data-en="Connect With Us" data-ar="تواصل معنا"></span></div>
+                    <div class="rank-section-sub" data-en="Follow us on our social platforms to stay updated!" data-ar="تابعنا على منصات التواصل للبقاء على اطلاع!"></div>
+                    <div class="social-squares-grid">
+                        <a href="https://www.tiktok.com/@otk1141" target="_blank" rel="noopener noreferrer" class="social-square tiktok-square">
+                            <i class="fab fa-tiktok"></i>
+                            <span class="social-name">@otk1141</span>
+                            <span class="social-label" data-en="Follow" data-ar="تابع"></span>
+                        </a>
+                        <a href="https://youtube.com/@otk1141" target="_blank" rel="noopener noreferrer" class="social-square youtube-square">
+                            <i class="fab fa-youtube"></i>
+                            <span class="social-name">@otk1141</span>
+                            <span class="social-label" data-en="Subscribe" data-ar="اشترك"></span>
+                        </a>
+                        <a href="https://www.instagram.com/37.8b" target="_blank" rel="noopener noreferrer" class="social-square instagram-square">
+                            <i class="fab fa-instagram"></i>
+                            <span class="social-name">@37.8b</span>
+                            <span class="social-label" data-en="Follow" data-ar="تابع"></span>
+                        </a>
+                    </div>
+                </div>
 
-// ============================================================
-// TABS (unchanged)
-// ============================================================
-document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const tabId = this.dataset.tab;
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-        this.classList.add('active');
-        document.getElementById('tab-' + tabId).classList.add('active');
-        document.querySelector('.tabs-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-});
+                <!-- ===== IP TAB ===== -->
+                <div class="tab-pane" id="tab-ip">
+                    <div class="ip-section">
+                        <div class="ip-display" style="text-align:center; padding:40px 20px;">
+                            <div style="font-size:64px; margin-bottom:16px;">🌐</div>
+                            <div class="ip-label" data-en="✦ Server IP ✦" data-ar="✦ آي بي السيرفر ✦" style="font-size:20px; letter-spacing:4px;"></div>
+                            <div style="font-size:28px; font-weight:800; font-family:'Orbitron',sans-serif; background:linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin:12px 0;">
+                                <span data-en="Coming Soon" data-ar="قريباً"></span>
+                            </div>
+                            <p style="color:#b99ad6; font-size:16px; max-width:400px; margin:0 auto;">
+                                <span data-en="We're preparing our servers. Stay tuned for the IP address!" data-ar="نحن نجهز سيرفراتنا. ترقبوا عنوان الآي بي!"></span>
+                            </p>
+                            <div style="margin-top:20px; display:flex; justify-content:center; gap:12px;">
+                                <span class="coming-chip" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); color:#9880b8;">
+                                    <i class="fas fa-clock"></i> <span data-en="Estimated: Q3 2026" data-ar="متوقع: الربع الثالث 2026"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-// ============================================================
-// FAQ (unchanged)
-// ============================================================
-function toggleFaq(btn) {
-    const item = btn.closest('.faq-item');
-    const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
-    if (!isOpen) {
-        item.classList.add('open');
-        setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
-    }
-}
+            </div>
+        </div>
 
-// ============================================================
-// TOAST (unchanged)
-// ============================================================
-function showToast(message, isError = false) {
-    const toast = document.getElementById('toast');
-    const toastMsg = document.getElementById('toastMessage');
-    const icon = toast.querySelector('i');
-    toastMsg.textContent = message;
-    if (isError) {
-        icon.className = 'fas fa-exclamation-circle';
-        toast.classList.add('error');
-    } else {
-        icon.className = 'fas fa-check-circle';
-        toast.classList.remove('error');
-    }
-    toast.classList.add('show');
-    clearTimeout(toast._timer);
-    toast._timer = setTimeout(() => toast.classList.remove('show'), 3500);
-}
+        <!-- ===== FOOTER ===== -->
+        <footer class="site-footer">
+            <div class="footer-links">
+                <a href="https://www.tiktok.com/@otk1141" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i> TikTok</a>
+                <a href="https://youtube.com/@otk1141" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i> YouTube</a>
+                <a href="https://www.instagram.com/37.8b" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+            </div>
+            <div>
+                <span class="footer-brand">Otk1</span>
+                <span data-en=" · 2026 · All rights reserved." data-ar=" · 2026 · جميع الحقوق محفوظة."></span>
+                <span style="margin-left:8px; opacity:0.3;"><i class="fas fa-infinity"></i></span>
+            </div>
+        </footer>
 
-// ============================================================
-// PRICE MODAL (unchanged)
-// ============================================================
-let selectedPlan = null;
-let currentRank = { name: '', icon: '', prefix: '' };
+    </div>
 
-function openPriceModal(rankName, rankIcon, rankPrefix) {
-    currentRank = { name: rankName, icon: rankIcon, prefix: rankPrefix };
-    selectedPlan = null;
+    <!-- ===== BACK TO TOP ===== -->
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
-    document.getElementById('modalRankIcon').textContent = rankIcon;
-    document.getElementById('modalRankName').textContent = rankName;
-    document.getElementById('modalRankPrefix').textContent = rankPrefix;
-
-    const isMember = rankName.toLowerCase() === 'member';
-    document.getElementById('modalOptions').style.display = isMember ? 'none' : 'grid';
-    document.getElementById('modalFreeOption').style.display = isMember ? 'grid' : 'none';
-
-    const sub = document.getElementById('modalSub');
-    if (isMember) {
-        sub.setAttribute('data-en', 'This rank is free – claim it now!');
-        sub.setAttribute('data-ar', 'هذه الرتبة مجانية – احصل عليها الآن!');
-    } else {
-        sub.setAttribute('data-en', 'Choose your pricing plan for this rank.');
-        sub.setAttribute('data-ar', 'اختر خطة السعر لهذه الرتبة.');
-    }
-    const currentLang = document.body.classList.contains('lang-en') ? 'en' : 'ar';
-    sub.textContent = sub.getAttribute('data-' + currentLang);
-
-    document.querySelectorAll('.modal-option').forEach(el => el.classList.remove('selected'));
-    document.getElementById('modalConfirmBtn').disabled = true;
-    document.getElementById('priceModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closePriceModal() {
-    document.getElementById('priceModal').classList.remove('active');
-    document.body.style.overflow = '';
-    selectedPlan = null;
-}
-
-function selectPlan(element) {
-    if (element.classList.contains('coming-opt')) return;
-    document.querySelectorAll('.modal-option').forEach(el => el.classList.remove('selected'));
-    document.querySelectorAll('.modal-option .opt-check').forEach(el => el.style.opacity = '0');
-
-    element.classList.add('selected');
-    const check = element.querySelector('.opt-check');
-    if (check) check.style.opacity = '1';
-
-    selectedPlan = element.dataset.plan;
-    document.getElementById('modalConfirmBtn').disabled = false;
-}
-
-function confirmPlan() {
-    if (!selectedPlan) return;
-    const rankName = currentRank.name;
-    const isMember = rankName.toLowerCase() === 'member';
-
-    if (isMember) {
-        showToast(`🎉 ${rankName} rank claimed for free!`);
-        closePriceModal();
-        return;
-    }
-
-    const planNames = { weekly: 'Weekly', monthly: 'Monthly', '3months': '3 Months', lifetime: 'Lifetime' };
-    const planPrices = { weekly: 5, monthly: 20, '3months': 60, lifetime: 120 };
-
-    const planName = planNames[selectedPlan] || selectedPlan;
-    const price = planPrices[selectedPlan] || 0;
-
-    addToCart(rankName, currentRank.icon, planName, price);
-    closePriceModal();
-}
-
-// ============================================================
-// RANK CARD CLICKS
-// ============================================================
-document.querySelectorAll('#tab-ranks .rank-mini:not(.coming-soon-rank)').forEach(card => {
-    card.addEventListener('click', function() {
-        const name = this.dataset.rankName;
-        const icon = this.dataset.rankIcon;
-        const prefix = this.dataset.rankPrefix;
-        if (name) openBenefitsModal(name, icon, prefix);
-    });
-});
-
-document.querySelectorAll('#tab-ranks .rank-mini.coming-soon-rank').forEach(card => {
-    card.addEventListener('click', function(e) {
-        e.stopPropagation();
-        showToast('🔜 This rank is coming soon! Stay tuned.', true);
-    });
-});
-
-// ============================================================
-// STORE CARD CLICKS
-// ============================================================
-document.querySelectorAll('#tab-store .store-tab-item:not(.coming-store)').forEach(card => {
-    card.addEventListener('click', function() {
-        const name = this.dataset.rankName;
-        const icon = this.dataset.rankIcon;
-        const prefix = this.dataset.rankPrefix;
-        if (name) openPriceModal(name, icon, prefix);
-    });
-});
-
-document.querySelectorAll('#tab-store .store-tab-item.coming-store').forEach(card => {
-    card.addEventListener('click', function(e) {
-        if (e.target.tagName === 'BUTTON') return;
-        showToast('🔜 This item is coming soon! Stay tuned.', true);
-    });
-});
-
-// Close modals
-document.getElementById('priceModal').addEventListener('click', function(e) {
-    if (e.target === this) closePriceModal();
-});
-document.getElementById('benefitsModal').addEventListener('click', function(e) {
-    if (e.target === this) closeBenefitsModal();
-});
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closePriceModal();
-        closeBenefitsModal();
-        closeCart();
-        closeLoginModal();
-    }
-});
-
-// ============================================================
-// SUPPORT FORM (unchanged)
-// ============================================================
-function handleSupport(e) {
-    e.preventDefault();
-    const name = document.getElementById('supportName').value;
-    const email = document.getElementById('supportEmail').value;
-    const message = document.getElementById('supportMessage').value;
-    if (!name || !email || !message) {
-        showToast('Please fill in all fields.', true);
-        return false;
-    }
-    showToast('✅ Ticket sent! We\'ll respond within 24 hours.');
-    document.getElementById('supportForm').reset();
-    return false;
-}
-
-// ============================================================
-// GOOGLE LOGIN (simulated)
-// ============================================================
-function openLoginModal() {
-    document.getElementById('loginModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeLoginModal() {
-    document.getElementById('loginModal').classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-function googleLogin() {
-    // Simulate Google OAuth – generate fake user
-    const user = {
-        name: 'Alex',
-        email: 'alex@example.com',
-        avatar: 'https://ui-avatars.com/api/?name=Alex&background=7b2ffc&color=fff&size=64'
-    };
-    localStorage.setItem('otk1_user', JSON.stringify(user));
-    updateUserUI(user);
-    closeLoginModal();
-    showToast(`✅ Welcome, ${user.name}!`);
-}
-
-function updateUserUI(user) {
-    document.getElementById('loginBtn').style.display = 'none';
-    const compact = document.getElementById('userProfileCompact');
-    compact.style.display = 'flex';
-    document.getElementById('userAvatarCompact').src = user.avatar;
-    document.getElementById('userNameCompact').textContent = user.name;
-}
-
-function logout() {
-    localStorage.removeItem('otk1_user');
-    document.getElementById('loginBtn').style.display = 'flex';
-    document.getElementById('userProfileCompact').style.display = 'none';
-    showToast('Logged out successfully.');
-}
-
-// ============================================================
-// INIT
-// ============================================================
-document.addEventListener('DOMContentLoaded', function() {
-    const savedLang = localStorage.getItem('otk1-lang') || 'en';
-    setLanguage(savedLang);
-
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
-        }
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.home-card, .rank-mini, .store-tab-item, .rules-card, .pricing-card, .why-item')
-        .forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            observer.observe(el);
-        });
-
-    setTimeout(() => {
-        document.querySelectorAll('.home-card, .rank-mini, .store-tab-item, .rules-card, .pricing-card, .why-item')
-            .forEach(el => {
-                el.style.opacity = '1';
-                el.style.transform = 'translateY(0)';
-            });
-    }, 300);
-
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
-        });
-    });
-
-    document.getElementById('cartOverlay').addEventListener('click', closeCart);
-
-    console.log('🚀 Otk1 Network — Enhanced with Particles & Google Login!');
-});
+    <script src="script.js"></script>
+</body>
+</html>
