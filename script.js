@@ -1,9 +1,104 @@
 /* ============================================================
-   COMPLETE JAVASCRIPT
+   COMPLETE JAVASCRIPT (with particles and Google login)
    ============================================================ */
 
 // ============================================================
-// RANK BENEFITS DATA
+// PARTICLE SYSTEM (canvas)
+// ============================================================
+const canvas = document.getElementById('particlesCanvas');
+const ctx = canvas.getContext('2d');
+let width, height;
+let particles = [];
+const PARTICLE_COUNT = 120;
+
+function resizeCanvas() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class Particle {
+    constructor() {
+        this.reset();
+    }
+    reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.size = Math.random() * 2.5 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.4;
+        this.speedY = (Math.random() - 0.5) * 0.4;
+        this.opacity = Math.random() * 0.7 + 0.3;
+        this.hue = 260 + Math.random() * 40; // purple to blue
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > width) this.speedX *= -1;
+        if (this.y < 0 || this.y > height) this.speedY *= -1;
+        // gently pull toward center for a nebula effect
+        const cx = width/2, cy = height/2;
+        const dx = cx - this.x, dy = cy - this.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist > 200) {
+            this.speedX += dx / dist * 0.005;
+            this.speedY += dy / dist * 0.005;
+        }
+        // limit speed
+        const maxSpeed = 0.8;
+        const spd = Math.sqrt(this.speedX*this.speedX + this.speedY*this.speedY);
+        if (spd > maxSpeed) {
+            this.speedX = (this.speedX / spd) * maxSpeed;
+            this.speedY = (this.speedY / spd) * maxSpeed;
+        }
+        this.opacity = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin(Date.now() / 3000 + this.x));
+    }
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${this.hue}, 80%, 70%, ${this.opacity * 0.5})`;
+        ctx.fill();
+        // glow
+        ctx.shadowColor = `hsla(${this.hue}, 90%, 70%, 0.3)`;
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+    }
+}
+
+// Create particles
+for (let i = 0; i < PARTICLE_COUNT; i++) {
+    particles.push(new Particle());
+}
+
+function drawParticles() {
+    ctx.clearRect(0, 0, width, height);
+    for (const p of particles) {
+        p.update();
+        p.draw();
+    }
+    // draw connecting lines (subtle)
+    for (let i = 0; i < particles.length; i++) {
+        for (let j = i+1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 150) {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = `rgba(150, 100, 255, ${0.08 * (1 - dist/150)})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+            }
+        }
+    }
+    requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ============================================================
+// RANK BENEFITS DATA (updated: Member rank added)
 // ============================================================
 const rankBenefits = {
     'Knight': {
@@ -25,11 +120,35 @@ const rankBenefits = {
     'King': {
         perks: ['Unlimited Homes', 'Kit King', 'Fly', 'Heal'],
         commands: ['/Nick', '/Back', '/Recipe', '/Feed', '/Disposal', '/Near', '/Craft', '/Enderchest', '/Fime', '/Heal', '/Fly', '/Fweather', '/Repair']
+    },
+    'Member': {
+        perks: ['Wooden Kit', 'Iron Armor'],
+        commands: []
+    },
+    'VIP': {
+        perks: ['Iron Armor Prot II', '24 Carrots'],
+        commands: []
+    },
+    'Terra': {
+        perks: ['Iron Prot III', 'Mending', '32 Carrots'],
+        commands: []
+    },
+    'Nova': {
+        perks: ['Diamond Prot III', '46 Carrots', '12 Golden Apples'],
+        commands: []
+    },
+    'Nebula': {
+        perks: ['Diamond Prot IV', '64 Carrots', '16 Golden Apples'],
+        commands: []
+    },
+    'MVP': {
+        perks: ['All VIP Perks', 'Priority Support', 'Party 50'],
+        commands: []
     }
 };
 
 // ============================================================
-// BENEFITS MODAL
+// BENEFITS MODAL (unchanged)
 // ============================================================
 function openBenefitsModal(rankName, rankIcon, rankPrefix) {
     const data = rankBenefits[rankName];
@@ -37,7 +156,6 @@ function openBenefitsModal(rankName, rankIcon, rankPrefix) {
         showToast('Rank details coming soon!', true);
         return;
     }
-
     document.getElementById('benefitsRankIcon').textContent = rankIcon;
     document.getElementById('benefitsRankName').textContent = rankName;
     document.getElementById('benefitsRankPrefix').textContent = rankPrefix;
@@ -83,7 +201,7 @@ function closeBenefitsModal() {
 }
 
 // ============================================================
-// CART SYSTEM
+// CART SYSTEM (unchanged)
 // ============================================================
 let cart = [];
 
@@ -95,13 +213,11 @@ function addToCart(rankName, rankIcon, planName, price) {
         plan: planName,
         price: price
     };
-
     const existing = cart.find(i => i.id === item.id);
     if (existing) {
         showToast(`${rankName} (${planName}) is already in your cart!`, true);
         return;
     }
-
     cart.push(item);
     updateCartUI();
     showToast(`✅ ${rankName} (${planName}) added to cart!`);
@@ -210,15 +326,17 @@ function checkout() {
 }
 
 // ============================================================
-// PAGE LOAD
+// PAGE LOAD, SCROLL, LANGUAGE (unchanged)
 // ============================================================
 window.addEventListener('load', function() {
     document.body.classList.add('loaded');
+    // Check if user is already logged in (simulated)
+    const user = JSON.parse(localStorage.getItem('otk1_user'));
+    if (user) {
+        updateUserUI(user);
+    }
 });
 
-// ============================================================
-// SCROLL PROGRESS & BACK TO TOP
-// ============================================================
 window.addEventListener('scroll', function() {
     const scrollTop = window.scrollY;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -233,9 +351,6 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// ============================================================
-// LANGUAGE TOGGLE
-// ============================================================
 function setLanguage(lang) {
     const body = document.body;
     const btnEn = document.getElementById('btnEn');
@@ -265,7 +380,7 @@ function setLanguage(lang) {
 }
 
 // ============================================================
-// TABS
+// TABS (unchanged)
 // ============================================================
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', function() {
@@ -279,7 +394,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 
 // ============================================================
-// FAQ
+// FAQ (unchanged)
 // ============================================================
 function toggleFaq(btn) {
     const item = btn.closest('.faq-item');
@@ -292,7 +407,7 @@ function toggleFaq(btn) {
 }
 
 // ============================================================
-// TOAST
+// TOAST (unchanged)
 // ============================================================
 function showToast(message, isError = false) {
     const toast = document.getElementById('toast');
@@ -312,7 +427,7 @@ function showToast(message, isError = false) {
 }
 
 // ============================================================
-// PRICE MODAL
+// PRICE MODAL (unchanged)
 // ============================================================
 let selectedPlan = null;
 let currentRank = { name: '', icon: '', prefix: '' };
@@ -325,12 +440,12 @@ function openPriceModal(rankName, rankIcon, rankPrefix) {
     document.getElementById('modalRankName').textContent = rankName;
     document.getElementById('modalRankPrefix').textContent = rankPrefix;
 
-    const isUser = rankName.toLowerCase() === 'user';
-    document.getElementById('modalOptions').style.display = isUser ? 'none' : 'grid';
-    document.getElementById('modalFreeOption').style.display = isUser ? 'grid' : 'none';
+    const isMember = rankName.toLowerCase() === 'member';
+    document.getElementById('modalOptions').style.display = isMember ? 'none' : 'grid';
+    document.getElementById('modalFreeOption').style.display = isMember ? 'grid' : 'none';
 
     const sub = document.getElementById('modalSub');
-    if (isUser) {
+    if (isMember) {
         sub.setAttribute('data-en', 'This rank is free – claim it now!');
         sub.setAttribute('data-ar', 'هذه الرتبة مجانية – احصل عليها الآن!');
     } else {
@@ -367,11 +482,10 @@ function selectPlan(element) {
 
 function confirmPlan() {
     if (!selectedPlan) return;
-
     const rankName = currentRank.name;
-    const isUser = rankName.toLowerCase() === 'user';
+    const isMember = rankName.toLowerCase() === 'member';
 
-    if (isUser) {
+    if (isMember) {
         showToast(`🎉 ${rankName} rank claimed for free!`);
         closePriceModal();
         return;
@@ -388,7 +502,7 @@ function confirmPlan() {
 }
 
 // ============================================================
-// RANK CARD CLICKS (Ranks Tab → Benefits)
+// RANK CARD CLICKS
 // ============================================================
 document.querySelectorAll('#tab-ranks .rank-mini:not(.coming-soon-rank)').forEach(card => {
     card.addEventListener('click', function() {
@@ -399,7 +513,6 @@ document.querySelectorAll('#tab-ranks .rank-mini:not(.coming-soon-rank)').forEac
     });
 });
 
-// Coming soon ranks show a toast instead
 document.querySelectorAll('#tab-ranks .rank-mini.coming-soon-rank').forEach(card => {
     card.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -408,7 +521,7 @@ document.querySelectorAll('#tab-ranks .rank-mini.coming-soon-rank').forEach(card
 });
 
 // ============================================================
-// STORE CARD CLICKS (Store Tab → Price Modal)
+// STORE CARD CLICKS
 // ============================================================
 document.querySelectorAll('#tab-store .store-tab-item:not(.coming-store)').forEach(card => {
     card.addEventListener('click', function() {
@@ -419,7 +532,6 @@ document.querySelectorAll('#tab-store .store-tab-item:not(.coming-store)').forEa
     });
 });
 
-// Coming soon store items show a toast
 document.querySelectorAll('#tab-store .store-tab-item.coming-store').forEach(card => {
     card.addEventListener('click', function(e) {
         if (e.target.tagName === 'BUTTON') return;
@@ -427,7 +539,7 @@ document.querySelectorAll('#tab-store .store-tab-item.coming-store').forEach(car
     });
 });
 
-// Close modals on overlay click or Escape
+// Close modals
 document.getElementById('priceModal').addEventListener('click', function(e) {
     if (e.target === this) closePriceModal();
 });
@@ -439,11 +551,12 @@ document.addEventListener('keydown', function(e) {
         closePriceModal();
         closeBenefitsModal();
         closeCart();
+        closeLoginModal();
     }
 });
 
 // ============================================================
-// SUPPORT FORM
+// SUPPORT FORM (unchanged)
 // ============================================================
 function handleSupport(e) {
     e.preventDefault();
@@ -457,6 +570,47 @@ function handleSupport(e) {
     showToast('✅ Ticket sent! We\'ll respond within 24 hours.');
     document.getElementById('supportForm').reset();
     return false;
+}
+
+// ============================================================
+// GOOGLE LOGIN (simulated)
+// ============================================================
+function openLoginModal() {
+    document.getElementById('loginModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLoginModal() {
+    document.getElementById('loginModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function googleLogin() {
+    // Simulate Google OAuth – generate fake user
+    const user = {
+        name: 'Alex',
+        email: 'alex@example.com',
+        avatar: 'https://ui-avatars.com/api/?name=Alex&background=7b2ffc&color=fff&size=64'
+    };
+    localStorage.setItem('otk1_user', JSON.stringify(user));
+    updateUserUI(user);
+    closeLoginModal();
+    showToast(`✅ Welcome, ${user.name}!`);
+}
+
+function updateUserUI(user) {
+    document.getElementById('loginBtn').style.display = 'none';
+    const compact = document.getElementById('userProfileCompact');
+    compact.style.display = 'flex';
+    document.getElementById('userAvatarCompact').src = user.avatar;
+    document.getElementById('userNameCompact').textContent = user.name;
+}
+
+function logout() {
+    localStorage.removeItem('otk1_user');
+    document.getElementById('loginBtn').style.display = 'flex';
+    document.getElementById('userProfileCompact').style.display = 'none';
+    showToast('Logged out successfully.');
 }
 
 // ============================================================
@@ -505,5 +659,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('cartOverlay').addEventListener('click', closeCart);
 
-    console.log('🚀 Otk1 Network — Fully functional with "Coming Soon" for BoxPvP & Practice!');
+    console.log('🚀 Otk1 Network — Enhanced with Particles & Google Login!');
 });
