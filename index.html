@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Your CSS -->
     <link rel="stylesheet" href="style.css" />
 </head>
 <body class="lang-en" dir="ltr">
@@ -32,30 +35,40 @@
         <span id="toastMessage">Copied to clipboard!</span>
     </div>
 
-    <!-- USER PROFILE -->
-    <div class="user-profile" id="userProfile" style="display:none;">
-        <img id="userAvatar" src="" alt="avatar" />
-        <span id="userName">User</span>
-        <button onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
-    </div>
-
-    <!-- LOGIN MODAL -->
+    <!-- ===== LOGIN MODAL (Google + Username) ===== -->
     <div class="login-modal-overlay" id="loginModal">
         <div class="login-modal">
             <button class="modal-close" onclick="closeLoginModal()"><i class="fas fa-times"></i></button>
             <h2><i class="fas fa-user-astronaut"></i> <span data-en="Welcome Back" data-ar="مرحباً بعودتك"></span></h2>
-            <p data-en="Sign in to access your ranks and purchases." data-ar="سجل الدخول للوصول إلى رتبك ومشترياتك."></p>
-            <button class="google-login-btn" onclick="googleLogin()">
-                <i class="fab fa-google"></i> <span data-en="Sign in with Google" data-ar="سجل الدخول باستخدام جوجل"></span>
-            </button>
-            <p class="login-note" data-en="Demo: click to simulate login" data-ar="تجريبي: اضغط لمحاكاة الدخول"></p>
+            <p id="loginSubText" data-en="Sign in with Google and set your Minecraft username." data-ar="سجل الدخول باستخدام جوجل وحدد اسمك في ماين كرافت."></p>
+
+            <!-- Google Sign-In Button -->
+            <div id="g_id_onload"
+                 data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+                 data-login_uri=""
+                 data-callback="handleGoogleLogin"
+                 data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
+
+            <div id="usernameSection" style="display:none; margin-top:20px;">
+                <div class="form-group">
+                    <label data-en="Minecraft Username" data-ar="اسم المستخدم في ماين كرافت"></label>
+                    <input type="text" id="minecraftUsername" placeholder="Enter your Minecraft name..." maxlength="16" />
+                </div>
+                <button class="btn-submit" onclick="saveUsername()" style="width:100%;">
+                    <span data-en="Save Username" data-ar="حفظ الاسم"></span>
+                </button>
+            </div>
+
+            <p class="login-note" data-en="🔐 Real Google OAuth – you'll need a valid Client ID." data-ar="🔐 Google OAuth حقيقي – ستحتاج إلى Client ID صالح."></p>
         </div>
     </div>
 
-    <!-- CART OVERLAY -->
+    <!-- ===== CART OVERLAY ===== -->
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
-    <!-- CART PANEL -->
+    <!-- ===== CART PANEL ===== -->
     <div class="cart-panel" id="cartPanel">
         <div class="cart-header">
             <h2><i class="fas fa-shopping-cart"></i> <span data-en="Your Cart" data-ar="سلة المشتريات"></span></h2>
@@ -69,9 +82,21 @@
             </div>
         </div>
         <div class="cart-footer">
+            <!-- Promo Code -->
+            <div class="promo-section">
+                <div class="promo-input-group">
+                    <input type="text" id="promoCodeInput" placeholder="Enter promo code..." maxlength="10" />
+                    <button onclick="applyPromoCode()"><i class="fas fa-tag"></i> Apply</button>
+                </div>
+                <div id="promoMessage" class="promo-message"></div>
+            </div>
             <div class="cart-total">
                 <span class="total-label" data-en="Total" data-ar="المجموع"></span>
                 <span class="total-price" id="cartTotal">$0.00</span>
+            </div>
+            <div id="discountRow" style="display:none; justify-content:space-between; padding:4px 0; font-size:14px; color:#4ade80;">
+                <span data-en="Discount (30%)" data-ar="خصم (30%)"></span>
+                <span id="discountAmount">-$0.00</span>
             </div>
             <button class="checkout-btn" id="checkoutBtn" disabled onclick="checkout()">
                 <i class="fas fa-lock"></i>
@@ -80,7 +105,7 @@
         </div>
     </div>
 
-    <!-- BENEFITS MODAL -->
+    <!-- ===== BENEFITS MODAL ===== -->
     <div class="benefits-modal-overlay" id="benefitsModal">
         <div class="benefits-modal">
             <button class="modal-close" onclick="closeBenefitsModal()"><i class="fas fa-times"></i></button>
@@ -102,7 +127,7 @@
         </div>
     </div>
 
-    <!-- PRICE MODAL -->
+    <!-- ===== PRICE MODAL ===== -->
     <div class="price-modal-overlay" id="priceModal">
         <div class="price-modal">
             <button class="modal-close" onclick="closePriceModal()"><i class="fas fa-times"></i></button>
@@ -136,7 +161,7 @@
                 <div class="modal-option" data-plan="lifetime" onclick="selectPlan(this)">
                     <span class="opt-icon">👑</span>
                     <div class="opt-name" data-en="Lifetime" data-ar="مدى الحياة"></div>
-                    <div class="opt-price">$120 <small>/life</small></div>
+                    <div class="opt-price" id="lifetimePrice">$120 <small>/life</small></div>
                     <div class="opt-desc" data-en="Ultimate status – forever" data-ar="الرتبة النهائية – للأبد"></div>
                     <span class="opt-badge">Best Deal</span>
                     <span class="opt-check"><i class="fas fa-check-circle"></i></span>
@@ -197,7 +222,11 @@
                     </button>
                     <div class="user-profile-compact" id="userProfileCompact" style="display:none;">
                         <img id="userAvatarCompact" src="" alt="avatar" />
-                        <span id="userNameCompact">User</span>
+                        <div class="user-info">
+                            <span id="userNameCompact">User</span>
+                            <span id="userMcNameCompact" style="font-size:10px; color:#b99ad6;">@mc_user</span>
+                        </div>
+                        <button onclick="logout()" style="background:transparent; border:none; color:#ff6b6b; cursor:pointer; font-size:14px; padding:4px 8px;"><i class="fas fa-sign-out-alt"></i></button>
                     </div>
                 </div>
                 <div class="nav-cart" onclick="toggleCart()" id="cartBtn">
