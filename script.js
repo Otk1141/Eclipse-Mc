@@ -109,85 +109,139 @@ const rankBenefits = {
         perks: ['Unlimited Homes', 'Kit King', 'Fly', 'Heal'],
         commands: ['/Nick', '/Back', '/Recipe', '/Feed', '/Disposal', '/Near', '/Craft', '/Enderchest', '/Fime', '/Heal', '/Fly', '/Fweather', '/Repair']
     },
-    'Member': {
-        perks: ['Wooden Kit', 'Iron Armor'],
-        commands: []
-    },
-    'VIP': {
-        perks: ['Iron Armor Prot II', '24 Carrots'],
-        commands: []
-    },
-    'Terra': {
-        perks: ['Iron Prot III', 'Mending', '32 Carrots'],
-        commands: []
-    },
-    'Nova': {
-        perks: ['Diamond Prot III', '46 Carrots', '12 Golden Apples'],
-        commands: []
-    },
-    'Nebula': {
-        perks: ['Diamond Prot IV', '64 Carrots', '16 Golden Apples'],
-        commands: []
-    },
-    'MVP': {
-        perks: ['All VIP Perks', 'Priority Support', 'Party 50'],
-        commands: []
-    }
+    'Member': { perks: ['Wooden Kit', 'Iron Armor'], commands: [] },
+    'VIP': { perks: ['Iron Armor Prot II', '24 Carrots'], commands: [] },
+    'Terra': { perks: ['Iron Prot III', 'Mending', '32 Carrots'], commands: [] },
+    'Nova': { perks: ['Diamond Prot III', '46 Carrots', '12 Golden Apples'], commands: [] },
+    'Nebula': { perks: ['Diamond Prot IV', '64 Carrots', '16 Golden Apples'], commands: [] },
+    'MVP': { perks: ['All VIP Perks', 'Priority Support', 'Party 50'], commands: [] }
 };
 
 // ============================================================
-// BENEFITS MODAL
+// PROMO CODES
 // ============================================================
-function openBenefitsModal(rankName, rankIcon, rankPrefix) {
-    const data = rankBenefits[rankName];
-    if (!data) { showToast('Rank details coming soon!', true); return; }
-    document.getElementById('benefitsRankIcon').textContent = rankIcon;
-    document.getElementById('benefitsRankName').textContent = rankName;
-    document.getElementById('benefitsRankPrefix').textContent = rankPrefix;
+const VALID_PROMOS = ['XBR', 'DEY', 'ACR', 'OTK'];
+const DISCOUNT_RATE = 0.30; // 30%
+let activePromo = null;
+let promoDiscount = 0;
 
-    const perksList = document.getElementById('benefitsPerksList');
-    perksList.innerHTML = '';
-    data.perks.forEach(perk => {
-        const span = document.createElement('span');
-        span.className = 'benefit-item';
-        span.innerHTML = `<i class="fas fa-star"></i> ${perk}`;
-        perksList.appendChild(span);
-    });
+function applyPromoCode() {
+    const input = document.getElementById('promoCodeInput');
+    const code = input.value.trim().toUpperCase();
+    const msgEl = document.getElementById('promoMessage');
+    const discountRow = document.getElementById('discountRow');
+    const discountAmountEl = document.getElementById('discountAmount');
 
-    const commandsList = document.getElementById('benefitsCommandsList');
-    commandsList.innerHTML = '';
-    if (data.commands.length === 0) {
-        const span = document.createElement('span');
-        span.className = 'cmd-item';
-        span.style.color = '#9880b8';
-        span.textContent = 'No special commands';
-        commandsList.appendChild(span);
-    } else {
-        data.commands.forEach(cmd => {
-            const span = document.createElement('span');
-            span.className = 'cmd-item';
-            span.innerHTML = `<i class="fas fa-terminal"></i> ${cmd}`;
-            commandsList.appendChild(span);
-        });
+    // Check if any lifetime items are in cart
+    const hasLifetime = cart.some(item => item.plan === 'Lifetime');
+    if (!hasLifetime) {
+        msgEl.textContent = '⚠️ Promo codes work only on Lifetime ranks!';
+        msgEl.style.color = '#fbbf24';
+        return;
     }
 
-    const currentLang = document.body.classList.contains('lang-en') ? 'en' : 'ar';
-    document.querySelectorAll('#benefitsModal [data-en][data-ar]').forEach(el => {
-        el.textContent = el.getAttribute('data-' + currentLang);
-    });
-
-    document.getElementById('benefitsModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-function closeBenefitsModal() {
-    document.getElementById('benefitsModal').classList.remove('active');
-    document.body.style.overflow = '';
+    if (VALID_PROMOS.includes(code)) {
+        activePromo = code;
+        promoDiscount = DISCOUNT_RATE;
+        msgEl.textContent = `✅ Promo code "${code}" applied! 30% off Lifetime ranks.`;
+        msgEl.style.color = '#4ade80';
+        discountRow.style.display = 'flex';
+        // Calculate discount on lifetime items
+        const lifetimeTotal = cart
+            .filter(item => item.plan === 'Lifetime')
+            .reduce((sum, item) => sum + item.price, 0);
+        const discountAmt = lifetimeTotal * DISCOUNT_RATE;
+        discountAmountEl.textContent = '-$' + discountAmt.toFixed(2);
+        updateCartUI();
+    } else if (code === '') {
+        msgEl.textContent = '';
+        discountRow.style.display = 'none';
+        activePromo = null;
+        promoDiscount = 0;
+        updateCartUI();
+    } else {
+        msgEl.textContent = '❌ Invalid promo code. Try XBR, DEY, ACR, or OTK.';
+        msgEl.style.color = '#ff6b6b';
+        activePromo = null;
+        promoDiscount = 0;
+        discountRow.style.display = 'none';
+        updateCartUI();
+    }
 }
 
 // ============================================================
-// CART SYSTEM
+// GOOGLE SIGN-IN (Real OAuth 2.0)
+// ============================================================
+let googleUser = null;
+
+function handleGoogleLogin(response) {
+    // Decode the JWT token to get user info
+    try {
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        googleUser = {
+            name: payload.name,
+            email: payload.email,
+            avatar: payload.picture,
+            sub: payload.sub
+        };
+        // Show username input
+        document.getElementById('usernameSection').style.display = 'block';
+        document.getElementById('loginSubText').textContent = '✅ Signed in as ' + googleUser.name + '. Enter your Minecraft username:';
+        document.getElementById('loginSubText').style.color = '#4ade80';
+        // Pre-fill with email username part
+        const mcName = googleUser.name.split(' ')[0].toLowerCase();
+        document.getElementById('minecraftUsername').value = mcName;
+    } catch (e) {
+        showToast('Google login error. Please try again.', true);
+    }
+}
+
+function saveUsername() {
+    const mcName = document.getElementById('minecraftUsername').value.trim();
+    if (!mcName || mcName.length < 3 || mcName.length > 16) {
+        showToast('Please enter a valid Minecraft username (3-16 characters).', true);
+        return;
+    }
+    if (!googleUser) {
+        showToast('Please sign in with Google first.', true);
+        return;
+    }
+    const userData = {
+        ...googleUser,
+        mcUsername: mcName
+    };
+    localStorage.setItem('otk1_user', JSON.stringify(userData));
+    updateUserUI(userData);
+    closeLoginModal();
+    showToast(`✅ Welcome, ${mcName}!`);
+}
+
+function updateUserUI(user) {
+    document.getElementById('loginBtn').style.display = 'none';
+    const compact = document.getElementById('userProfileCompact');
+    compact.style.display = 'flex';
+    document.getElementById('userAvatarCompact').src = user.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=7b2ffc&color=fff&size=64';
+    document.getElementById('userNameCompact').textContent = user.name;
+    document.getElementById('userMcNameCompact').textContent = '@' + user.mcUsername;
+}
+
+function logout() {
+    localStorage.removeItem('otk1_user');
+    // Also sign out from Google
+    if (window.google && google.accounts) {
+        google.accounts.id.disableAutoSelect();
+    }
+    googleUser = null;
+    document.getElementById('loginBtn').style.display = 'flex';
+    document.getElementById('userProfileCompact').style.display = 'none';
+    showToast('Logged out successfully.');
+}
+
+// ============================================================
+// CART SYSTEM (with promo support)
 // ============================================================
 let cart = [];
+let appliedPromo = null;
 
 function addToCart(rankName, rankIcon, planName, price) {
     const item = {
@@ -195,29 +249,57 @@ function addToCart(rankName, rankIcon, planName, price) {
         name: rankName,
         icon: rankIcon,
         plan: planName,
-        price: price
+        price: price,
+        originalPrice: price
     };
     const existing = cart.find(i => i.id === item.id);
-    if (existing) { showToast(`${rankName} (${planName}) is already in your cart!`, true); return; }
+    if (existing) {
+        showToast(`${rankName} (${planName}) is already in your cart!`, true);
+        return;
+    }
     cart.push(item);
+    // If promo is active, recalculate discounts
+    if (activePromo) {
+        applyPromoCode();
+    }
     updateCartUI();
     showToast(`✅ ${rankName} (${planName}) added to cart!`);
     openCart();
 }
+
 function removeFromCart(id) {
     cart = cart.filter(item => item.id !== id);
+    if (activePromo) {
+        // Re-check if any lifetime items remain
+        const hasLifetime = cart.some(item => item.plan === 'Lifetime');
+        if (!hasLifetime) {
+            activePromo = null;
+            promoDiscount = 0;
+            document.getElementById('discountRow').style.display = 'none';
+            document.getElementById('promoMessage').textContent = '';
+        } else {
+            applyPromoCode();
+        }
+    }
     updateCartUI();
     showToast('Item removed from cart');
 }
+
 function updateCartUI() {
     const itemsContainer = document.getElementById('cartItems');
     const badge = document.getElementById('cartBadge');
     const totalEl = document.getElementById('cartTotal');
     const checkoutBtn = document.getElementById('checkoutBtn');
+    const discountRow = document.getElementById('discountRow');
+    const discountAmountEl = document.getElementById('discountAmount');
 
     const count = cart.length;
-    if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); }
-    else { badge.classList.add('hidden'); }
+    if (count > 0) {
+        badge.textContent = count;
+        badge.classList.remove('hidden');
+    } else {
+        badge.classList.add('hidden');
+    }
 
     if (cart.length === 0) {
         itemsContainer.innerHTML = `
@@ -233,12 +315,27 @@ function updateCartUI() {
         });
         checkoutBtn.disabled = true;
         totalEl.textContent = '$0.00';
+        discountRow.style.display = 'none';
         return;
     }
 
-    let html = '', total = 0;
+    let html = '';
+    let total = 0;
+    let lifetimeTotal = 0;
+
     cart.forEach(item => {
-        total += item.price;
+        // Apply discount to lifetime items if promo is active
+        let displayPrice = item.price;
+        if (activePromo && item.plan === 'Lifetime') {
+            displayPrice = item.price * (1 - DISCOUNT_RATE);
+            lifetimeTotal += item.price;
+        }
+        total += displayPrice;
+
+        const priceDisplay = activePromo && item.plan === 'Lifetime'
+            ? `<span style="text-decoration:line-through; color:#6a5a80; font-size:13px; margin-right:6px;">$${item.price}</span> $${displayPrice.toFixed(2)}`
+            : `$${item.price}`;
+
         html += `
                 <div class="cart-item">
                     <span class="item-icon">${item.icon}</span>
@@ -246,11 +343,20 @@ function updateCartUI() {
                         <div class="item-name">${item.name}</div>
                         <div class="item-plan"><span data-en="Plan" data-ar="الخطة"></span>: ${item.plan}</div>
                     </div>
-                    <div class="item-price">$${item.price}</div>
+                    <div class="item-price">${priceDisplay}</div>
                     <button class="item-remove" onclick="removeFromCart('${item.id}')"><i class="fas fa-times"></i></button>
                 </div>
             `;
     });
+
+    // Show discount row if promo is active and there are lifetime items
+    if (activePromo && lifetimeTotal > 0) {
+        const discountAmt = lifetimeTotal * DISCOUNT_RATE;
+        discountRow.style.display = 'flex';
+        discountAmountEl.textContent = '-$' + discountAmt.toFixed(2);
+    } else {
+        discountRow.style.display = 'none';
+    }
 
     itemsContainer.innerHTML = html;
     totalEl.textContent = '$' + total.toFixed(2);
@@ -261,6 +367,7 @@ function updateCartUI() {
         el.textContent = el.getAttribute('data-' + lang);
     });
 }
+
 function toggleCart() {
     const panel = document.getElementById('cartPanel');
     const overlay = document.getElementById('cartOverlay');
@@ -268,6 +375,7 @@ function toggleCart() {
     overlay.classList.toggle('active');
     document.body.style.overflow = panel.classList.contains('open') ? 'hidden' : '';
 }
+
 function openCart() {
     const panel = document.getElementById('cartPanel');
     const overlay = document.getElementById('cartOverlay');
@@ -275,6 +383,7 @@ function openCart() {
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
+
 function closeCart() {
     const panel = document.getElementById('cartPanel');
     const overlay = document.getElementById('cartOverlay');
@@ -282,12 +391,27 @@ function closeCart() {
     overlay.classList.remove('active');
     document.body.style.overflow = '';
 }
+
 function checkout() {
-    if (cart.length === 0) { showToast('Your cart is empty!', true); return; }
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    if (cart.length === 0) {
+        showToast('Your cart is empty!', true);
+        return;
+    }
+    let total = cart.reduce((sum, item) => {
+        let price = item.price;
+        if (activePromo && item.plan === 'Lifetime') {
+            price = price * (1 - DISCOUNT_RATE);
+        }
+        return sum + price;
+    }, 0);
     const itemNames = cart.map(i => i.name + ' (' + i.plan + ')').join(', ');
     showToast(`🛒 Checkout complete! Total: $${total.toFixed(2)} for ${itemNames}`);
     cart = [];
+    activePromo = null;
+    promoDiscount = 0;
+    document.getElementById('promoCodeInput').value = '';
+    document.getElementById('promoMessage').textContent = '';
+    document.getElementById('discountRow').style.display = 'none';
     updateCartUI();
     closeCart();
 }
@@ -298,7 +422,23 @@ function checkout() {
 window.addEventListener('load', function() {
     document.body.classList.add('loaded');
     const user = JSON.parse(localStorage.getItem('otk1_user'));
-    if (user) updateUserUI(user);
+    if (user) {
+        updateUserUI(user);
+        googleUser = user;
+    }
+    // Initialize Google Sign-In
+    if (window.google && google.accounts) {
+        google.accounts.id.initialize({
+            client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+            callback: handleGoogleLogin,
+            cancel_on_tap_outside: false,
+            auto_select: false
+        });
+        google.accounts.id.renderButton(
+            document.querySelector('.g_id_signin'),
+            { type: 'standard', size: 'large', theme: 'outline', text: 'sign_in_with', shape: 'rectangular' }
+        );
+    }
 });
 
 window.addEventListener('scroll', function() {
@@ -388,6 +528,25 @@ function showToast(message, isError = false) {
 }
 
 // ============================================================
+// LOGIN MODAL
+// ============================================================
+function openLoginModal() {
+    document.getElementById('loginModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    // Reset username section if not logged in
+    const user = JSON.parse(localStorage.getItem('otk1_user'));
+    if (!user) {
+        document.getElementById('usernameSection').style.display = 'none';
+        document.getElementById('loginSubText').textContent = 'Sign in with Google and set your Minecraft username.';
+        document.getElementById('loginSubText').style.color = '#b99ad6';
+    }
+}
+function closeLoginModal() {
+    document.getElementById('loginModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// ============================================================
 // PRICE MODAL
 // ============================================================
 let selectedPlan = null;
@@ -416,16 +575,21 @@ function openPriceModal(rankName, rankIcon, rankPrefix) {
     const currentLang = document.body.classList.contains('lang-en') ? 'en' : 'ar';
     sub.textContent = sub.getAttribute('data-' + currentLang);
 
+    // Reset lifetime price display
+    document.getElementById('lifetimePrice').innerHTML = '$120 <small>/life</small>';
+
     document.querySelectorAll('.modal-option').forEach(el => el.classList.remove('selected'));
     document.getElementById('modalConfirmBtn').disabled = true;
     document.getElementById('priceModal').classList.add('active');
     document.body.style.overflow = 'hidden';
 }
+
 function closePriceModal() {
     document.getElementById('priceModal').classList.remove('active');
     document.body.style.overflow = '';
     selectedPlan = null;
 }
+
 function selectPlan(element) {
     if (element.classList.contains('coming-opt')) return;
     document.querySelectorAll('.modal-option').forEach(el => el.classList.remove('selected'));
@@ -438,6 +602,7 @@ function selectPlan(element) {
     selectedPlan = element.dataset.plan;
     document.getElementById('modalConfirmBtn').disabled = false;
 }
+
 function confirmPlan() {
     if (!selectedPlan) return;
     const rankName = currentRank.name;
@@ -453,7 +618,10 @@ function confirmPlan() {
     const planPrices = { weekly: 5, monthly: 20, '3months': 60, lifetime: 120 };
 
     const planName = planNames[selectedPlan] || selectedPlan;
-    const price = planPrices[selectedPlan] || 0;
+    let price = planPrices[selectedPlan] || 0;
+
+    // If lifetime and promo is active, apply discount at checkout time
+    // We'll apply it in the cart when promo is active
 
     addToCart(rankName, currentRank.icon, planName, price);
     closePriceModal();
@@ -495,7 +663,58 @@ document.querySelectorAll('#tab-store .store-tab-item.coming-store').forEach(car
     });
 });
 
-// Close modals
+// ============================================================
+// BENEFITS MODAL
+// ============================================================
+function openBenefitsModal(rankName, rankIcon, rankPrefix) {
+    const data = rankBenefits[rankName];
+    if (!data) { showToast('Rank details coming soon!', true); return; }
+    document.getElementById('benefitsRankIcon').textContent = rankIcon;
+    document.getElementById('benefitsRankName').textContent = rankName;
+    document.getElementById('benefitsRankPrefix').textContent = rankPrefix;
+
+    const perksList = document.getElementById('benefitsPerksList');
+    perksList.innerHTML = '';
+    data.perks.forEach(perk => {
+        const span = document.createElement('span');
+        span.className = 'benefit-item';
+        span.innerHTML = `<i class="fas fa-star"></i> ${perk}`;
+        perksList.appendChild(span);
+    });
+
+    const commandsList = document.getElementById('benefitsCommandsList');
+    commandsList.innerHTML = '';
+    if (data.commands.length === 0) {
+        const span = document.createElement('span');
+        span.className = 'cmd-item';
+        span.style.color = '#9880b8';
+        span.textContent = 'No special commands';
+        commandsList.appendChild(span);
+    } else {
+        data.commands.forEach(cmd => {
+            const span = document.createElement('span');
+            span.className = 'cmd-item';
+            span.innerHTML = `<i class="fas fa-terminal"></i> ${cmd}`;
+            commandsList.appendChild(span);
+        });
+    }
+
+    const currentLang = document.body.classList.contains('lang-en') ? 'en' : 'ar';
+    document.querySelectorAll('#benefitsModal [data-en][data-ar]').forEach(el => {
+        el.textContent = el.getAttribute('data-' + currentLang);
+    });
+
+    document.getElementById('benefitsModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+function closeBenefitsModal() {
+    document.getElementById('benefitsModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// ============================================================
+// CLOSE MODALS
+// ============================================================
 document.getElementById('priceModal').addEventListener('click', function(e) { if (e.target === this) closePriceModal(); });
 document.getElementById('benefitsModal').addEventListener('click', function(e) { if (e.target === this) closeBenefitsModal(); });
 document.addEventListener('keydown', function(e) {
@@ -519,42 +738,6 @@ function handleSupport(e) {
     showToast('✅ Ticket sent! We\'ll respond within 24 hours.');
     document.getElementById('supportForm').reset();
     return false;
-}
-
-// ============================================================
-// GOOGLE LOGIN (simulated)
-// ============================================================
-function openLoginModal() {
-    document.getElementById('loginModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-function closeLoginModal() {
-    document.getElementById('loginModal').classList.remove('active');
-    document.body.style.overflow = '';
-}
-function googleLogin() {
-    const user = {
-        name: 'Alex',
-        email: 'alex@example.com',
-        avatar: 'https://ui-avatars.com/api/?name=Alex&background=7b2ffc&color=fff&size=64'
-    };
-    localStorage.setItem('otk1_user', JSON.stringify(user));
-    updateUserUI(user);
-    closeLoginModal();
-    showToast(`✅ Welcome, ${user.name}!`);
-}
-function updateUserUI(user) {
-    document.getElementById('loginBtn').style.display = 'none';
-    const compact = document.getElementById('userProfileCompact');
-    compact.style.display = 'flex';
-    document.getElementById('userAvatarCompact').src = user.avatar;
-    document.getElementById('userNameCompact').textContent = user.name;
-}
-function logout() {
-    localStorage.removeItem('otk1_user');
-    document.getElementById('loginBtn').style.display = 'flex';
-    document.getElementById('userProfileCompact').style.display = 'none';
-    showToast('Logged out successfully.');
 }
 
 // ============================================================
@@ -603,5 +786,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('cartOverlay').addEventListener('click', closeCart);
 
-    console.log('🚀 Otk1 Network — Enhanced with Particles & Google Login!');
+    // Promo code input enter key
+    document.getElementById('promoCodeInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            applyPromoCode();
+        }
+    });
+
+    console.log('🚀 Otk1 Network — Google Sign-In + Promo Codes (XBR, DEY, ACR, OTK)');
 });
