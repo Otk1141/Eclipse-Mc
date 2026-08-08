@@ -1,607 +1,1852 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Otk1 Network | Space Minecraft Servers</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css" />
-</head>
-<body class="lang-en" dir="ltr">
+/* ============================================================
+   ROOT & RESET
+   ============================================================ */
+:root {
+    --primary: #7b2ffc;
+    --primary-light: #a855f7;
+    --primary-dark: #4c1d95;
+    --gold: #fbbf24;
+    --gold-dark: #f59e0b;
+    --success: #4ade80;
+    --danger: #ff6b6b;
+    --bg-dark: #0a0618;
+    --glass-bg: rgba(18, 8, 30, 0.55);
+    --glass-border: rgba(180, 100, 255, 0.15);
+    --text-primary: #f0e6ff;
+    --text-secondary: #c8b8e0;
+    --text-muted: #9880b8;
+    --shadow-glow: 0 0 40px rgba(120, 50, 200, 0.15);
+    --radius: 24px;
+    --radius-lg: 32px;
+    --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
 
-    <!-- PARTICLE CANVAS -->
-    <canvas id="particlesCanvas"></canvas>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
-    <!-- SPACE BACKGROUND -->
-    <div class="space-bg">
-        <div class="stars"></div>
-        <div class="nebula"></div>
-        <div class="nebula"></div>
-        <div class="nebula"></div>
-    </div>
+body {
+    font-family: 'Inter', 'Segoe UI', 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+    min-height: 100vh;
+    background: var(--bg-dark);
+    color: #e8e0f0;
+    overflow-x: hidden;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+body.loaded { opacity: 1; }
 
-    <!-- PROGRESS BAR -->
-    <div class="progress-bar" id="progressBar"></div>
+/* --- Particle Canvas --- */
+#particlesCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
 
-    <!-- TOAST -->
-    <div class="toast" id="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Copied to clipboard!</span>
-    </div>
+/* --- Space Background --- */
+.space-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background:
+        radial-gradient(ellipse at 20% 50%, #1a0a30 0%, #0a0618 70%),
+        radial-gradient(ellipse at 80% 20%, #2d1050 0%, #0a0618 60%),
+        radial-gradient(ellipse at 50% 100%, #1f0a3a 0%, #0a0618 50%);
+    overflow: hidden;
+}
+.space-bg .stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 160px 30px, #ddd, transparent),
+        radial-gradient(1px 1px at 200px 60px, #fff, transparent),
+        radial-gradient(2px 2px at 250px 20px, #eee, transparent),
+        radial-gradient(1px 1px at 300px 90px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(2px 2px at 350px 50px, #fff, transparent),
+        radial-gradient(1px 1px at 400px 30px, #ddd, transparent),
+        radial-gradient(2px 2px at 450px 70px, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1px 1px at 500px 20px, #fff, transparent),
+        radial-gradient(2px 2px at 550px 80px, #eee, transparent),
+        radial-gradient(1px 1px at 600px 40px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(2px 2px at 650px 60px, #fff, transparent),
+        radial-gradient(1px 1px at 700px 30px, #ddd, transparent),
+        radial-gradient(2px 2px at 750px 90px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 800px 50px, #fff, transparent),
+        radial-gradient(2px 2px at 850px 20px, #eee, transparent),
+        radial-gradient(1px 1px at 900px 70px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 950px 40px, #fff, transparent),
+        radial-gradient(1px 1px at 1000px 80px, #ddd, transparent),
+        radial-gradient(2px 2px at 1050px 30px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 1100px 60px, #fff, transparent),
+        radial-gradient(2px 2px at 1150px 20px, #eee, transparent),
+        radial-gradient(1px 1px at 1200px 90px, rgba(255,255,255,0.5), transparent);
+    background-size: 200px 200px;
+    opacity: 0.8;
+    animation: twinkle 6s ease-in-out infinite alternate;
+}
+@keyframes twinkle { 0% { opacity: 0.4; } 100% { opacity: 0.9; } }
+.space-bg .nebula {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.12;
+    animation: floatNebula 20s ease-in-out infinite alternate;
+}
+.space-bg .nebula:nth-child(2) {
+    width: 700px; height: 700px; top: -200px; right: -150px;
+    background: #7b2ffc; animation-duration: 25s;
+}
+.space-bg .nebula:nth-child(3) {
+    width: 600px; height: 600px; bottom: -150px; left: -150px;
+    background: #ff0055; animation-duration: 30s; animation-delay: -5s;
+}
+.space-bg .nebula:nth-child(4) {
+    width: 500px; height: 500px; top: 40%; left: 40%;
+    transform: translate(-50%, -50%);
+    background: #3a1a7a; opacity: 0.06; animation-duration: 35s;
+}
+@keyframes floatNebula {
+    0% { transform: translate(0,0) scale(1); }
+    100% { transform: translate(40px, -30px) scale(1.1); }
+}
 
-    <!-- USER PROFILE -->
-    <div class="user-profile" id="userProfile" style="display:none;">
-        <img id="userAvatar" src="" alt="avatar" />
-        <span id="userName">User</span>
-        <button onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
-    </div>
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0618; }
+::-webkit-scrollbar-thumb { background: #7b2ffc; border-radius: 10px; box-shadow: 0 0 20px rgba(120,50,200,0.3); }
+::-webkit-scrollbar-thumb:hover { background: #a855f7; }
 
-    <!-- LOGIN MODAL -->
-    <div class="login-modal-overlay" id="loginModal">
-        <div class="login-modal">
-            <button class="modal-close" onclick="closeLoginModal()"><i class="fas fa-times"></i></button>
-            <h2><i class="fas fa-user-astronaut"></i> <span data-en="Welcome Back" data-ar="مرحباً بعودتك"></span></h2>
-            <p data-en="Sign in to access your ranks and purchases." data-ar="سجل الدخول للوصول إلى رتبك ومشترياتك."></p>
-            <button class="google-login-btn" onclick="googleLogin()">
-                <i class="fab fa-google"></i> <span data-en="Sign in with Google" data-ar="سجل الدخول باستخدام جوجل"></span>
-            </button>
-            <p class="login-note" data-en="Demo: click to simulate login" data-ar="تجريبي: اضغط لمحاكاة الدخول"></p>
-        </div>
-    </div>
+.main-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 20px 24px 40px;
+}
 
-    <!-- CART OVERLAY -->
-    <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+.progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 0%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--gold));
+    z-index: 99999;
+    transition: width 0.1s ease;
+    box-shadow: 0 0 20px var(--primary);
+}
+.back-to-top {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 9999;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.back-to-top.visible { opacity: 1; transform: scale(1); }
+.back-to-top:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: scale(1.1);
+    box-shadow: 0 0 40px var(--primary);
+}
 
-    <!-- CART PANEL -->
-    <div class="cart-panel" id="cartPanel">
-        <div class="cart-header">
-            <h2><i class="fas fa-shopping-cart"></i> <span data-en="Your Cart" data-ar="سلة المشتريات"></span></h2>
-            <button class="cart-close" onclick="closeCart()"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="cart-items" id="cartItems">
-            <div class="empty-cart">
-                <i class="fas fa-shopping-cart"></i>
-                <p data-en="Your cart is empty" data-ar="سلة المشتريات فارغة"></p>
-                <span class="sub" data-en="Browse ranks and add items to get started" data-ar="تصفح الرتب وأضف العناصر للبدء"></span>
-            </div>
-        </div>
-        <div class="cart-footer">
-            <div class="cart-total">
-                <span class="total-label" data-en="Total" data-ar="المجموع"></span>
-                <span class="total-price" id="cartTotal">$0.00</span>
-            </div>
-            <button class="checkout-btn" id="checkoutBtn" disabled onclick="checkout()">
-                <i class="fas fa-lock"></i>
-                <span data-en="Proceed to Checkout" data-ar="متابعة الدفع"></span>
-            </button>
-        </div>
-    </div>
+.toast {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    background: rgba(18,8,30,0.9);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(180,100,255,0.2);
+    border-radius: 16px;
+    padding: 16px 24px;
+    color: #f0e6ff;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+    transform: translateY(120px) scale(0.9);
+    opacity: 0;
+    transition: all 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 400px;
+}
+.toast.show { transform: translateY(0) scale(1); opacity: 1; }
+.toast i { font-size: 20px; color: #4ade80; }
+.toast.error i { color: #ff6b6b; }
 
-    <!-- BENEFITS MODAL -->
-    <div class="benefits-modal-overlay" id="benefitsModal">
-        <div class="benefits-modal">
-            <button class="modal-close" onclick="closeBenefitsModal()"><i class="fas fa-times"></i></button>
-            <span class="benefits-rank-icon" id="benefitsRankIcon">⚔️</span>
-            <div class="benefits-rank-name" id="benefitsRankName">Knight</div>
-            <div style="text-align:center;"><span class="benefits-rank-prefix" id="benefitsRankPrefix">KNIGHT</span></div>
-            <div class="benefits-divider"></div>
-            <div class="benefits-section">
-                <span class="benefits-label" data-en="✦ Perks" data-ar="✦ المزايا"></span>
-                <div class="benefits-list" id="benefitsPerksList"></div>
-            </div>
-            <div class="benefits-section">
-                <span class="benefits-label" data-en="✦ Commands" data-ar="✦ الأوامر"></span>
-                <div class="commands-list" id="benefitsCommandsList"></div>
-            </div>
-            <button class="benefits-close-btn" onclick="closeBenefitsModal()">
-                <span data-en="Got it!" data-ar="حسناً!"></span>
-            </button>
-        </div>
-    </div>
+/* ----- NAVBAR ----- */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px 24px;
+    padding: 12px 28px;
+    background: rgba(12,6,28,0.55);
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    border-radius: 80px;
+    border: 1px solid rgba(180,100,255,0.2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+    margin-bottom: 32px;
+    transition: all 0.3s ease;
+}
+.navbar:hover {
+    border-color: rgba(180,100,255,0.35);
+    box-shadow: 0 24px 80px rgba(90,20,180,0.2);
+}
+.nav-brand { display: flex; align-items: center; gap: 14px; }
+.nav-brand .logo-icon {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a855f7, #6b21a8, #4c1d95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 900;
+    color: #fff;
+    box-shadow: 0 0 30px rgba(120,50,200,0.5);
+    font-family: 'Orbitron', sans-serif;
+    animation: pulse-logo 3s ease-in-out infinite;
+}
+@keyframes pulse-logo {
+    0%,100% { box-shadow: 0 0 30px rgba(120,50,200,0.5); }
+    50% { box-shadow: 0 0 60px rgba(120,50,200,0.8); }
+}
+.nav-brand .logo-icon:hover { transform: scale(1.05) rotate(-5deg); box-shadow: 0 0 50px rgba(120,50,200,0.7); }
+.nav-brand .brand-name {
+    font-size: 26px;
+    font-weight: 900;
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(135deg, #e0b3ff, #b77aff, #7b2ffc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.5px;
+    text-shadow: 0 0 40px rgba(120,50,200,0.2);
+}
+.nav-center {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.nav-accounts { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.account-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 18px 6px 14px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 600;
+    background: rgba(40,15,65,0.5);
+    border: 1px solid rgba(180,100,255,0.12);
+    backdrop-filter: blur(8px);
+    color: #d4c0f0;
+    transition: all 0.3s ease;
+}
+.account-badge:hover {
+    background: rgba(40,15,65,0.7);
+    border-color: rgba(180,100,255,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+.account-badge .role-tag {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 2px 12px;
+    border-radius: 30px;
+    background: #7b2ffc;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(120,50,200,0.3);
+}
+.account-badge .role-tag.admin { background: #ff6b6b; box-shadow: 0 0 20px rgba(255,107,107,0.3); }
+.account-badge .role-tag.owner {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a0a30;
+    box-shadow: 0 0 20px rgba(251,191,36,0.3);
+}
+.account-badge .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+}
+.account-badge .status-dot.online { background: #4ade80; box-shadow: 0 0 16px #4ade80; }
+.account-badge .status-dot.offline { background: #f87171; box-shadow: 0 0 16px #f87171; }
+.account-badge.coming { opacity: 0.7; border-style: dashed; }
 
-    <!-- PRICE MODAL -->
-    <div class="price-modal-overlay" id="priceModal">
-        <div class="price-modal">
-            <button class="modal-close" onclick="closePriceModal()"><i class="fas fa-times"></i></button>
-            <span class="modal-rank-icon" id="modalRankIcon">⚔️</span>
-            <div class="modal-rank-name" id="modalRankName">Knight</div>
-            <div style="text-align:center;"><span class="modal-rank-prefix" id="modalRankPrefix">KNIGHT</span></div>
-            <p class="modal-sub" id="modalSub" data-en="Choose your pricing plan for this rank." data-ar="اختر خطة السعر لهذه الرتبة."></p>
-            <div class="modal-options" id="modalOptions">
-                <div class="modal-option" data-plan="weekly" onclick="selectPlan(this)">
-                    <span class="opt-icon">⚡</span>
-                    <div class="opt-name" data-en="Weekly" data-ar="أسبوعي"></div>
-                    <div class="opt-price">$5 <small>/wk</small></div>
-                    <div class="opt-desc" data-en="Perfect for trying out" data-ar="مثالي للتجربة"></div>
-                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
-                </div>
-                <div class="modal-option popular-opt" data-plan="monthly" onclick="selectPlan(this)">
-                    <span class="opt-icon">🔥</span>
-                    <div class="opt-name" data-en="Monthly" data-ar="شهري"></div>
-                    <div class="opt-price">$20 <small>/mo</small></div>
-                    <div class="opt-desc" data-en="Best value for active players" data-ar="أفضل قيمة للاعبين النشطين"></div>
-                    <span class="opt-badge">Popular</span>
-                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
-                </div>
-                <div class="modal-option" data-plan="3months" onclick="selectPlan(this)">
-                    <span class="opt-icon">💎</span>
-                    <div class="opt-name" data-en="3 Months" data-ar="3 أشهر"></div>
-                    <div class="opt-price">$60 <small>/3mo</small></div>
-                    <div class="opt-desc" data-en="Save big with commitment" data-ar="وفّر كثيراً مع التزام"></div>
-                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
-                </div>
-                <div class="modal-option" data-plan="lifetime" onclick="selectPlan(this)">
-                    <span class="opt-icon">👑</span>
-                    <div class="opt-name" data-en="Lifetime" data-ar="مدى الحياة"></div>
-                    <div class="opt-price">$120 <small>/life</small></div>
-                    <div class="opt-desc" data-en="Ultimate status – forever" data-ar="الرتبة النهائية – للأبد"></div>
-                    <span class="opt-badge">Best Deal</span>
-                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
-                </div>
-            </div>
-            <div class="modal-options" id="modalFreeOption" style="display:none;">
-                <div class="modal-option" data-plan="free" onclick="selectPlan(this)" style="border-color:#4ade80;">
-                    <span class="opt-icon">🎁</span>
-                    <div class="opt-name" data-en="Free" data-ar="مجاني"></div>
-                    <div class="opt-price" style="color:#4ade80;">$0</div>
-                    <div class="opt-desc" data-en="Claim now – no cost!" data-ar="احصل عليه الآن – مجاني!"></div>
-                    <span class="opt-check"><i class="fas fa-check-circle"></i></span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-confirm" id="modalConfirmBtn" disabled onclick="confirmPlan()">
-                    <span data-en="Add to Cart" data-ar="أضف إلى السلة"></span>
-                </button>
-                <button class="btn-cancel" onclick="closePriceModal()">
-                    <span data-en="Cancel" data-ar="إلغاء"></span>
-                </button>
-            </div>
-        </div>
-    </div>
+.nav-socials { display: flex; align-items: center; gap: 8px; }
+.nav-socials a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: rgba(40,15,65,0.4);
+    border: 1px solid rgba(180,100,255,0.1);
+    color: #b99ad6;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    backdrop-filter: blur(4px);
+}
+.nav-socials a:hover {
+    transform: scale(1.15) translateY(-3px);
+    border-color: rgba(180,100,255,0.4);
+    box-shadow: 0 8px 30px rgba(120,40,220,0.3);
+    background: rgba(40,15,65,0.7);
+}
+.nav-socials a.tiktok:hover { color: #ff0050; border-color: #ff0050; box-shadow: 0 8px 30px rgba(255,0,80,0.25); }
+.nav-socials a.youtube:hover { color: #ff0033; border-color: #ff0033; box-shadow: 0 8px 30px rgba(255,0,50,0.25); }
+.nav-socials a.instagram:hover { color: #f09433; border-color: #f09433; box-shadow: 0 8px 30px rgba(240,148,51,0.25); }
+.nav-socials .social-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #9880b8;
+    letter-spacing: 0.5px;
+    margin-right: 4px;
+    opacity: 0.7;
+}
 
-    <!-- ===== MAIN WRAPPER ===== -->
-    <div class="main-wrapper">
+.nav-auth {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.login-btn {
+    background: linear-gradient(135deg, #7b2ffc, #6b21a8);
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 8px 18px;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(120,50,200,0.3);
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.login-btn:hover { transform: scale(1.05); box-shadow: 0 8px 30px rgba(120,50,200,0.5); }
+.user-profile-compact {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(40,15,65,0.5);
+    padding: 4px 12px 4px 4px;
+    border-radius: 40px;
+    border: 1px solid rgba(180,100,255,0.15);
+    backdrop-filter: blur(4px);
+}
+.user-profile-compact img { width: 32px; height: 32px; border-radius: 50%; border: 2px solid #a855f7; }
+.user-profile-compact span { font-weight: 600; color: #f0e6ff; font-size: 13px; }
 
-        <!-- ===== NAVBAR ===== -->
-        <nav class="navbar">
-            <div class="nav-brand">
-                <div class="logo-icon">O</div>
-                <span class="brand-name">Otk1</span>
-            </div>
-            <div class="nav-center">
-                <div class="nav-accounts">
-                    <div class="account-badge">
-                        <span class="status-dot online"></span>
-                        <span>Otk1</span>
-                        <span class="role-tag owner">Owner</span>
-                    </div>
-                    <div class="account-badge coming">
-                        <span class="status-dot offline"></span>
-                        <span class="en-text">Admin</span>
-                        <span class="ar-text">مدير</span>
-                        <span class="role-tag admin">Soon</span>
-                    </div>
-                </div>
-                <div class="nav-socials">
-                    <span class="social-label"><i class="fas fa-share-alt" style="margin-right:4px;"></i><span data-en="Follow" data-ar="تابع"></span></span>
-                    <a href="https://www.tiktok.com/@otk1141" target="_blank" rel="noopener noreferrer" class="tiktok" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-                    <a href="https://youtube.com/@otk1141" target="_blank" rel="noopener noreferrer" class="youtube" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                    <a href="https://www.instagram.com/37.8b" target="_blank" rel="noopener noreferrer" class="instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                </div>
-                <div class="nav-auth">
-                    <button id="loginBtn" class="login-btn" onclick="openLoginModal()">
-                        <i class="fas fa-user"></i> <span data-en="Sign In" data-ar="تسجيل الدخول"></span>
-                    </button>
-                    <div class="user-profile-compact" id="userProfileCompact" style="display:none;">
-                        <img id="userAvatarCompact" src="" alt="avatar" />
-                        <span id="userNameCompact">User</span>
-                    </div>
-                </div>
-                <div class="nav-cart" onclick="toggleCart()" id="cartBtn">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-badge hidden" id="cartBadge">0</span>
-                </div>
-            </div>
-            <div class="nav-lang">
-                <button id="btnEn" class="active" onclick="setLanguage('en')">EN</button>
-                <button id="btnAr" onclick="setLanguage('ar')">AR</button>
-            </div>
-        </nav>
+.nav-lang {
+    display: flex;
+    gap: 4px;
+    background: rgba(20,8,40,0.4);
+    border-radius: 40px;
+    padding: 4px;
+    border: 1px solid rgba(180,100,255,0.1);
+    backdrop-filter: blur(4px);
+}
+.nav-lang button {
+    background: transparent;
+    border: none;
+    color: #a884c9;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 6px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+.nav-lang button.active {
+    background: linear-gradient(135deg, #7b2ffc, #6b21a8);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(120,40,220,0.4);
+}
+.nav-lang button:hover:not(.active) { color: #d4b5ff; background: rgba(120,40,220,0.15); }
 
-        <!-- ===== TABS CONTAINER ===== -->
-        <div class="tabs-container">
+.nav-cart {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: rgba(40,15,65,0.4);
+    border: 1px solid rgba(180,100,255,0.1);
+    color: #b99ad6;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    backdrop-filter: blur(4px);
+}
+.nav-cart:hover {
+    transform: scale(1.1) translateY(-2px);
+    border-color: rgba(180,100,255,0.3);
+    color: #f0e6ff;
+    box-shadow: 0 8px 30px rgba(120,40,220,0.2);
+}
+.nav-cart .cart-badge {
+    position: absolute;
+    top: -4px; right: -4px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a0a30;
+    font-size: 10px;
+    font-weight: 800;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 0 20px rgba(251,191,36,0.3);
+    transition: all 0.3s ease;
+}
+.nav-cart .cart-badge.hidden { transform: scale(0); opacity: 0; }
 
-            <div class="tabs-nav">
-                <button class="tab-btn active" data-tab="home"><i class="fas fa-home"></i><span data-en="Home" data-ar="الرئيسية"></span></button>
-                <button class="tab-btn" data-tab="ranks"><i class="fas fa-crown"></i><span data-en="Ranks" data-ar="الرتب"></span></button>
-                <button class="tab-btn" data-tab="store"><i class="fas fa-store"></i><span data-en="Store" data-ar="المتجر"></span></button>
-                <button class="tab-btn" data-tab="rules"><i class="fas fa-gavel"></i><span data-en="Rules" data-ar="القوانين"></span></button>
-                <button class="tab-btn" data-tab="support"><i class="fas fa-headset"></i><span data-en="Support" data-ar="الدعم"></span></button>
-                <button class="tab-btn" data-tab="faq"><i class="fas fa-question-circle"></i><span data-en="FAQ" data-ar="الأسئلة"></span></button>
-                <button class="tab-btn" data-tab="social"><i class="fas fa-share-alt"></i><span data-en="Social" data-ar="وسائل التواصل"></span></button>
-                <button class="tab-btn" data-tab="ip"><i class="fas fa-server"></i><span data-en="IP" data-ar="الآي بي"></span><span class="badge-tab">Soon</span></button>
-            </div>
+.cart-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 99998;
+    background: rgba(10,6,24,0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+}
+.cart-overlay.active { opacity: 1; visibility: visible; }
 
-            <div class="tabs-content">
+.cart-panel {
+    position: fixed;
+    top: 0; right: 0;
+    width: 420px;
+    max-width: 100vw;
+    height: 100%;
+    z-index: 99999;
+    background: rgba(18,8,30,0.95);
+    backdrop-filter: blur(32px) saturate(1.4);
+    -webkit-backdrop-filter: blur(32px) saturate(1.4);
+    border-left: 1px solid rgba(180,100,255,0.15);
+    box-shadow: -20px 0 60px rgba(0,0,0,0.6);
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+.cart-panel.open { transform: translateX(0); }
+.cart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 28px 16px 28px;
+    border-bottom: 1px solid rgba(180,100,255,0.06);
+    flex-shrink: 0;
+}
+.cart-header h2 {
+    font-size: 22px;
+    font-weight: 800;
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.cart-header h2 i { font-size: 20px; color: #fbbf24; -webkit-text-fill-color: initial; }
+.cart-header .cart-close {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(180,100,255,0.1);
+    color: #9880b8;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+}
+.cart-header .cart-close:hover {
+    background: rgba(255,107,107,0.15);
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+    transform: rotate(90deg);
+}
 
-                <!-- ===== HOME TAB ===== -->
-                <div class="tab-pane active" id="tab-home">
-                    <div class="home-hero">
-                        <h1 class="main-title" data-en="🌌 Welcome to Otk1 Network" data-ar="🌌 مرحباً بك في شبكة Otk1"></h1>
-                        <p class="main-sub" data-en="Looking for a server that combines competition, survival, and fun in one place? You've come to the right spot." data-ar="هل تبحث عن سيرفر يجمع بين المنافسة، البقاء، والمتعة في مكان واحد؟ لقد وصلت إلى المكان الصحيح."></p>
-                        <div class="divider-glow"></div>
-                    </div>
-                    <div class="home-grid">
-                        <div class="home-card">
-                            <span class="card-icon-big">🌍</span>
-                            <h4 data-en="Earth Survival" data-ar="سيرفر البقاء إيرث"></h4>
-                            <div class="card-tag" data-en="Survival · Towny · Economy" data-ar="بقاء · تاوني · اقتصاد"></div>
-                            <p data-en="Enjoy a world inspired by planet Earth. Build your city, make friends, and explore a unique Survival experience filled with adventures." data-ar="استمتع بعالم مستوحى من كوكب الأرض، ابنِ مدينتك، كوّن صداقات، واستكشف تجربة Survival مختلفة ومليئة بالمغامرات."></p>
-                            <div class="status-online"><i class="fas fa-circle"></i> 24/7 Online</div>
-                        </div>
-                        <div class="home-card">
-                            <span class="card-icon-big">🌊</span>
-                            <h4 data-en="Neptune Practice" data-ar="نبتون تدريب"></h4>
-                            <div class="card-tag" data-en="Practice · Ranked · Kits" data-ar="تدريب · ترتيب · كيتات"></div>
-                            <p data-en="The best place to sharpen your PvP skills with fast matches, varied kits, and professional training to become the strongest player." data-ar="أفضل مكان لتطوير مهاراتك في PvP مع مباريات سريعة، Kits متنوعة، وتدريب احترافي لتصبح أقوى لاعب."></p>
-                            <div class="status-coming"><i class="fas fa-hourglass-half"></i> <span data-en="Coming Soon" data-ar="قريباً"></span></div>
-                        </div>
-                        <div class="home-card">
-                            <span class="card-icon-big">🌌</span>
-                            <h4 data-en="Galaxy BoxPvP" data-ar="جالاكسي بوكس بي في بي"></h4>
-                            <div class="card-tag" data-en="Box PvP · Loot · Chests" data-ar="بوكس بي في بي · غنائم · صناديق"></div>
-                            <p data-en="Enter the strongest PvP battles, upgrade your gear, fight players, and climb to the top in a system full of challenges and excitement." data-ar="ادخل إلى أقوى معارك الـPvP، طوّر عتادك، قاتل اللاعبين، واصعد إلى القمة في نظام مليء بالتحديات والحماس."></p>
-                            <div class="status-coming"><i class="fas fa-hourglass-half"></i> <span data-en="Coming Soon" data-ar="قريباً"></span></div>
-                        </div>
-                    </div>
-                    <div style="text-align:center; margin-top:22px;">
-                        <span style="font-size:18px; font-weight:700; color:#b99ad6; font-family:'Orbitron',sans-serif;" data-en="🔥 Coming Soon" data-ar="🔥 قريباً"></span>
-                        <div class="coming-soon-grid">
-                            <span class="coming-chip"><i class="fas fa-heart"></i> Lifesteal</span>
-                            <span class="coming-chip"><i class="fas fa-bed"></i> BedWars</span>
-                            <span class="coming-chip"><i class="fas fa-cloud"></i> SkyWars</span>
-                        </div>
-                    </div>
-                    <div class="why-section">
-                        <h3 class="why-title" data-en="⭐ Why Our Server?" data-ar="⭐ لماذا سيرفرنا؟"></h3>
-                        <div class="why-grid">
-                            <div class="why-item"><span class="why-icon">🚀</span><div class="why-label" data-en="Fast Performance" data-ar="أداء سريع"></div><div class="why-desc" data-en="Fast performance and great ping" data-ar="أداء سريع وPing ممتاز"></div></div>
-                            <div class="why-item"><span class="why-icon">🛡️</span><div class="why-label" data-en="Strong Protection" data-ar="حماية قوية"></div><div class="why-desc" data-en="Strong anti-cheat protection" data-ar="حماية قوية ضد الغش"></div></div>
-                            <div class="why-item"><span class="why-icon">👥</span><div class="why-label" data-en="Active Community" data-ar="مجتمع نشط"></div><div class="why-desc" data-en="Respectful community and active staff" data-ar="مجتمع محترم وإدارة متفاعلة"></div></div>
-                            <div class="why-item"><span class="why-icon">🎁</span><div class="why-label" data-en="Constant Updates" data-ar="تحديثات مستمرة"></div><div class="why-desc" data-en="Regular updates and new content" data-ar="تحديثات ومحتوى جديد باستمرار"></div></div>
-                            <div class="why-item"><span class="why-icon">⭐</span><div class="why-label" data-en="All-in-One Experience" data-ar="تجربة شاملة"></div><div class="why-desc" data-en="An experience combining competition, survival, and fun" data-ar="تجربة تجمع بين التنافس، البقاء، والمرح"></div></div>
-                        </div>
-                    </div>
-                </div>
+.cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px 20px 20px;
+}
+.cart-items .empty-cart {
+    text-align: center;
+    padding: 60px 20px;
+    color: #9880b8;
+}
+.cart-items .empty-cart i { font-size: 56px; margin-bottom: 16px; opacity: 0.3; display: block; }
+.cart-items .empty-cart p { font-size: 16px; font-weight: 500; }
+.cart-items .empty-cart .sub { font-size: 14px; color: #6a5a80; margin-top: 4px; }
 
-                <!-- ===== RANKS TAB ===== -->
-                <div class="tab-pane" id="tab-ranks">
-                    <div class="rank-section-title"><i class="fas fa-crown"></i><span data-en="Earth Survival Ranks" data-ar="رتب سيرفر البقاء إيرث"></span></div>
-                    <div class="rank-section-sub" data-en="Click on any rank to see what it gives you." data-ar="انقر على أي رتبة لترى ما تقدمه لك."></div>
-                    <div class="rank-grid">
-                        <div class="rank-mini knight" data-rank-name="Knight" data-rank-icon="⚔️" data-rank-prefix="KNIGHT">
-                            <span class="rank-mini-icon">⚔️</span>
-                            <div class="rank-mini-name">Knight</div>
-                            <div class="rank-mini-prefix">KNIGHT</div>
-                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="5x Homes" data-ar="5 منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span></div>
-                            <div class="rank-click-hint" data-en="Click for details" data-ar="انقر للتفاصيل"></div>
-                        </div>
-                        <div class="rank-mini lord" data-rank-name="Lord" data-rank-icon="👑" data-rank-prefix="LORD">
-                            <span class="rank-mini-icon">👑</span>
-                            <div class="rank-mini-name">Lord</div>
-                            <div class="rank-mini-prefix">LORD</div>
-                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="10x Homes" data-ar="10 منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span></div>
-                            <div class="rank-click-hint" data-en="Click for details" data-ar="انقر للتفاصيل"></div>
-                        </div>
-                        <div class="rank-mini paladin" data-rank-name="Paladin" data-rank-icon="🛡️" data-rank-prefix="PALADIN">
-                            <span class="rank-mini-icon">🛡️</span>
-                            <div class="rank-mini-name">Paladin</div>
-                            <div class="rank-mini-prefix">PALADIN</div>
-                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="∞ Homes" data-ar="∞ منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span></div>
-                            <div class="rank-click-hint" data-en="Click for details" data-ar="انقر للتفاصيل"></div>
-                        </div>
-                        <div class="rank-mini duke" data-rank-name="Duke" data-rank-icon="🏰" data-rank-prefix="DUKE">
-                            <span class="rank-mini-icon">🏰</span>
-                            <div class="rank-mini-name">Duke</div>
-                            <div class="rank-mini-prefix">DUKE</div>
-                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="∞ Homes" data-ar="∞ منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span> · <i class="fas fa-feather-alt"></i> <span data-en="Fly" data-ar="طيران"></span></div>
-                            <div class="rank-click-hint" data-en="Click for details" data-ar="انقر للتفاصيل"></div>
-                        </div>
-                        <div class="rank-mini king" data-rank-name="King" data-rank-icon="🌟" data-rank-prefix="KING">
-                            <span class="rank-mini-icon">🌟</span>
-                            <div class="rank-mini-name">King</div>
-                            <div class="rank-mini-prefix">KING</div>
-                            <div class="rank-mini-benefits"><i class="fas fa-home"></i> <span data-en="∞ Homes" data-ar="∞ منازل"></span> · <i class="fas fa-box"></i> <span data-en="Kit" data-ar="كيت"></span> · <i class="fas fa-feather-alt"></i> <span data-en="Fly" data-ar="طيران"></span> · <i class="fas fa-heartbeat"></i> <span data-en="Heal" data-ar="شفاء"></span></div>
-                            <div class="rank-click-hint" data-en="Click for details" data-ar="انقر للتفاصيل"></div>
-                        </div>
-                    </div>
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: rgba(0,0,0,0.25);
+    border-radius: 16px;
+    border: 1px solid rgba(180,100,255,0.06);
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    animation: cartItemSlide 0.3s ease;
+}
+@keyframes cartItemSlide { from { opacity:0; transform: translateX(-20px); } to { opacity:1; transform: translateX(0); } }
+.cart-item:hover { border-color: rgba(180,100,255,0.15); background: rgba(0,0,0,0.35); }
+.cart-item .item-icon { font-size: 28px; flex-shrink: 0; width: 44px; text-align: center; }
+.cart-item .item-info { flex: 1; min-width: 0; }
+.cart-item .item-info .item-name { font-size: 15px; font-weight: 700; color: #f0e6ff; }
+.cart-item .item-info .item-plan { font-size: 12px; color: #9880b8; display: flex; align-items: center; gap: 6px; }
+.cart-item .item-price { font-size: 17px; font-weight: 800; color: #fbbf24; font-family: 'Orbitron', sans-serif; flex-shrink: 0; margin-right: 4px; }
+.cart-item .item-remove {
+    background: transparent;
+    border: none;
+    color: #6a5a80;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 4px 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.cart-item .item-remove:hover { color: #ff6b6b; background: rgba(255,107,107,0.1); transform: scale(1.1); }
 
-                    <!-- Galaxy BoxPvP Ranks (Coming Soon) – Member instead of User -->
-                    <div class="rank-section-title" style="margin-top:32px;"><i class="fas fa-box-open"></i><span data-en="Galaxy BoxPvP Ranks" data-ar="رتب جالاكسي بوكس بي في بي"></span> <span class="badge-tab soon" style="font-size:12px; padding:2px 14px;">Coming Soon</span></div>
-                    <div class="rank-section-sub" data-en="These ranks will be available soon. Stay tuned!" data-ar="هذه الرتب ستكون متاحة قريباً. ترقبوا!"></div>
-                    <div class="rank-grid">
-                        <div class="rank-mini member coming-soon-rank" data-rank-name="Member" data-rank-icon="🪖" data-rank-prefix="MEMBER">
-                            <span class="rank-mini-icon">🪖</span>
-                            <div class="rank-mini-name">Member</div>
-                            <div class="rank-mini-prefix">MEMBER</div>
-                            <div class="rank-mini-benefits"><span data-en="Wooden Kit · Iron Armor" data-ar="كيت خشبي · درع حديدي"></span></div>
-                            <div class="rank-coming-badge">Coming Soon</div>
-                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
-                        </div>
-                        <div class="rank-mini vip coming-soon-rank" data-rank-name="VIP" data-rank-icon="⭐" data-rank-prefix="VIP">
-                            <span class="rank-mini-icon">⭐</span>
-                            <div class="rank-mini-name">VIP</div>
-                            <div class="rank-mini-prefix">VIP</div>
-                            <div class="rank-mini-benefits"><span data-en="Iron Armor Prot II · 24 Carrots" data-ar="درع حديدي حماية II · 24 جزر"></span></div>
-                            <div class="rank-coming-badge">Coming Soon</div>
-                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
-                        </div>
-                        <div class="rank-mini terra coming-soon-rank" data-rank-name="Terra" data-rank-icon="🌍" data-rank-prefix="TERRA">
-                            <span class="rank-mini-icon">🌍</span>
-                            <div class="rank-mini-name">Terra</div>
-                            <div class="rank-mini-prefix">TERRA</div>
-                            <div class="rank-mini-benefits"><span data-en="Iron Prot III · Mending · 32 Carrots" data-ar="حديدي حماية III · إصلاح · 32 جزر"></span></div>
-                            <div class="rank-coming-badge">Coming Soon</div>
-                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
-                        </div>
-                        <div class="rank-mini nova coming-soon-rank" data-rank-name="Nova" data-rank-icon="🌟" data-rank-prefix="NOVA">
-                            <span class="rank-mini-icon">🌟</span>
-                            <div class="rank-mini-name">Nova</div>
-                            <div class="rank-mini-prefix">NOVA</div>
-                            <div class="rank-mini-benefits"><span data-en="Diamond Prot III · 46 Carrots · 12 GApples" data-ar="ماسي حماية III · 46 جزر · 12 تفاح ذهبي"></span></div>
-                            <div class="rank-coming-badge">Coming Soon</div>
-                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
-                        </div>
-                        <div class="rank-mini nebula coming-soon-rank" data-rank-name="Nebula" data-rank-icon="🌌" data-rank-prefix="NEBULA">
-                            <span class="rank-mini-icon">🌌</span>
-                            <div class="rank-mini-name">Nebula</div>
-                            <div class="rank-mini-prefix">NEBULA</div>
-                            <div class="rank-mini-benefits"><span data-en="Diamond Prot IV · 64 Carrots · 16 GApples" data-ar="ماسي حماية IV · 64 جزر · 16 تفاح ذهبي"></span></div>
-                            <div class="rank-coming-badge">Coming Soon</div>
-                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
-                        </div>
-                    </div>
+.cart-footer {
+    padding: 16px 28px 28px 28px;
+    border-top: 1px solid rgba(180,100,255,0.06);
+    flex-shrink: 0;
+}
+.cart-footer .cart-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.cart-footer .cart-total .total-label { font-size: 16px; font-weight: 600; color: #d4c0f0; }
+.cart-footer .cart-total .total-price {
+    font-size: 26px;
+    font-weight: 900;
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.cart-footer .checkout-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 40px;
+    border: none;
+    background: linear-gradient(135deg, #7b2ffc, #6b21a8);
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 24px rgba(120,50,200,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.cart-footer .checkout-btn:hover { transform: scale(1.02); box-shadow: 0 8px 40px rgba(120,50,200,0.4); }
+.cart-footer .checkout-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.cart-footer .checkout-btn i { font-size: 18px; }
 
-                    <!-- Neptune Practice Ranks (Coming Soon) -->
-                    <div class="rank-section-title" style="margin-top:32px;"><i class="fas fa-fist-raised"></i><span data-en="Neptune Practice Ranks" data-ar="رتب نبتون تدريب"></span> <span class="badge-tab soon" style="font-size:12px; padding:2px 14px;">Coming Soon</span></div>
-                    <div class="rank-section-sub" data-en="These ranks will be available soon. Stay tuned!" data-ar="هذه الرتب ستكون متاحة قريباً. ترقبوا!"></div>
-                    <div class="rank-grid">
-                        <div class="rank-mini neptune-vip coming-soon-rank" data-rank-name="VIP" data-rank-icon="⭐" data-rank-prefix="VIP">
-                            <span class="rank-mini-icon">⭐</span>
-                            <div class="rank-mini-name">VIP</div>
-                            <div class="rank-mini-prefix">VIP</div>
-                            <div class="rank-mini-benefits"><span data-en="Full Servers · Daily Rewards · Party 25" data-ar="سيرفرات ممتلئة · مكافآت يومية · حفلة 25"></span></div>
-                            <div class="rank-coming-badge">Coming Soon</div>
-                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
-                        </div>
-                        <div class="rank-mini neptune-mvp coming-soon-rank" data-rank-name="MVP" data-rank-icon="👑" data-rank-prefix="MVP">
-                            <span class="rank-mini-icon">👑</span>
-                            <div class="rank-mini-name">MVP</div>
-                            <div class="rank-mini-prefix">MVP</div>
-                            <div class="rank-mini-benefits"><span data-en="All VIP Perks · Priority Support · Party 50" data-ar="جميع مزايا VIP · دعم أولوية · حفلة 50"></span></div>
-                            <div class="rank-coming-badge">Coming Soon</div>
-                            <div class="rank-click-hint" data-en="🔜 Not yet available" data-ar="🔜 غير متاح بعد"></div>
-                        </div>
-                    </div>
+/* ----- TABS ----- */
+.tabs-container {
+    background: rgba(18,8,30,0.5);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    border-radius: 40px;
+    border: 1px solid rgba(180,100,255,0.12);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
+    overflow: hidden;
+    margin-top: 10px;
+}
+.tabs-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 18px 24px 0 24px;
+    border-bottom: 1px solid rgba(180,100,255,0.06);
+    background: rgba(0,0,0,0.15);
+}
+.tabs-nav .tab-btn {
+    background: transparent;
+    border: none;
+    color: #9880b8;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 12px 26px;
+    border-radius: 20px 20px 0 0;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.3px;
+}
+.tabs-nav .tab-btn i { font-size: 16px; transition: all 0.3s ease; }
+.tabs-nav .tab-btn:hover { color: #d4c0f0; background: rgba(120,50,200,0.08); transform: translateY(-2px); }
+.tabs-nav .tab-btn.active {
+    color: #f0e6ff;
+    background: rgba(120,50,200,0.15);
+    box-shadow: inset 0 -3px 0 #a855f7;
+    text-shadow: 0 0 20px rgba(120,50,200,0.2);
+}
+.tabs-nav .tab-btn.active i { color: #a855f7; }
+.tabs-nav .tab-btn .badge-tab {
+    font-size: 10px;
+    background: linear-gradient(135deg, #a855f7, #7b2ffc);
+    color: #fff;
+    padding: 1px 10px;
+    border-radius: 30px;
+    font-weight: 700;
+    box-shadow: 0 0 20px rgba(120,50,200,0.3);
+}
+.tabs-nav .tab-btn .badge-tab.soon {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a0a30;
+    box-shadow: 0 0 20px rgba(251,191,36,0.3);
+}
+.tabs-content { padding: 32px 32px 40px; }
+.tab-pane { display: none; animation: fadeSlide 0.5s ease; }
+.tab-pane.active { display: block; }
+@keyframes fadeSlide { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-                    <div style="margin-top:32px;">
-                        <div class="rank-section-title" style="font-size:24px;"><i class="fas fa-tags"></i><span data-en="Pricing Plans" data-ar="خطط الأسعار"></span></div>
-                        <div class="rank-section-sub" data-en="Choose the plan that fits your playstyle." data-ar="اختر الخطة التي تناسب أسلوب لعبك."></div>
-                        <div class="pricing-grid">
-                            <div class="pricing-card"><span class="pricing-icon">⚡</span><div class="pricing-name" data-en="Weekly" data-ar="أسبوعي"></div><div class="pricing-price">$5 <small>/week</small></div><div class="pricing-desc" data-en="Perfect for trying out a rank." data-ar="مثالي لتجربة رتبة."></div></div>
-                            <div class="pricing-card popular"><span class="pricing-icon">🔥</span><div class="pricing-name" data-en="Monthly" data-ar="شهري"></div><div class="pricing-price">$20 <small>/month</small></div><div class="pricing-desc" data-en="Best value for active players." data-ar="أفضل قيمة للاعبين النشطين."></div></div>
-                            <div class="pricing-card"><span class="pricing-icon">💎</span><div class="pricing-name" data-en="3 Months" data-ar="3 أشهر"></div><div class="pricing-price">$60 <small>/3mo</small></div><div class="pricing-desc" data-en="Save big with a longer commitment." data-ar="وفّر كثيراً مع التزام أطول."></div></div>
-                            <div class="pricing-card"><span class="pricing-icon">👑</span><div class="pricing-name" data-en="Lifetime" data-ar="مدى الحياة"></div><div class="pricing-price">$120 <small>/life</small></div><div class="pricing-desc" data-en="Ultimate status – forever." data-ar="الرتبة النهائية – للأبد."></div><span class="pricing-badge">Best Deal</span></div>
-                        </div>
-                    </div>
-                </div>
+/* ----- HOME ----- */
+.home-hero { text-align: center; padding: 20px 10px 30px; }
+.home-hero .main-title {
+    font-size: 48px;
+    font-weight: 900;
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(135deg, #f0e6ff, #b77aff, #7b2ffc, #4c1d95);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientShift 6s ease-in-out infinite alternate;
+    letter-spacing: -1px;
+    line-height: 1.2;
+    text-shadow: 0 0 60px rgba(120,50,200,0.2);
+}
+@keyframes gradientShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+.home-hero .main-sub { font-size: 18px; color: #b99ad6; max-width: 700px; margin: 14px auto 0; font-weight: 300; line-height: 1.6; }
+.home-hero .divider-glow {
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #a855f7, #7b2ffc, transparent);
+    margin: 18px auto 0;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(120,50,200,0.2);
+}
 
-                <!-- ===== STORE TAB ===== -->
-                <div class="tab-pane" id="tab-store">
-                    <div class="rank-section-title"><i class="fas fa-store"></i><span data-en="Store" data-ar="المتجر"></span></div>
-                    <div class="rank-section-sub" data-en="Click any rank to see all pricing options." data-ar="انقر على أي رتبة لترى جميع خيارات الأسعار."></div>
+.home-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+    margin-top: 32px;
+}
+.home-card {
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(8px);
+    border-radius: 28px;
+    padding: 28px 24px 32px;
+    border: 1px solid rgba(180,100,255,0.08);
+    transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: float-card 6s ease-in-out infinite;
+}
+.home-card:nth-child(2) { animation-delay: -2s; }
+.home-card:nth-child(3) { animation-delay: -4s; }
+@keyframes float-card { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-6px); } }
+.home-card::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 20%, rgba(120,50,200,0.05), transparent 70%);
+    pointer-events: none;
+    transition: all 0.6s ease;
+}
+.home-card:hover::before { transform: scale(1.2); }
+.home-card:hover {
+    border-color: rgba(180,100,255,0.25);
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 24px 60px rgba(90,20,180,0.25), 0 0 40px rgba(120,50,200,0.2);
+}
+.home-card .card-icon-big {
+    font-size: 52px;
+    margin-bottom: 12px;
+    display: block;
+    filter: drop-shadow(0 0 20px rgba(120,50,200,0.2));
+    animation: floatIcon 4s ease-in-out infinite;
+}
+@keyframes floatIcon { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-10px) rotate(3deg); } }
+.home-card h4 { font-size: 22px; font-weight: 800; color: #f0e6ff; margin-bottom: 4px; font-family: 'Orbitron', sans-serif; letter-spacing: -0.3px; }
+.home-card .card-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 3px 16px;
+    border-radius: 30px;
+    background: rgba(120,50,200,0.15);
+    color: #c9a6ff;
+    border: 1px solid rgba(180,100,255,0.1);
+    margin-bottom: 12px;
+    backdrop-filter: blur(4px);
+}
+.home-card p { color: #c8b8e0; font-size: 14px; line-height: 1.8; margin-bottom: 12px; }
+.home-card .status-online {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 16px;
+    border-radius: 30px;
+    background: rgba(74,222,128,0.08);
+    border: 1px solid rgba(74,222,128,0.15);
+    color: #4ade80;
+}
+.home-card .status-online i { font-size: 10px; }
+.home-card .status-coming {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 16px;
+    border-radius: 30px;
+    background: rgba(251,191,36,0.08);
+    border: 1px solid rgba(251,191,36,0.15);
+    color: #fbbf24;
+}
+.home-card .status-coming i { font-size: 10px; animation: pulse-dot 2s infinite; }
 
-                    <!-- Earth Survival Store -->
-                    <div style="margin-top:24px;">
-                        <h4 style="color:#f0e6ff; font-size:20px; margin-bottom:14px; font-family:'Orbitron',sans-serif;"><i class="fas fa-crown" style="color:#fbbf24;"></i> <span data-en="Earth Survival" data-ar="سيرفر البقاء إيرث"></span></h4>
-                        <div class="store-tab-grid">
-                            <div class="store-tab-item" data-rank-name="Knight" data-rank-icon="⚔️" data-rank-prefix="KNIGHT"><span class="store-icon">⚔️</span><div class="store-name">Knight</div><div class="store-price">$5/wk</div><div class="store-desc" data-en="5x Homes · Kit Knight" data-ar="5 منازل · كيت نايت"></div><button class="btn-store-buy" onclick="event.stopPropagation();openPriceModal('Knight', '⚔️', 'KNIGHT')">Buy</button></div>
-                            <div class="store-tab-item" data-rank-name="Lord" data-rank-icon="👑" data-rank-prefix="LORD"><span class="store-icon">👑</span><div class="store-name">Lord</div><div class="store-price">$20/mo</div><div class="store-desc" data-en="10x Homes · Kit Lord" data-ar="10 منازل · كيت لورد"></div><button class="btn-store-buy" onclick="event.stopPropagation();openPriceModal('Lord', '👑', 'LORD')">Buy</button></div>
-                            <div class="store-tab-item" data-rank-name="Paladin" data-rank-icon="🛡️" data-rank-prefix="PALADIN"><span class="store-icon">🛡️</span><div class="store-name">Paladin</div><div class="store-price">$60/3mo</div><div class="store-desc" data-en="∞ Homes · Kit Paladin" data-ar="∞ منازل · كيت بالادين"></div><button class="btn-store-buy" onclick="event.stopPropagation();openPriceModal('Paladin', '🛡️', 'PALADIN')">Buy</button></div>
-                            <div class="store-tab-item" data-rank-name="Duke" data-rank-icon="🏰" data-rank-prefix="DUKE"><span class="store-icon">🏰</span><div class="store-name">Duke</div><div class="store-price">$120/life</div><div class="store-desc" data-en="∞ Homes · Fly · Heal" data-ar="∞ منازل · طيران · شفاء"></div><button class="btn-store-buy" onclick="event.stopPropagation();openPriceModal('Duke', '🏰', 'DUKE')">Buy</button></div>
-                            <div class="store-tab-item" data-rank-name="King" data-rank-icon="🌟" data-rank-prefix="KING"><span class="store-icon">🌟</span><div class="store-name">King</div><div class="store-price">$120/life</div><div class="store-desc" data-en="∞ Homes · All Commands" data-ar="∞ منازل · جميع الأوامر"></div><button class="btn-store-buy" onclick="event.stopPropagation();openPriceModal('King', '🌟', 'KING')">Buy</button></div>
-                        </div>
-                    </div>
+.coming-soon-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 16px;
+}
+.coming-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 22px;
+    border-radius: 40px;
+    background: rgba(251,191,36,0.06);
+    border: 1px solid rgba(251,191,36,0.12);
+    color: #fbbf24;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+.coming-chip:hover { background: rgba(251,191,36,0.12); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(251,191,36,0.08); }
+.coming-chip i { font-size: 16px; }
 
-                    <!-- Galaxy BoxPvP Store (Coming Soon) – Member instead of User -->
-                    <div style="margin-top:28px;">
-                        <h4 style="color:#f0e6ff; font-size:20px; margin-bottom:14px; font-family:'Orbitron',sans-serif;"><i class="fas fa-box-open" style="color:#f472b6;"></i> <span data-en="Galaxy BoxPvP" data-ar="جالاكسي بوكس بي في بي"></span> <span class="badge-tab soon" style="font-size:11px; padding:2px 12px;">Coming Soon</span></h4>
-                        <div class="store-tab-grid">
-                            <div class="store-tab-item coming-store"><span class="store-icon">🪖</span><div class="store-name">Member</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="Starter Kit" data-ar="كيت مبتدئ"></div><button class="btn-store-buy" disabled>Soon</button></div>
-                            <div class="store-tab-item coming-store"><span class="store-icon">⭐</span><div class="store-name">VIP</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="Iron Prot II · 24 Carrots" data-ar="حديدي حماية II · 24 جزر"></div><button class="btn-store-buy" disabled>Soon</button></div>
-                            <div class="store-tab-item coming-store"><span class="store-icon">🌍</span><div class="store-name">Terra</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="Iron Prot III · Mending" data-ar="حديدي حماية III · إصلاح"></div><button class="btn-store-buy" disabled>Soon</button></div>
-                            <div class="store-tab-item coming-store"><span class="store-icon">🌟</span><div class="store-name">Nova</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="Diamond Prot III · 46 Carrots" data-ar="ماسي حماية III · 46 جزر"></div><button class="btn-store-buy" disabled>Soon</button></div>
-                            <div class="store-tab-item coming-store"><span class="store-icon">🌌</span><div class="store-name">Nebula</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="Diamond Prot IV · 64 Carrots" data-ar="ماسي حماية IV · 64 جزر"></div><button class="btn-store-buy" disabled>Soon</button></div>
-                        </div>
-                    </div>
+.why-section {
+    margin-top: 44px;
+    background: rgba(0,0,0,0.2);
+    backdrop-filter: blur(8px);
+    border-radius: 28px;
+    padding: 34px 30px;
+    border: 1px solid rgba(180,100,255,0.06);
+}
+.why-section .why-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 800;
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 24px;
+    letter-spacing: -0.5px;
+}
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+}
+.why-item {
+    text-align: center;
+    padding: 20px 16px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 20px;
+    border: 1px solid rgba(180,100,255,0.04);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+.why-item:hover { border-color: rgba(180,100,255,0.15); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
+.why-item .why-icon { font-size: 32px; margin-bottom: 8px; display: block; }
+.why-item .why-label { font-size: 15px; font-weight: 700; color: #f0e6ff; }
+.why-item .why-desc { font-size: 13px; color: #b99ad6; margin-top: 4px; line-height: 1.5; }
 
-                    <!-- Neptune Practice Store (Coming Soon) -->
-                    <div style="margin-top:28px;">
-                        <h4 style="color:#f0e6ff; font-size:20px; margin-bottom:14px; font-family:'Orbitron',sans-serif;"><i class="fas fa-fist-raised" style="color:#60a5fa;"></i> <span data-en="Neptune Practice" data-ar="نبتون تدريب"></span> <span class="badge-tab soon" style="font-size:11px; padding:2px 12px;">Coming Soon</span></h4>
-                        <div class="store-tab-grid">
-                            <div class="store-tab-item coming-store"><span class="store-icon">⭐</span><div class="store-name">VIP</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="Full Servers · Daily Rewards" data-ar="سيرفرات ممتلئة · مكافآت يومية"></div><button class="btn-store-buy" disabled>Soon</button></div>
-                            <div class="store-tab-item coming-store"><span class="store-icon">👑</span><div class="store-name">MVP</div><div class="store-price soon-price">🔜 Coming Soon</div><div class="store-desc" data-en="All VIP Perks · Priority Support" data-ar="جميع مزايا VIP · دعم أولوية"></div><button class="btn-store-buy" disabled>Soon</button></div>
-                        </div>
-                    </div>
-                </div>
+/* ----- RANKS ----- */
+.rank-section-title {
+    font-size: 28px;
+    font-weight: 800;
+    font-family: 'Orbitron', sans-serif;
+    color: #f0e6ff;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.rank-section-title i { color: #a855f7; text-shadow: 0 0 30px rgba(120,50,200,0.3); }
+.rank-section-sub { color: #b99ad6; font-size: 15px; margin-bottom: 22px; font-weight: 300; }
 
-                <!-- ===== RULES TAB ===== -->
-                <div class="tab-pane" id="tab-rules">
-                    <div class="rank-section-title"><i class="fas fa-gavel"></i><span data-en="Server Rules" data-ar="قوانين السيرفر"></span></div>
-                    <div class="rank-section-sub" data-en="Follow the rules to ensure a fair and fun experience for everyone." data-ar="اتبع القوانين لضمان تجربة عادلة وممتعة للجميع."></div>
-                    <div class="rules-grid">
-                        <div class="rules-card">
-                            <span class="rules-icon">🌐</span>
-                            <h4 data-en="Global Rules" data-ar="قوانين عامة"></h4>
-                            <ul>
-                                <li><i class="fas fa-shield-alt"></i> <span data-en="No hacking, cheating, or exploiting bugs." data-ar="لا للغش أو استغلال الأخطاء."></span> <span class="rule-badge">Zero Tolerance</span></li>
-                                <li><i class="fas fa-comment-slash"></i> <span data-en="Respect all players – no toxicity, racism, or harassment." data-ar="احترم جميع اللاعبين – لا للسمية أو العنصرية أو المضايقة."></span></li>
-                                <li><i class="fas fa-microphone-alt"></i> <span data-en="No spamming or advertising other servers." data-ar="لا للسبام أو الإعلان عن سيرفرات أخرى."></span></li>
-                                <li><i class="fas fa-user-secret"></i> <span data-en="No inappropriate usernames or skins." data-ar="لا لأسماء أو جلود غير لائقة."></span></li>
-                                <li><i class="fas fa-flag"></i> <span data-en="Follow staff instructions at all times." data-ar="اتبع تعليمات الطاقم في جميع الأوقات."></span></li>
-                            </ul>
-                        </div>
-                        <div class="rules-card">
-                            <span class="rules-icon">🌍</span>
-                            <h4 data-en="Earth Survival Rules" data-ar="قوانين سيرفر البقاء إيرث"></h4>
-                            <ul>
-                                <li><i class="fas fa-home"></i> <span data-en="No griefing – protect your builds with claims." data-ar="لا للتخريب – احمِ مبانيّك بالحماية."></span> <span class="rule-badge green">Protected</span></li>
-                                <li><i class="fas fa-hand-holding-usd"></i> <span data-en="No scamming or exploiting economy systems." data-ar="لا للنصب أو استغلال أنظمة الاقتصاد."></span></li>
-                                <li><i class="fas fa-tree"></i> <span data-en="No destroying natural terrain without permission." data-ar="لا لتدمير التضاريس الطبيعية دون إذن."></span></li>
-                                <li><i class="fas fa-clock"></i> <span data-en="AFK farming is allowed but limited to 15 minutes." data-ar="الزراعة أثناء AFK مسموحة ولكن محددة بـ 15 دقيقة."></span></li>
-                            </ul>
-                        </div>
-                        <div class="rules-card">
-                            <span class="rules-icon">🌌</span>
-                            <h4 data-en="Galaxy BoxPvP Rules" data-ar="قوانين جالاكسي بوكس بي في بي"></h4>
-                            <ul>
-                                <li><i class="fas fa-crosshairs"></i> <span data-en="No teaming in free-for-all modes." data-ar="لا للتحالفات في أوضاع free-for-all."></span> <span class="rule-badge gold">Fair Play</span></li>
-                                <li><i class="fas fa-box-open"></i> <span data-en="No stealing from other players' chests." data-ar="لا لسرقة صناديق اللاعبين الآخرين."></span></li>
-                                <li><i class="fas fa-swords"></i> <span data-en="No spawn camping – give players a chance." data-ar="لا للكمائن عند نقطة الإحياء – امنح اللاعبين فرصة."></span></li>
-                                <li><i class="fas fa-tachometer-alt"></i> <span data-en="No exploiting glitches or using unfair advantages." data-ar="لا لاستغلال الأخطاء أو استخدام مزايا غير عادلة."></span></li>
-                            </ul>
-                        </div>
-                        <div class="rules-card">
-                            <span class="rules-icon">🌊</span>
-                            <h4 data-en="Neptune Practice Rules" data-ar="قوانين نبتون تدريب"></h4>
-                            <ul>
-                                <li><i class="fas fa-handshake"></i> <span data-en="No toxicity – respect your opponent." data-ar="لا للسمية – احترم خصمك."></span> <span class="rule-badge green">Sportsmanship</span></li>
-                                <li><i class="fas fa-sliders-h"></i> <span data-en="No using banned items or kits in ranked matches." data-ar="لا لاستخدام عناصر أو كيتات محظورة في المباريات المرتبة."></span></li>
-                                <li><i class="fas fa-flag-checkered"></i> <span data-en="No leaving mid-match to avoid a loss." data-ar="لا للمغادرة أثناء المباراة لتجنب الخسارة."></span></li>
-                                <li><i class="fas fa-users"></i> <span data-en="Party limits must be respected." data-ar="يجب احترام حدود الحفلة."></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div style="margin-top:20px; padding:16px 20px; background:rgba(255,107,107,0.06); border-radius:16px; border:1px solid rgba(255,107,107,0.1); text-align:center;">
-                        <p style="color:#ff6b6b; font-size:14px;"><i class="fas fa-exclamation-triangle"></i> <span data-en="Violating any rule may result in a mute, kick, ban, or rank removal at staff discretion." data-ar="قد يؤدي مخالفة أي قانون إلى كتم، طرد، حظر، أو إزالة الرتبة حسب تقدير الطاقم."></span></p>
-                    </div>
-                </div>
+.rank-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 18px;
+    margin-bottom: 32px;
+}
+.rank-mini {
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(6px);
+    border-radius: 22px;
+    padding: 20px 16px 22px;
+    border: 1px solid rgba(180,100,255,0.06);
+    transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+.rank-mini::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--rank-color, #a855f7), transparent);
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+.rank-mini:hover::after { opacity: 1; }
+.rank-mini:hover {
+    border-color: rgba(180,100,255,0.2);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3), 0 0 40px rgba(120,50,200,0.15);
+}
+.rank-mini .rank-mini-icon { font-size: 34px; margin-bottom: 4px; display: block; }
+.rank-mini .rank-mini-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: #f0e6ff;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: -0.3px;
+}
+.rank-mini .rank-mini-prefix {
+    font-size: 11px;
+    font-weight: 700;
+    color: #c9a6ff;
+    background: rgba(120,50,200,0.12);
+    padding: 2px 14px;
+    border-radius: 30px;
+    display: inline-block;
+    margin-top: 2px;
+    border: 1px solid rgba(180,100,255,0.06);
+}
+.rank-mini .rank-mini-benefits { font-size: 12px; color: #d4c0f0; margin-top: 8px; line-height: 1.5; }
+.rank-mini .rank-mini-benefits i { color: #a855f7; margin: 0 2px; }
+.rank-click-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+    border-top: 1px dashed rgba(180,100,255,0.1);
+    padding-top: 10px;
+}
+.rank-mini:hover .rank-click-hint { opacity: 1; color: var(--gold); }
+.rank-mini.coming-soon-rank {
+    opacity: 0.65;
+    cursor: default;
+    border-style: dashed;
+    border-color: rgba(251,191,36,0.2);
+}
+.rank-mini.coming-soon-rank:hover { transform: translateY(-2px) scale(1.01); border-color: rgba(251,191,36,0.3); }
+.rank-mini.coming-soon-rank .rank-click-hint { color: #fbbf24; opacity: 0.9; }
+.rank-mini .rank-coming-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 2px 12px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a0a30;
+    margin-top: 4px;
+    box-shadow: 0 0 20px rgba(251,191,36,0.15);
+}
 
-                <!-- ===== SUPPORT TAB ===== -->
-                <div class="tab-pane" id="tab-support">
-                    <div class="rank-section-title"><i class="fas fa-headset"></i><span data-en="Support" data-ar="الدعم"></span></div>
-                    <div class="rank-section-sub" data-en="We're here to help! Contact us and we'll get back to you as soon as possible." data-ar="نحن هنا للمساعدة! تواصل معنا وسنرد عليك في أقرب وقت ممكن."></div>
-                    <div class="support-container">
-                        <div class="support-form">
-                            <h4 data-en="📩 Send a Ticket" data-ar="📩 أرسل تذكرة"></h4>
-                            <p class="form-sub" data-en="Fill out the form and our team will respond within 24 hours." data-ar="املأ النموذج وسيرد فريقنا في غضون 24 ساعة."></p>
-                            <form id="supportForm" onsubmit="return handleSupport(event)">
-                                <div class="form-group"><label data-en="Your Name" data-ar="اسمك"></label><input type="text" id="supportName" placeholder="Enter your name..." required /></div>
-                                <div class="form-group"><label data-en="Email Address" data-ar="البريد الإلكتروني"></label><input type="email" id="supportEmail" placeholder="your@email.com" required /></div>
-                                <div class="form-group"><label data-en="Issue Type" data-ar="نوع المشكلة"></label>
-                                    <select id="supportType"><option value="bug" data-en="Bug Report" data-ar="تقرير خطأ"></option><option value="rank" data-en="Rank Issue" data-ar="مشكلة في الرتبة"></option><option value="payment" data-en="Payment Problem" data-ar="مشكلة في الدفع"></option><option value="other" data-en="Other" data-ar="أخرى"></option></select>
-                                </div>
-                                <div class="form-group"><label data-en="Message" data-ar="الرسالة"></label><textarea id="supportMessage" placeholder="Describe your issue in detail..." required></textarea></div>
-                                <button type="submit" class="btn-submit"><span data-en="Send Message" data-ar="إرسال"></span></button>
-                            </form>
-                        </div>
-                        <div class="support-info">
-                            <div class="info-card"><div class="info-icon"><i class="fas fa-discord"></i></div><div class="info-content"><h5 data-en="Join our Discord" data-ar="انضم إلى ديسكورد"></h5><p data-en="Get instant support and connect with the community." data-ar="احصل على دعم فوري وتواصل مع المجتمع."><br><a href="#">discord.gg/otk1</a></p></div></div>
-                            <div class="info-card"><div class="info-icon"><i class="fas fa-envelope"></i></div><div class="info-content"><h5 data-en="Email Support" data-ar="الدعم عبر البريد"></h5><p data-en="For serious issues, reach out directly." data-ar="للمشاكل الجادة، تواصل مباشرة."><br><a href="mailto:support@otk1.net">support@otk1.net</a></p></div></div>
-                            <div class="info-card"><div class="info-icon"><i class="fas fa-clock"></i></div><div class="info-content"><h5 data-en="Response Time" data-ar="وقت الرد"></h5><p data-en="We aim to respond within 24 hours." data-ar="نهدف إلى الرد خلال 24 ساعة."></p></div></div>
-                            <div class="info-card"><div class="info-icon"><i class="fas fa-shield-alt"></i></div><div class="info-content"><h5 data-en="Trust & Safety" data-ar="الثقة والأمان"></h5><p data-en="Your data is safe with us. We never share your information." data-ar="بياناتك آمنة معنا. لا نشارك معلوماتك أبداً."></p></div></div>
-                        </div>
-                    </div>
-                </div>
+.rank-mini.knight { --rank-color: #a0a0a0; border-top: 3px solid #a0a0a0; }
+.rank-mini.lord { --rank-color: #fbbf24; border-top: 3px solid #fbbf24; }
+.rank-mini.paladin { --rank-color: #60a5fa; border-top: 3px solid #60a5fa; }
+.rank-mini.duke { --rank-color: #a855f7; border-top: 3px solid #a855f7; }
+.rank-mini.king { --rank-color: #f472b6; border-top: 3px solid #f472b6; }
+.rank-mini.member { --rank-color: #a0a0a0; border-top: 3px solid #a0a0a0; }
+.rank-mini.vip { --rank-color: #fbbf24; border-top: 3px solid #fbbf24; }
+.rank-mini.terra { --rank-color: #f472b6; border-top: 3px solid #f472b6; }
+.rank-mini.nova { --rank-color: #60a5fa; border-top: 3px solid #60a5fa; }
+.rank-mini.nebula { --rank-color: #a855f7; border-top: 3px solid #a855f7; }
+.rank-mini.neptune-vip { --rank-color: #fbbf24; border-top: 3px solid #fbbf24; }
+.rank-mini.neptune-mvp { --rank-color: #a855f7; border-top: 3px solid #a855f7; }
 
-                <!-- ===== FAQ TAB ===== -->
-                <div class="tab-pane" id="tab-faq">
-                    <div class="rank-section-title"><i class="fas fa-question-circle"></i><span data-en="Frequently Asked Questions" data-ar="الأسئلة الشائعة"></span></div>
-                    <div class="rank-section-sub" data-en="Everything you need to know about Otk1 Network." data-ar="كل ما تحتاج معرفته عن شبكة Otk1."></div>
-                    <div class="faq-list">
-                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ How do I join the server?" data-ar="❓ كيف أنضم إلى السيرفر؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Simply copy the server IP from the IP tab above, open Minecraft (Java Edition 1.20.4), click Multiplayer, then Add Server, paste the IP, and join!" data-ar="ببساطة انسخ الآي بي من تبويب IP أعلاه، افتح ماين كرافت (إصدار 1.20.4)، اضغط Multiplayer، ثم Add Server، الصق الآي بي وانضم!"></div></div>
-                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ What Minecraft version do I need?" data-ar="❓ ما هو إصدار ماين كرافت المطلوب؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="All our servers run on Minecraft Java Edition 1.20.4. We recommend using this version for the best experience." data-ar="جميع سيرفراتنا تعمل على ماين كرافت جافا إصدار 1.20.4. نوصي باستخدام هذا الإصدار للحصول على أفضل تجربة."></div></div>
-                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ How do I buy a rank?" data-ar="❓ كيف أشتري رتبة؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Ranks are purchased using in-game coins earned by playing on the server. Visit the Store tab to see all available ranks and their requirements. You can also purchase directly with real money via our store." data-ar="تُشترى الرتب باستخدام العملات داخل اللعبة التي تكسبها من اللعب على السيرفر. زر المتجر لترى جميع الرتب المتاحة ومتطلباتها. يمكنك أيضاً الشراء مباشرة بالمال الحقيقي عبر متجرنا."></div></div>
-                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ Is there a Discord server?" data-ar="❓ هل يوجد سيرفر ديسكورد؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Yes! Join our Discord community to stay updated, chat with other players, and get support. The invite link is available in-game or visit the Support tab." data-ar="نعم! انضم إلى مجتمعنا على ديسكورد للبقاء على اطلاع، والدردشة مع اللاعبين الآخرين، والحصول على الدعم. رابط الدعوة متاح داخل اللعبة أو زر تبويب الدعم."></div></div>
-                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ Can I play with friends?" data-ar="❓ هل يمكنني اللعب مع الأصدقاء؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Absolutely! All our servers support multiplayer. You can team up, create parties, and compete together. Party limits vary by rank – check the Ranks tab for details." data-ar="بالتأكيد! جميع سيرفراتنا تدعم اللعب الجماعي. يمكنك تشكيل فرق، وإنشاء حفلات، والتنافس معًا. حدود الحفلة تختلف حسب الرتبة – تحقق من تبويب الرتب للتفاصيل."></div></div>
-                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ What is the server's uptime?" data-ar="❓ ما هو وقت تشغيل السيرفر؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Our servers are online 24/7 with 99.9% uptime. We perform regular maintenance to ensure the best performance for all players." data-ar="سيرفراتنا تعمل 24/7 مع uptime 99.9%. نقوم بصيانة دورية لضمان أفضل أداء لجميع اللاعبين."></div></div>
-                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ How do I report a player?" data-ar="❓ كيف أبلغ عن لاعب؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="You can report a player using /report (player) (reason) in-game, or open a ticket in the Support tab. Our staff will review it promptly." data-ar="يمكنك الإبلاغ عن لاعب باستخدام /report (اللاعب) (السبب) داخل اللعبة، أو فتح تذكرة في تبويب الدعم. سيراجع طاقمنا الأمر بسرعة."></div></div>
-                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ What are the rules?" data-ar="❓ ما هي القوانين؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="You can find all server rules in the Rules tab. We have global rules as well as game-specific rules for each server mode." data-ar="يمكنك العثور على جميع قوانين السيرفر في تبويب القوانين. لدينا قوانين عامة بالإضافة إلى قوانين خاصة بكل نمط لعب."></div></div>
-                    </div>
-                </div>
+/* ----- BENEFITS MODAL ----- */
+.benefits-modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 99999;
+    background: rgba(10,6,24,0.85);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.benefits-modal-overlay.active { display: flex; animation: modalFadeIn 0.4s ease; }
+.benefits-modal {
+    background: rgba(18,8,30,0.92);
+    backdrop-filter: blur(32px) saturate(1.4);
+    -webkit-backdrop-filter: blur(32px) saturate(1.4);
+    border-radius: 40px;
+    border: 1px solid rgba(180,100,255,0.2);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 80px rgba(120,50,200,0.08);
+    max-width: 560px;
+    width: 100%;
+    padding: 36px 32px 40px;
+    position: relative;
+    animation: modalSlideUp 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    overflow: hidden;
+}
+.benefits-modal .modal-close {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(180,100,255,0.1);
+    color: #9880b8;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+}
+.benefits-modal .modal-close:hover {
+    background: rgba(255,107,107,0.15);
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+    transform: rotate(90deg);
+}
+.benefits-modal .benefits-rank-icon { font-size: 48px; display: block; text-align: center; margin-bottom: 4px; }
+.benefits-modal .benefits-rank-name {
+    font-size: 28px;
+    font-weight: 900;
+    font-family: 'Orbitron', sans-serif;
+    color: #f0e6ff;
+    text-align: center;
+    letter-spacing: -0.5px;
+}
+.benefits-modal .benefits-rank-prefix {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #c9a6ff;
+    background: rgba(120,50,200,0.12);
+    padding: 2px 16px;
+    border-radius: 30px;
+    display: inline-block;
+    margin: 0 auto 16px;
+    border: 1px solid rgba(180,100,255,0.06);
+}
+.benefits-modal .benefits-divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    margin: 0 auto 18px;
+    border-radius: 10px;
+}
+.benefits-modal .benefits-section { margin-bottom: 14px; }
+.benefits-modal .benefits-section .benefits-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 6px;
+}
+.benefits-modal .benefits-section .benefits-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    justify-content: center;
+}
+.benefits-modal .benefits-section .benefits-list .benefit-item {
+    font-size: 14px;
+    color: #d4c0f0;
+    background: rgba(255,255,255,0.03);
+    padding: 4px 14px;
+    border-radius: 30px;
+    border: 1px solid rgba(180,100,255,0.06);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.benefits-modal .benefits-section .benefits-list .benefit-item i { color: var(--primary-light); font-size: 12px; }
+.benefits-modal .benefits-section .commands-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    justify-content: center;
+}
+.benefits-modal .benefits-section .commands-list .cmd-item {
+    font-size: 13px;
+    color: #c8b8e0;
+    background: rgba(0,0,0,0.2);
+    padding: 2px 12px;
+    border-radius: 30px;
+    font-family: 'Inter', monospace;
+    border: 1px solid rgba(180,100,255,0.06);
+}
+.benefits-modal .benefits-section .commands-list .cmd-item i { color: var(--text-muted); margin-right: 4px; }
+.benefits-modal .benefits-close-btn {
+    display: block;
+    margin: 18px auto 0;
+    padding: 10px 36px;
+    border-radius: 40px;
+    border: none;
+    background: linear-gradient(135deg, #7b2ffc, #6b21a8);
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 24px rgba(120,50,200,0.3);
+}
+.benefits-modal .benefits-close-btn:hover { transform: scale(1.03); box-shadow: 0 8px 40px rgba(120,50,200,0.4); }
 
-                <!-- ===== SOCIAL TAB ===== -->
-                <div class="tab-pane" id="tab-social">
-                    <div class="rank-section-title"><i class="fas fa-share-alt"></i><span data-en="Connect With Us" data-ar="تواصل معنا"></span></div>
-                    <div class="rank-section-sub" data-en="Follow us on our social platforms to stay updated!" data-ar="تابعنا على منصات التواصل للبقاء على اطلاع!"></div>
-                    <div class="social-squares-grid">
-                        <a href="https://www.tiktok.com/@otk1141" target="_blank" rel="noopener noreferrer" class="social-square tiktok-square">
-                            <i class="fab fa-tiktok"></i>
-                            <span class="social-name">@otk1141</span>
-                            <span class="social-label" data-en="Follow" data-ar="تابع"></span>
-                        </a>
-                        <a href="https://youtube.com/@otk1141" target="_blank" rel="noopener noreferrer" class="social-square youtube-square">
-                            <i class="fab fa-youtube"></i>
-                            <span class="social-name">@otk1141</span>
-                            <span class="social-label" data-en="Subscribe" data-ar="اشترك"></span>
-                        </a>
-                        <a href="https://www.instagram.com/37.8b" target="_blank" rel="noopener noreferrer" class="social-square instagram-square">
-                            <i class="fab fa-instagram"></i>
-                            <span class="social-name">@37.8b</span>
-                            <span class="social-label" data-en="Follow" data-ar="تابع"></span>
-                        </a>
-                    </div>
-                </div>
+/* ----- PRICING ----- */
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+    margin: 20px 0 10px;
+}
+.pricing-card {
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(6px);
+    border-radius: 22px;
+    padding: 22px 18px 24px;
+    border: 1px solid rgba(180,100,255,0.08);
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    position: relative;
+    overflow: hidden;
+}
+.pricing-card::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 50% 30%, rgba(120,50,200,0.06), transparent 60%);
+    pointer-events: none;
+}
+.pricing-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(180,100,255,0.25);
+    box-shadow: 0 20px 60px rgba(90,20,180,0.2), 0 0 40px rgba(120,50,200,0.1);
+}
+.pricing-card .pricing-icon { font-size: 32px; margin-bottom: 4px; display: block; }
+.pricing-card .pricing-name { font-size: 16px; font-weight: 700; color: #f0e6ff; font-family: 'Orbitron', sans-serif; }
+.pricing-card .pricing-price {
+    font-size: 28px;
+    font-weight: 900;
+    color: #fbbf24;
+    margin: 6px 0;
+    font-family: 'Orbitron', sans-serif;
+}
+.pricing-card .pricing-price small { font-size: 14px; font-weight: 400; color: #9880b8; }
+.pricing-card .pricing-desc { font-size: 13px; color: #b99ad6; line-height: 1.6; }
+.pricing-card .pricing-badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 2px 14px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a0a30;
+}
+.pricing-card.popular { border-color: #fbbf24; box-shadow: 0 0 40px rgba(251,191,36,0.08); }
+.pricing-card.popular::after {
+    content: '★ POPULAR';
+    position: absolute;
+    top: 12px; right: 12px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 2px 12px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a0a30;
+}
 
-                <!-- ===== IP TAB ===== -->
-                <div class="tab-pane" id="tab-ip">
-                    <div class="ip-section">
-                        <div class="ip-display" style="text-align:center; padding:40px 20px;">
-                            <div style="font-size:64px; margin-bottom:16px;">🌐</div>
-                            <div class="ip-label" data-en="✦ Server IP ✦" data-ar="✦ آي بي السيرفر ✦" style="font-size:20px; letter-spacing:4px;"></div>
-                            <div style="font-size:28px; font-weight:800; font-family:'Orbitron',sans-serif; background:linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin:12px 0;">
-                                <span data-en="Coming Soon" data-ar="قريباً"></span>
-                            </div>
-                            <p style="color:#b99ad6; font-size:16px; max-width:400px; margin:0 auto;">
-                                <span data-en="We're preparing our servers. Stay tuned for the IP address!" data-ar="نحن نجهز سيرفراتنا. ترقبوا عنوان الآي بي!"></span>
-                            </p>
-                            <div style="margin-top:20px; display:flex; justify-content:center; gap:12px;">
-                                <span class="coming-chip" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); color:#9880b8;">
-                                    <i class="fas fa-clock"></i> <span data-en="Estimated: Q3 2026" data-ar="متوقع: الربع الثالث 2026"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+/* ----- PRICE MODAL ----- */
+.price-modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 99999;
+    background: rgba(10,6,24,0.85);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.price-modal-overlay.active { display: flex; animation: modalFadeIn 0.4s ease; }
+.price-modal {
+    background: rgba(18,8,30,0.92);
+    backdrop-filter: blur(32px) saturate(1.4);
+    -webkit-backdrop-filter: blur(32px) saturate(1.4);
+    border-radius: 40px;
+    border: 1px solid rgba(180,100,255,0.2);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 80px rgba(120,50,200,0.08);
+    max-width: 580px;
+    width: 100%;
+    padding: 36px 32px 40px;
+    position: relative;
+    animation: modalSlideUp 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    overflow: hidden;
+}
+.price-modal .modal-close {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(180,100,255,0.1);
+    color: #9880b8;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+}
+.price-modal .modal-close:hover {
+    background: rgba(255,107,107,0.15);
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+    transform: rotate(90deg);
+}
+.price-modal .modal-rank-icon { font-size: 48px; display: block; text-align: center; margin-bottom: 4px; }
+.price-modal .modal-rank-name {
+    font-size: 28px;
+    font-weight: 900;
+    font-family: 'Orbitron', sans-serif;
+    color: #f0e6ff;
+    text-align: center;
+    letter-spacing: -0.5px;
+}
+.price-modal .modal-rank-prefix {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #c9a6ff;
+    background: rgba(120,50,200,0.12);
+    padding: 2px 16px;
+    border-radius: 30px;
+    display: inline-block;
+    margin: 0 auto 16px;
+    border: 1px solid rgba(180,100,255,0.06);
+}
+.price-modal .modal-sub { text-align: center; font-size: 14px; color: #b99ad6; margin-bottom: 20px; }
+.price-modal .modal-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+.price-modal .modal-option {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(180,100,255,0.08);
+    border-radius: 18px;
+    padding: 16px 12px 18px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+    position: relative;
+    overflow: hidden;
+}
+.price-modal .modal-option::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(circle at 50% 0%, rgba(120,50,200,0.05), transparent 70%);
+    pointer-events: none;
+}
+.price-modal .modal-option:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(180,100,255,0.25);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+.price-modal .modal-option:active { transform: scale(0.96); }
+.price-modal .modal-option .opt-icon { font-size: 24px; display: block; margin-bottom: 2px; }
+.price-modal .modal-option .opt-name { font-size: 13px; font-weight: 700; color: #f0e6ff; font-family: 'Orbitron', sans-serif; }
+.price-modal .modal-option .opt-price {
+    font-size: 20px;
+    font-weight: 900;
+    color: #fbbf24;
+    margin: 2px 0;
+}
+.price-modal .modal-option .opt-desc { font-size: 11px; color: #b99ad6; }
+.price-modal .modal-option .opt-badge {
+    display: inline-block;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1px 10px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a0a30;
+    margin-top: 4px;
+}
+.price-modal .modal-option.popular-opt { border-color: #fbbf24; box-shadow: 0 0 30px rgba(251,191,36,0.05); }
+.price-modal .modal-option.selected { border-color: #4ade80; box-shadow: 0 0 40px rgba(74,222,128,0.1); }
+.price-modal .modal-option.selected .opt-price { color: #4ade80; }
+.price-modal .modal-option .opt-check {
+    position: absolute;
+    top: 6px; right: 8px;
+    font-size: 14px;
+    color: #4ade80;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+}
+.price-modal .modal-option.selected .opt-check { opacity: 1; transform: scale(1); }
+.price-modal .modal-option.coming-opt { opacity: 0.5; cursor: default; border-style: dashed; }
+.price-modal .modal-option.coming-opt:hover { transform: none; border-color: rgba(180,100,255,0.08); box-shadow: none; }
+.price-modal .modal-option .opt-coming-badge {
+    display: inline-block;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1px 10px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a0a30;
+    margin-top: 4px;
+}
+.price-modal .modal-footer {
+    margin-top: 22px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.price-modal .modal-footer .btn-confirm {
+    padding: 12px 40px;
+    border-radius: 40px;
+    border: none;
+    background: linear-gradient(135deg, #7b2ffc, #6b21a8);
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 24px rgba(120,50,200,0.3);
+    flex: 1;
+    min-width: 140px;
+}
+.price-modal .modal-footer .btn-confirm:hover { transform: scale(1.03); box-shadow: 0 8px 40px rgba(120,50,200,0.4); }
+.price-modal .modal-footer .btn-confirm:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.price-modal .modal-footer .btn-cancel {
+    padding: 12px 28px;
+    border-radius: 40px;
+    border: 1px solid rgba(180,100,255,0.12);
+    background: rgba(255,255,255,0.03);
+    color: #9880b8;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+.price-modal .modal-footer .btn-cancel:hover { background: rgba(255,255,255,0.06); color: #d4c0f0; }
 
-            </div>
-        </div>
+/* ----- STORE ----- */
+.store-tab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+}
+.store-tab-item {
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(6px);
+    border-radius: 22px;
+    padding: 20px 16px 22px;
+    border: 1px solid rgba(180,100,255,0.06);
+    transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    text-align: center;
+    cursor: pointer;
+}
+.store-tab-item:hover {
+    border-color: rgba(180,100,255,0.2);
+    transform: translateY(-6px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.25), 0 0 30px rgba(120,50,200,0.1);
+}
+.store-tab-item .store-icon { font-size: 32px; margin-bottom: 4px; display: block; }
+.store-tab-item .store-name { font-size: 17px; font-weight: 700; color: #f0e6ff; font-family: 'Orbitron', sans-serif; }
+.store-tab-item .store-price { font-size: 14px; font-weight: 600; color: #fbbf24; margin: 2px 0 6px; }
+.store-tab-item .store-price.soon-price {
+    color: #fbbf24;
+    font-size: 12px;
+    background: rgba(251,191,36,0.1);
+    padding: 2px 12px;
+    border-radius: 30px;
+    display: inline-block;
+    border: 1px solid rgba(251,191,36,0.15);
+}
+.store-tab-item .store-desc { font-size: 12px; color: #b99ad6; line-height: 1.5; margin-bottom: 10px; }
+.store-tab-item .btn-store-buy {
+    padding: 6px 24px;
+    border-radius: 40px;
+    border: none;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a0a30;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 20px rgba(251,191,36,0.15);
+}
+.store-tab-item .btn-store-buy:hover { transform: scale(1.06); box-shadow: 0 8px 30px rgba(251,191,36,0.3); }
+.store-tab-item .btn-store-buy:disabled { opacity: 0.4; cursor: not-allowed; transform: none; background: #4a4a6a; box-shadow: none; }
+.store-tab-item.coming-store {
+    opacity: 0.7;
+    border-style: dashed;
+    border-color: rgba(251,191,36,0.15);
+}
+.store-tab-item.coming-store:hover { transform: translateY(-3px); border-color: rgba(251,191,36,0.25); }
+.store-tab-item .store-coming-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 2px 12px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1a0a30;
+    margin-top: 4px;
+    box-shadow: 0 0 20px rgba(251,191,36,0.15);
+}
 
-        <!-- ===== FOOTER ===== -->
-        <footer class="site-footer">
-            <div class="footer-links">
-                <a href="https://www.tiktok.com/@otk1141" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i> TikTok</a>
-                <a href="https://youtube.com/@otk1141" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i> YouTube</a>
-                <a href="https://www.instagram.com/37.8b" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> Instagram</a>
-                <a href="#"><i class="fas fa-envelope"></i> Contact</a>
-            </div>
-            <div>
-                <span class="footer-brand">Otk1</span>
-                <span data-en=" · 2026 · All rights reserved." data-ar=" · 2026 · جميع الحقوق محفوظة."></span>
-                <span style="margin-left:8px; opacity:0.3;"><i class="fas fa-infinity"></i></span>
-            </div>
-        </footer>
+/* ----- RULES, SUPPORT, FAQ, SOCIAL, IP ----- */
+.rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 10px;
+}
+.rules-card {
+    background: rgba(0,0,0,0.25);
+    backdrop-filter: blur(6px);
+    border-radius: 24px;
+    padding: 24px 22px 28px;
+    border: 1px solid rgba(180,100,255,0.06);
+    transition: all 0.3s ease;
+}
+.rules-card:hover {
+    border-color: rgba(180,100,255,0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+.rules-card .rules-icon { font-size: 36px; margin-bottom: 8px; display: block; }
+.rules-card h4 { font-size: 20px; font-weight: 700; color: #f0e6ff; font-family: 'Orbitron', sans-serif; margin-bottom: 12px; }
+.rules-card ul { list-style: none; padding: 0; }
+.rules-card ul li {
+    padding: 6px 0;
+    color: #c8b8e0;
+    font-size: 14px;
+    line-height: 1.6;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border-bottom: 1px solid rgba(180,100,255,0.04);
+}
+.rules-card ul li:last-child { border-bottom: none; }
+.rules-card ul li i { color: #a855f7; font-size: 14px; margin-top: 3px; flex-shrink: 0; }
+.rules-card ul li .rule-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 1px 10px;
+    border-radius: 30px;
+    background: rgba(255,107,107,0.15);
+    color: #ff6b6b;
+    margin-left: 4px;
+    flex-shrink: 0;
+}
+.rules-card ul li .rule-badge.green { background: rgba(74,222,128,0.15); color: #4ade80; }
+.rules-card ul li .rule-badge.gold { background: rgba(251,191,36,0.15); color: #fbbf24; }
 
-    </div>
+.support-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 10px;
+}
+.support-form {
+    background: rgba(0,0,0,0.25);
+    backdrop-filter: blur(6px);
+    border-radius: 24px;
+    padding: 28px 26px;
+    border: 1px solid rgba(180,100,255,0.06);
+}
+.support-form h4 { font-size: 20px; font-weight: 700; color: #f0e6ff; font-family: 'Orbitron', sans-serif; margin-bottom: 4px; }
+.support-form .form-sub { color: #b99ad6; font-size: 14px; margin-bottom: 18px; }
+.support-form .form-group { margin-bottom: 16px; }
+.support-form .form-group label { display: block; font-size: 13px; font-weight: 600; color: #d4c0f0; margin-bottom: 4px; }
+.support-form .form-group input,
+.support-form .form-group select,
+.support-form .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(180,100,255,0.1);
+    background: rgba(0,0,0,0.3);
+    color: #f0e6ff;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+}
+.support-form .form-group input:focus,
+.support-form .form-group select:focus,
+.support-form .form-group textarea:focus {
+    outline: none;
+    border-color: #a855f7;
+    box-shadow: 0 0 20px rgba(120,50,200,0.15);
+}
+.support-form .form-group textarea { resize: vertical; min-height: 100px; }
+.support-form .form-group select option { background: #1a0a30; }
+.support-form .btn-submit {
+    padding: 12px 36px;
+    border-radius: 40px;
+    border: none;
+    background: linear-gradient(135deg, #7b2ffc, #6b21a8);
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 20px rgba(120,50,200,0.3);
+    width: 100%;
+}
+.support-form .btn-submit:hover { transform: scale(1.02); box-shadow: 0 8px 30px rgba(120,50,200,0.4); }
+.support-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.support-info .info-card {
+    background: rgba(0,0,0,0.25);
+    backdrop-filter: blur(6px);
+    border-radius: 20px;
+    padding: 22px 24px;
+    border: 1px solid rgba(180,100,255,0.06);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.support-info .info-card:hover { border-color: rgba(180,100,255,0.15); transform: translateX(4px); }
+.support-info .info-card .info-icon { font-size: 28px; color: #a855f7; width: 50px; text-align: center; flex-shrink: 0; }
+.support-info .info-card .info-content h5 { font-size: 16px; font-weight: 700; color: #f0e6ff; }
+.support-info .info-card .info-content p { font-size: 14px; color: #b99ad6; margin-top: 2px; }
+.support-info .info-card .info-content a { color: #a855f7; text-decoration: none; transition: color 0.3s ease; }
+.support-info .info-card .info-content a:hover { color: #d4c0f0; }
 
-    <!-- ===== BACK TO TOP ===== -->
-    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-        <i class="fas fa-arrow-up"></i>
-    </button>
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 820px;
+    margin: 0 auto;
+}
+.faq-item {
+    background: rgba(0,0,0,0.2);
+    backdrop-filter: blur(6px);
+    border-radius: 20px;
+    border: 1px solid rgba(180,100,255,0.06);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+.faq-item:hover { border-color: rgba(180,100,255,0.12); }
+.faq-question {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 18px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #f0e6ff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-family: 'Inter', sans-serif;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+.faq-question:hover { color: #d4c0f0; background: rgba(120,50,200,0.04); }
+.faq-question i { color: #a855f7; transition: transform 0.4s ease; font-size: 16px; flex-shrink: 0; }
+.faq-item.open .faq-question i { transform: rotate(180deg); }
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.25,0.46,0.45,0.94), padding 0.3s ease;
+    padding: 0 24px;
+    color: #c8b8e0;
+    font-size: 14px;
+    line-height: 1.8;
+}
+.faq-item.open .faq-answer { max-height: 300px; padding: 0 24px 20px 24px; }
 
-    <script src="script.js"></script>
-</body>
-</html>
+.social-squares-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px;
+    margin-top: 30px;
+}
+.social-square {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+}
+.social-square i { font-size: 48px; margin-bottom: 12px; }
+.social-square .social-name { font-weight: 600; font-size: 16px; margin-bottom: 8px; }
+.social-square .social-label { font-size: 12px; padding: 4px 16px; border-radius: 40px; background: rgba(255,255,255,0.1); transition: all 0.3s ease; }
+.social-square:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6);
+}
+.social-square.tiktok-square:hover { border-color: #ff0050; box-shadow: 0 20px 40px -10px #ff005066; }
+.social-square.youtube-square:hover { border-color: #ff0033; box-shadow: 0 20px 40px -10px #ff003366; }
+.social-square.instagram-square:hover { border-color: #f09433; box-shadow: 0 20px 40px -10px #f0943366; }
+.social-square.tiktok-square i { color: #ff0050; }
+.social-square.youtube-square i { color: #ff0033; }
+.social-square.instagram-square i { color: #f09433; }
+
+.ip-section { text-align: center; padding: 20px 10px; }
+.ip-section .ip-display {
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(12px);
+    border-radius: 28px;
+    padding: 36px 28px 32px;
+    border: 1px solid rgba(180,100,255,0.1);
+    max-width: 540px;
+    margin: 0 auto 24px;
+    box-shadow: 0 0 60px rgba(120,50,200,0.05);
+    transition: all 0.3s ease;
+}
+.ip-section .ip-display:hover { border-color: rgba(180,100,255,0.2); box-shadow: 0 0 80px rgba(120,50,200,0.1); }
+.ip-section .ip-display .ip-label { font-size: 13px; color: #9880b8; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; }
+
+.site-footer {
+    margin-top: 48px;
+    padding: 32px 20px 24px;
+    text-align: center;
+    border-top: 1px solid rgba(180,100,255,0.06);
+    color: rgba(180,150,210,0.35);
+    font-size: 14px;
+}
+.site-footer .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+.site-footer .footer-links a {
+    color: rgba(180,150,210,0.5);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 14px;
+    font-weight: 500;
+}
+.site-footer .footer-links a:hover { color: #c9a6ff; }
+.site-footer .footer-brand { font-weight: 700; font-family: 'Orbitron', sans-serif; color: rgba(200,170,230,0.5); }
+
+/* ----- LOGIN MODAL ----- */
+.login-modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 99999;
+    background: rgba(10,6,24,0.85);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.login-modal-overlay.active { display: flex; animation: modalFadeIn 0.4s ease; }
+.login-modal {
+    background: rgba(18,8,30,0.92);
+    backdrop-filter: blur(32px) saturate(1.4);
+    -webkit-backdrop-filter: blur(32px) saturate(1.4);
+    border-radius: 40px;
+    border: 1px solid rgba(180,100,255,0.2);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 80px rgba(120,50,200,0.08);
+    max-width: 420px;
+    width: 100%;
+    padding: 40px 32px 36px;
+    position: relative;
+    animation: modalSlideUp 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    text-align: center;
+}
+.login-modal .modal-close {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(180,100,255,0.1);
+    color: #9880b8;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+}
+.login-modal .modal-close:hover {
+    background: rgba(255,107,107,0.15);
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+    transform: rotate(90deg);
+}
+.login-modal h2 { font-size: 28px; font-weight: 800; font-family: 'Orbitron', sans-serif; color: #f0e6ff; margin-bottom: 8px; }
+.login-modal h2 i { color: #a855f7; }
+.login-modal p { color: #b99ad6; font-size: 14px; margin-bottom: 24px; }
+.google-login-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 40px;
+    border: none;
+    background: #ffffff;
+    color: #1a0a30;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+.google-login-btn i { font-size: 22px; color: #ea4335; }
+.google-login-btn:hover { transform: scale(1.02); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+.login-note { margin-top: 16px; font-size: 12px; color: #6a5a80; font-style: italic; }
+
+@keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(40px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+body.lang-en .ar-text { display: none !important; }
+body.lang-en .en-text { display: inline !important; }
+body.lang-ar .en-text { display: none !important; }
+body.lang-ar .ar-text { display: inline !important; }
+
+/* ----- RESPONSIVE ----- */
+@media (max-width: 960px) {
+    .navbar { flex-direction: column; align-items: stretch; gap: 12px; padding: 16px 20px; border-radius: 40px; }
+    .nav-brand { justify-content: center; }
+    .nav-center { justify-content: center; flex-direction: column; gap: 12px; }
+    .nav-accounts { justify-content: center; }
+    .nav-socials { justify-content: center; }
+    .nav-lang { justify-content: center; }
+    .nav-cart { align-self: center; }
+    .nav-auth { justify-content: center; }
+    .tabs-nav .tab-btn { font-size: 13px; padding: 10px 16px; gap: 6px; }
+    .tabs-nav .tab-btn i { font-size: 14px; }
+    .home-hero .main-title { font-size: 32px; }
+    .home-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr 1fr; }
+    .rank-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    .store-tab-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    .tabs-content { padding: 24px 18px 28px; }
+    .support-container { grid-template-columns: 1fr; }
+    .rules-grid { grid-template-columns: 1fr 1fr; }
+    .pricing-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+    .price-modal .modal-options { grid-template-columns: 1fr 1fr; }
+    .social-squares-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    .cart-panel { width: 100%; }
+    .benefits-modal { max-width: 95%; padding: 28px 20px 32px; }
+}
+@media (max-width: 600px) {
+    .main-wrapper { padding: 12px 12px 30px; }
+    .navbar { padding: 12px 16px; border-radius: 28px; }
+    .nav-brand .brand-name { font-size: 20px; }
+    .account-badge { font-size: 12px; padding: 4px 12px 4px 10px; }
+    .account-badge .role-tag { font-size: 9px; padding: 1px 8px; }
+    .nav-socials a { width: 36px; height: 36px; font-size: 16px; }
+    .nav-cart { width: 36px; height: 36px; font-size: 16px; }
+    .nav-cart .cart-badge { font-size: 8px; min-width: 16px; height: 16px; }
+    .tabs-nav { padding: 12px 12px 0 12px; gap: 4px; }
+    .tabs-nav .tab-btn { font-size: 11px; padding: 8px 10px; gap: 4px; }
+    .tabs-nav .tab-btn i { font-size: 12px; }
+    .tabs-nav .tab-btn .badge-tab { font-size: 8px; padding: 0 6px; }
+    .tabs-content { padding: 16px 12px 20px; }
+    .home-hero .main-title { font-size: 24px; }
+    .home-hero .main-sub { font-size: 14px; }
+    .home-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr; }
+    .rank-grid { grid-template-columns: 1fr 1fr; }
+    .store-tab-grid { grid-template-columns: 1fr 1fr; }
+    .rules-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr 1fr; }
+    .coming-soon-grid { gap: 8px; }
+    .coming-chip { font-size: 12px; padding: 4px 14px; }
+    .faq-question { font-size: 14px; padding: 14px 18px; }
+    .faq-answer { font-size: 13px; padding: 0 18px; }
+    .faq-item.open .faq-answer { padding: 0 18px 16px 18px; }
+    .rank-section-title { font-size: 22px; }
+    .why-section .why-title { font-size: 24px; }
+    .support-form { padding: 20px 16px; }
+    .support-info .info-card { padding: 16px 18px; flex-direction: column; text-align: center; }
+    .price-modal { padding: 28px 18px 30px; border-radius: 28px; }
+    .price-modal .modal-options { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .price-modal .modal-option { padding: 12px 8px 14px; }
+    .price-modal .modal-option .opt-price { font-size: 17px; }
+    .price-modal .modal-rank-name { font-size: 22px; }
+    .social-squares-grid { grid-template-columns: 1fr 1fr; }
+    .social-square i { font-size: 36px; }
+    .ip-section .ip-display .ip-address { font-size: 22px; }
+    .ip-section .ip-info-grid { grid-template-columns: 1fr 1fr; }
+    .cart-panel { width: 100%; }
+    .cart-item .item-price { font-size: 14px; }
+    .cart-footer .cart-total .total-price { font-size: 20px; }
+    .cart-header h2 { font-size: 18px; }
+    .benefits-modal { padding: 24px 16px 28px; }
+    .benefits-modal .benefits-rank-name { font-size: 22px; }
+    .benefits-modal .benefits-section .benefits-list .benefit-item { font-size: 12px; padding: 3px 10px; }
+    .benefits-modal .benefits-section .commands-list .cmd-item { font-size: 11px; padding: 2px 8px; }
+    .login-modal { padding: 30px 20px 28px; }
+    .login-modal h2 { font-size: 22px; }
+}
+@media (max-width: 400px) {
+    .rank-grid { grid-template-columns: 1fr; }
+    .store-tab-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .ip-section .ip-info-grid { grid-template-columns: 1fr; }
+    .tabs-nav .tab-btn { font-size: 10px; padding: 6px 8px; }
+    .tabs-nav .tab-btn .badge-tab { display: none; }
+    .home-hero .main-title { font-size: 20px; }
+    .why-grid { grid-template-columns: 1fr; }
+    .price-modal .modal-options { grid-template-columns: 1fr; }
+    .price-modal .modal-footer { flex-direction: column; }
+    .price-modal .modal-footer .btn-confirm { min-width: auto; }
+    .social-squares-grid { grid-template-columns: 1fr; }
+}
