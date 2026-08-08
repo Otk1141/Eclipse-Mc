@@ -8,15 +8,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <!-- Your CSS -->
     <link rel="stylesheet" href="style.css" />
 </head>
 <body class="lang-en" dir="ltr">
 
-    <!-- ===== PARTICLE CANVAS ===== -->
+    <!-- PARTICLE CANVAS -->
     <canvas id="particlesCanvas"></canvas>
 
-    <!-- ===== SPACE BACKGROUND (overlay) ===== -->
+    <!-- SPACE BACKGROUND -->
     <div class="space-bg">
         <div class="stars"></div>
         <div class="nebula"></div>
@@ -24,23 +23,23 @@
         <div class="nebula"></div>
     </div>
 
-    <!-- ===== PROGRESS BAR ===== -->
+    <!-- PROGRESS BAR -->
     <div class="progress-bar" id="progressBar"></div>
 
-    <!-- ===== TOAST ===== -->
+    <!-- TOAST -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
         <span id="toastMessage">Copied to clipboard!</span>
     </div>
 
-    <!-- ===== USER PROFILE (logged in) ===== -->
+    <!-- USER PROFILE -->
     <div class="user-profile" id="userProfile" style="display:none;">
         <img id="userAvatar" src="" alt="avatar" />
         <span id="userName">User</span>
         <button onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
     </div>
 
-    <!-- ===== LOGIN MODAL ===== -->
+    <!-- LOGIN MODAL -->
     <div class="login-modal-overlay" id="loginModal">
         <div class="login-modal">
             <button class="modal-close" onclick="closeLoginModal()"><i class="fas fa-times"></i></button>
@@ -53,10 +52,10 @@
         </div>
     </div>
 
-    <!-- ===== CART OVERLAY ===== -->
+    <!-- CART OVERLAY -->
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
-    <!-- ===== CART PANEL ===== -->
+    <!-- CART PANEL -->
     <div class="cart-panel" id="cartPanel">
         <div class="cart-header">
             <h2><i class="fas fa-shopping-cart"></i> <span data-en="Your Cart" data-ar="سلة المشتريات"></span></h2>
@@ -81,7 +80,7 @@
         </div>
     </div>
 
-    <!-- ===== BENEFITS MODAL ===== -->
+    <!-- BENEFITS MODAL -->
     <div class="benefits-modal-overlay" id="benefitsModal">
         <div class="benefits-modal">
             <button class="modal-close" onclick="closeBenefitsModal()"><i class="fas fa-times"></i></button>
@@ -103,7 +102,7 @@
         </div>
     </div>
 
-    <!-- ===== PRICE MODAL ===== -->
+    <!-- PRICE MODAL -->
     <div class="price-modal-overlay" id="priceModal">
         <div class="price-modal">
             <button class="modal-close" onclick="closePriceModal()"><i class="fas fa-times"></i></button>
@@ -192,7 +191,6 @@
                     <a href="https://youtube.com/@otk1141" target="_blank" rel="noopener noreferrer" class="youtube" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     <a href="https://www.instagram.com/37.8b" target="_blank" rel="noopener noreferrer" class="instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                 </div>
-                <!-- Login / User -->
                 <div class="nav-auth">
                     <button id="loginBtn" class="login-btn" onclick="openLoginModal()">
                         <i class="fas fa-user"></i> <span data-en="Sign In" data-ar="تسجيل الدخول"></span>
@@ -321,11 +319,10 @@
                         </div>
                     </div>
 
-                    <!-- ===== GALAXY BOXPVP RANKS (COMING SOON) ===== -->
+                    <!-- Galaxy BoxPvP Ranks (Coming Soon) – Member instead of User -->
                     <div class="rank-section-title" style="margin-top:32px;"><i class="fas fa-box-open"></i><span data-en="Galaxy BoxPvP Ranks" data-ar="رتب جالاكسي بوكس بي في بي"></span> <span class="badge-tab soon" style="font-size:12px; padding:2px 14px;">Coming Soon</span></div>
                     <div class="rank-section-sub" data-en="These ranks will be available soon. Stay tuned!" data-ar="هذه الرتب ستكون متاحة قريباً. ترقبوا!"></div>
                     <div class="rank-grid">
-                        <!-- Changed "User" to "Member" -->
                         <div class="rank-mini member coming-soon-rank" data-rank-name="Member" data-rank-icon="🪖" data-rank-prefix="MEMBER">
                             <span class="rank-mini-icon">🪖</span>
                             <div class="rank-mini-name">Member</div>
@@ -368,7 +365,7 @@
                         </div>
                     </div>
 
-                    <!-- ===== NEPTUNE PRACTICE RANKS (COMING SOON) ===== -->
+                    <!-- Neptune Practice Ranks (Coming Soon) -->
                     <div class="rank-section-title" style="margin-top:32px;"><i class="fas fa-fist-raised"></i><span data-en="Neptune Practice Ranks" data-ar="رتب نبتون تدريب"></span> <span class="badge-tab soon" style="font-size:12px; padding:2px 14px;">Coming Soon</span></div>
                     <div class="rank-section-sub" data-en="These ranks will be available soon. Stay tuned!" data-ar="هذه الرتب ستكون متاحة قريباً. ترقبوا!"></div>
                     <div class="rank-grid">
@@ -441,9 +438,144 @@
                     </div>
                 </div>
 
-                <!-- ===== RULES, SUPPORT, FAQ, SOCIAL, IP (unchanged) ===== -->
-                <!-- For brevity, I'm omitting these sections here – they remain identical -->
-                <!-- but they are present in the full code. I'll include them in the final zip. -->
+                <!-- ===== RULES TAB ===== -->
+                <div class="tab-pane" id="tab-rules">
+                    <div class="rank-section-title"><i class="fas fa-gavel"></i><span data-en="Server Rules" data-ar="قوانين السيرفر"></span></div>
+                    <div class="rank-section-sub" data-en="Follow the rules to ensure a fair and fun experience for everyone." data-ar="اتبع القوانين لضمان تجربة عادلة وممتعة للجميع."></div>
+                    <div class="rules-grid">
+                        <div class="rules-card">
+                            <span class="rules-icon">🌐</span>
+                            <h4 data-en="Global Rules" data-ar="قوانين عامة"></h4>
+                            <ul>
+                                <li><i class="fas fa-shield-alt"></i> <span data-en="No hacking, cheating, or exploiting bugs." data-ar="لا للغش أو استغلال الأخطاء."></span> <span class="rule-badge">Zero Tolerance</span></li>
+                                <li><i class="fas fa-comment-slash"></i> <span data-en="Respect all players – no toxicity, racism, or harassment." data-ar="احترم جميع اللاعبين – لا للسمية أو العنصرية أو المضايقة."></span></li>
+                                <li><i class="fas fa-microphone-alt"></i> <span data-en="No spamming or advertising other servers." data-ar="لا للسبام أو الإعلان عن سيرفرات أخرى."></span></li>
+                                <li><i class="fas fa-user-secret"></i> <span data-en="No inappropriate usernames or skins." data-ar="لا لأسماء أو جلود غير لائقة."></span></li>
+                                <li><i class="fas fa-flag"></i> <span data-en="Follow staff instructions at all times." data-ar="اتبع تعليمات الطاقم في جميع الأوقات."></span></li>
+                            </ul>
+                        </div>
+                        <div class="rules-card">
+                            <span class="rules-icon">🌍</span>
+                            <h4 data-en="Earth Survival Rules" data-ar="قوانين سيرفر البقاء إيرث"></h4>
+                            <ul>
+                                <li><i class="fas fa-home"></i> <span data-en="No griefing – protect your builds with claims." data-ar="لا للتخريب – احمِ مبانيّك بالحماية."></span> <span class="rule-badge green">Protected</span></li>
+                                <li><i class="fas fa-hand-holding-usd"></i> <span data-en="No scamming or exploiting economy systems." data-ar="لا للنصب أو استغلال أنظمة الاقتصاد."></span></li>
+                                <li><i class="fas fa-tree"></i> <span data-en="No destroying natural terrain without permission." data-ar="لا لتدمير التضاريس الطبيعية دون إذن."></span></li>
+                                <li><i class="fas fa-clock"></i> <span data-en="AFK farming is allowed but limited to 15 minutes." data-ar="الزراعة أثناء AFK مسموحة ولكن محددة بـ 15 دقيقة."></span></li>
+                            </ul>
+                        </div>
+                        <div class="rules-card">
+                            <span class="rules-icon">🌌</span>
+                            <h4 data-en="Galaxy BoxPvP Rules" data-ar="قوانين جالاكسي بوكس بي في بي"></h4>
+                            <ul>
+                                <li><i class="fas fa-crosshairs"></i> <span data-en="No teaming in free-for-all modes." data-ar="لا للتحالفات في أوضاع free-for-all."></span> <span class="rule-badge gold">Fair Play</span></li>
+                                <li><i class="fas fa-box-open"></i> <span data-en="No stealing from other players' chests." data-ar="لا لسرقة صناديق اللاعبين الآخرين."></span></li>
+                                <li><i class="fas fa-swords"></i> <span data-en="No spawn camping – give players a chance." data-ar="لا للكمائن عند نقطة الإحياء – امنح اللاعبين فرصة."></span></li>
+                                <li><i class="fas fa-tachometer-alt"></i> <span data-en="No exploiting glitches or using unfair advantages." data-ar="لا لاستغلال الأخطاء أو استخدام مزايا غير عادلة."></span></li>
+                            </ul>
+                        </div>
+                        <div class="rules-card">
+                            <span class="rules-icon">🌊</span>
+                            <h4 data-en="Neptune Practice Rules" data-ar="قوانين نبتون تدريب"></h4>
+                            <ul>
+                                <li><i class="fas fa-handshake"></i> <span data-en="No toxicity – respect your opponent." data-ar="لا للسمية – احترم خصمك."></span> <span class="rule-badge green">Sportsmanship</span></li>
+                                <li><i class="fas fa-sliders-h"></i> <span data-en="No using banned items or kits in ranked matches." data-ar="لا لاستخدام عناصر أو كيتات محظورة في المباريات المرتبة."></span></li>
+                                <li><i class="fas fa-flag-checkered"></i> <span data-en="No leaving mid-match to avoid a loss." data-ar="لا للمغادرة أثناء المباراة لتجنب الخسارة."></span></li>
+                                <li><i class="fas fa-users"></i> <span data-en="Party limits must be respected." data-ar="يجب احترام حدود الحفلة."></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="margin-top:20px; padding:16px 20px; background:rgba(255,107,107,0.06); border-radius:16px; border:1px solid rgba(255,107,107,0.1); text-align:center;">
+                        <p style="color:#ff6b6b; font-size:14px;"><i class="fas fa-exclamation-triangle"></i> <span data-en="Violating any rule may result in a mute, kick, ban, or rank removal at staff discretion." data-ar="قد يؤدي مخالفة أي قانون إلى كتم، طرد، حظر، أو إزالة الرتبة حسب تقدير الطاقم."></span></p>
+                    </div>
+                </div>
+
+                <!-- ===== SUPPORT TAB ===== -->
+                <div class="tab-pane" id="tab-support">
+                    <div class="rank-section-title"><i class="fas fa-headset"></i><span data-en="Support" data-ar="الدعم"></span></div>
+                    <div class="rank-section-sub" data-en="We're here to help! Contact us and we'll get back to you as soon as possible." data-ar="نحن هنا للمساعدة! تواصل معنا وسنرد عليك في أقرب وقت ممكن."></div>
+                    <div class="support-container">
+                        <div class="support-form">
+                            <h4 data-en="📩 Send a Ticket" data-ar="📩 أرسل تذكرة"></h4>
+                            <p class="form-sub" data-en="Fill out the form and our team will respond within 24 hours." data-ar="املأ النموذج وسيرد فريقنا في غضون 24 ساعة."></p>
+                            <form id="supportForm" onsubmit="return handleSupport(event)">
+                                <div class="form-group"><label data-en="Your Name" data-ar="اسمك"></label><input type="text" id="supportName" placeholder="Enter your name..." required /></div>
+                                <div class="form-group"><label data-en="Email Address" data-ar="البريد الإلكتروني"></label><input type="email" id="supportEmail" placeholder="your@email.com" required /></div>
+                                <div class="form-group"><label data-en="Issue Type" data-ar="نوع المشكلة"></label>
+                                    <select id="supportType"><option value="bug" data-en="Bug Report" data-ar="تقرير خطأ"></option><option value="rank" data-en="Rank Issue" data-ar="مشكلة في الرتبة"></option><option value="payment" data-en="Payment Problem" data-ar="مشكلة في الدفع"></option><option value="other" data-en="Other" data-ar="أخرى"></option></select>
+                                </div>
+                                <div class="form-group"><label data-en="Message" data-ar="الرسالة"></label><textarea id="supportMessage" placeholder="Describe your issue in detail..." required></textarea></div>
+                                <button type="submit" class="btn-submit"><span data-en="Send Message" data-ar="إرسال"></span></button>
+                            </form>
+                        </div>
+                        <div class="support-info">
+                            <div class="info-card"><div class="info-icon"><i class="fas fa-discord"></i></div><div class="info-content"><h5 data-en="Join our Discord" data-ar="انضم إلى ديسكورد"></h5><p data-en="Get instant support and connect with the community." data-ar="احصل على دعم فوري وتواصل مع المجتمع."><br><a href="#">discord.gg/otk1</a></p></div></div>
+                            <div class="info-card"><div class="info-icon"><i class="fas fa-envelope"></i></div><div class="info-content"><h5 data-en="Email Support" data-ar="الدعم عبر البريد"></h5><p data-en="For serious issues, reach out directly." data-ar="للمشاكل الجادة، تواصل مباشرة."><br><a href="mailto:support@otk1.net">support@otk1.net</a></p></div></div>
+                            <div class="info-card"><div class="info-icon"><i class="fas fa-clock"></i></div><div class="info-content"><h5 data-en="Response Time" data-ar="وقت الرد"></h5><p data-en="We aim to respond within 24 hours." data-ar="نهدف إلى الرد خلال 24 ساعة."></p></div></div>
+                            <div class="info-card"><div class="info-icon"><i class="fas fa-shield-alt"></i></div><div class="info-content"><h5 data-en="Trust & Safety" data-ar="الثقة والأمان"></h5><p data-en="Your data is safe with us. We never share your information." data-ar="بياناتك آمنة معنا. لا نشارك معلوماتك أبداً."></p></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== FAQ TAB ===== -->
+                <div class="tab-pane" id="tab-faq">
+                    <div class="rank-section-title"><i class="fas fa-question-circle"></i><span data-en="Frequently Asked Questions" data-ar="الأسئلة الشائعة"></span></div>
+                    <div class="rank-section-sub" data-en="Everything you need to know about Otk1 Network." data-ar="كل ما تحتاج معرفته عن شبكة Otk1."></div>
+                    <div class="faq-list">
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ How do I join the server?" data-ar="❓ كيف أنضم إلى السيرفر؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Simply copy the server IP from the IP tab above, open Minecraft (Java Edition 1.20.4), click Multiplayer, then Add Server, paste the IP, and join!" data-ar="ببساطة انسخ الآي بي من تبويب IP أعلاه، افتح ماين كرافت (إصدار 1.20.4)، اضغط Multiplayer، ثم Add Server، الصق الآي بي وانضم!"></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ What Minecraft version do I need?" data-ar="❓ ما هو إصدار ماين كرافت المطلوب؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="All our servers run on Minecraft Java Edition 1.20.4. We recommend using this version for the best experience." data-ar="جميع سيرفراتنا تعمل على ماين كرافت جافا إصدار 1.20.4. نوصي باستخدام هذا الإصدار للحصول على أفضل تجربة."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ How do I buy a rank?" data-ar="❓ كيف أشتري رتبة؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Ranks are purchased using in-game coins earned by playing on the server. Visit the Store tab to see all available ranks and their requirements. You can also purchase directly with real money via our store." data-ar="تُشترى الرتب باستخدام العملات داخل اللعبة التي تكسبها من اللعب على السيرفر. زر المتجر لترى جميع الرتب المتاحة ومتطلباتها. يمكنك أيضاً الشراء مباشرة بالمال الحقيقي عبر متجرنا."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ Is there a Discord server?" data-ar="❓ هل يوجد سيرفر ديسكورد؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Yes! Join our Discord community to stay updated, chat with other players, and get support. The invite link is available in-game or visit the Support tab." data-ar="نعم! انضم إلى مجتمعنا على ديسكورد للبقاء على اطلاع، والدردشة مع اللاعبين الآخرين، والحصول على الدعم. رابط الدعوة متاح داخل اللعبة أو زر تبويب الدعم."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ Can I play with friends?" data-ar="❓ هل يمكنني اللعب مع الأصدقاء؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Absolutely! All our servers support multiplayer. You can team up, create parties, and compete together. Party limits vary by rank – check the Ranks tab for details." data-ar="بالتأكيد! جميع سيرفراتنا تدعم اللعب الجماعي. يمكنك تشكيل فرق، وإنشاء حفلات، والتنافس معًا. حدود الحفلة تختلف حسب الرتبة – تحقق من تبويب الرتب للتفاصيل."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ What is the server's uptime?" data-ar="❓ ما هو وقت تشغيل السيرفر؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="Our servers are online 24/7 with 99.9% uptime. We perform regular maintenance to ensure the best performance for all players." data-ar="سيرفراتنا تعمل 24/7 مع uptime 99.9%. نقوم بصيانة دورية لضمان أفضل أداء لجميع اللاعبين."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ How do I report a player?" data-ar="❓ كيف أبلغ عن لاعب؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="You can report a player using /report (player) (reason) in-game, or open a ticket in the Support tab. Our staff will review it promptly." data-ar="يمكنك الإبلاغ عن لاعب باستخدام /report (اللاعب) (السبب) داخل اللعبة، أو فتح تذكرة في تبويب الدعم. سيراجع طاقمنا الأمر بسرعة."></div></div>
+                        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)"><span data-en="❓ What are the rules?" data-ar="❓ ما هي القوانين؟"></span><i class="fas fa-chevron-down"></i></button><div class="faq-answer" data-en="You can find all server rules in the Rules tab. We have global rules as well as game-specific rules for each server mode." data-ar="يمكنك العثور على جميع قوانين السيرفر في تبويب القوانين. لدينا قوانين عامة بالإضافة إلى قوانين خاصة بكل نمط لعب."></div></div>
+                    </div>
+                </div>
+
+                <!-- ===== SOCIAL TAB ===== -->
+                <div class="tab-pane" id="tab-social">
+                    <div class="rank-section-title"><i class="fas fa-share-alt"></i><span data-en="Connect With Us" data-ar="تواصل معنا"></span></div>
+                    <div class="rank-section-sub" data-en="Follow us on our social platforms to stay updated!" data-ar="تابعنا على منصات التواصل للبقاء على اطلاع!"></div>
+                    <div class="social-squares-grid">
+                        <a href="https://www.tiktok.com/@otk1141" target="_blank" rel="noopener noreferrer" class="social-square tiktok-square">
+                            <i class="fab fa-tiktok"></i>
+                            <span class="social-name">@otk1141</span>
+                            <span class="social-label" data-en="Follow" data-ar="تابع"></span>
+                        </a>
+                        <a href="https://youtube.com/@otk1141" target="_blank" rel="noopener noreferrer" class="social-square youtube-square">
+                            <i class="fab fa-youtube"></i>
+                            <span class="social-name">@otk1141</span>
+                            <span class="social-label" data-en="Subscribe" data-ar="اشترك"></span>
+                        </a>
+                        <a href="https://www.instagram.com/37.8b" target="_blank" rel="noopener noreferrer" class="social-square instagram-square">
+                            <i class="fab fa-instagram"></i>
+                            <span class="social-name">@37.8b</span>
+                            <span class="social-label" data-en="Follow" data-ar="تابع"></span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ===== IP TAB ===== -->
+                <div class="tab-pane" id="tab-ip">
+                    <div class="ip-section">
+                        <div class="ip-display" style="text-align:center; padding:40px 20px;">
+                            <div style="font-size:64px; margin-bottom:16px;">🌐</div>
+                            <div class="ip-label" data-en="✦ Server IP ✦" data-ar="✦ آي بي السيرفر ✦" style="font-size:20px; letter-spacing:4px;"></div>
+                            <div style="font-size:28px; font-weight:800; font-family:'Orbitron',sans-serif; background:linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin:12px 0;">
+                                <span data-en="Coming Soon" data-ar="قريباً"></span>
+                            </div>
+                            <p style="color:#b99ad6; font-size:16px; max-width:400px; margin:0 auto;">
+                                <span data-en="We're preparing our servers. Stay tuned for the IP address!" data-ar="نحن نجهز سيرفراتنا. ترقبوا عنوان الآي بي!"></span>
+                            </p>
+                            <div style="margin-top:20px; display:flex; justify-content:center; gap:12px;">
+                                <span class="coming-chip" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); color:#9880b8;">
+                                    <i class="fas fa-clock"></i> <span data-en="Estimated: Q3 2026" data-ar="متوقع: الربع الثالث 2026"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -470,7 +602,6 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- Your JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
